@@ -2,6 +2,10 @@
 
 Interactive cloud shared responsibility matrix covering customer governance, Customer SOC and cloud-provider involvement across cloud service models.
 
+This version contains **800 atomic controls** across cybersecurity, FinOps, service management, operational incidents, availability, backup, recovery, continuity, data governance, privacy, records management, performance, capacity and scalability, architecture and technical governance, change, release and environment management, network and carrier operations, on-premises infrastructure and operations, asset, CMDB and lifecycle management, virtualisation and platform operations, storage and media operations, plus supplier, procurement and commercial management.
+
+Each control record contains one objective, one expected outcome, one test and one owner assignment, together with RASCI, standards mappings and provider contractual references.
+
 ## Publish with GitHub Pages
 
 1. Create a GitHub repository.
@@ -25,3 +29,9 @@ Every later push to `main` republishes the site automatically.
 - `.github/workflows/deploy-pages.yml` — automated GitHub Pages deployment
 
 No build tools, packages or server-side services are required.
+
+## Version
+
+- Explorer release: Version 16
+- Matrix schema: 1.14.0
+- Control count: 800
