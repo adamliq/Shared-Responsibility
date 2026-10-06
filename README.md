@@ -1,11 +1,11 @@
 # Cloud Shared Responsibility Explorer
 
-GitHub Pages-ready export of Version 21.
+GitHub Pages-ready export of Version 23.
 
 ## Contents
 
 - `index.html` — interactive responsibility explorer
-- `matrix.json` — complete 1,058-control catalogue (schema 1.19.0)
+- `matrix.json` — complete 1,191-control catalogue (schema 1.21.0)
 - `.nojekyll` — disables Jekyll processing for GitHub Pages
 
 ## Publish with GitHub Pages
@@ -17,6 +17,6 @@ GitHub Pages-ready export of Version 21.
 
 The application is static and requires no build step or server-side runtime.
 
-## Version 21 addition
+## Version 23 addition
 
-The Core Infrastructure Services layer contains 56 atomic controls covering Active Directory and LDAP, DNS, DHCP, NTP, PKI and certificates, IPAM, file services, directory replication, recovery and customer SOC monitoring responsibilities.
+The Security Accreditation, Assurance and Authority to Operate layer contains 50 atomic controls covering authorisation boundaries, categorisation, control baselines, documentation, independent assessment, POA&Ms, residual-risk decisions, ATO outcomes, continuous authorisation and industry certification or attestation.

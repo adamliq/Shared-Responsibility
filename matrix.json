@@ -1,9 +1,9 @@
 {
-  "schema_version": "1.19.0",
+  "schema_version": "1.21.0",
   "title": "Cloud Shared Responsibility Control Matrix",
   "description": "Provider-neutral shared responsibility controls spanning cloud and on-premises security, service, infrastructure, compute, communications, end-user computing and workplace services.",
   "source_workbook": "cloud_shared_responsibility_matrix_crosswalk.xlsx",
-  "control_count": 1058,
+  "control_count": 1191,
   "atomicity_rule": "One control objective, one expected outcome, one test and one owner assignment per control record.",
   "standards_basis": {
     "csa_ccm": "v4.1.0",
@@ -3439,7 +3439,7 @@
     },
     {
       "control_id": "VUL-001",
-      "domain": "Threat and vulnerability",
+      "domain": "Vulnerability and exposure management",
       "service_model": "All cloud",
       "control_objective": "Identify provider vulnerabilities",
       "expected_outcome": "Provider-managed service layers are continuously assessed for vulnerabilities.",
@@ -3479,7 +3479,7 @@
     },
     {
       "control_id": "VUL-002",
-      "domain": "Threat and vulnerability",
+      "domain": "Vulnerability and exposure management",
       "service_model": "IaaS",
       "control_objective": "Identify guest vulnerabilities",
       "expected_outcome": "Customer-managed guest operating systems and applications are scanned.",
@@ -3519,7 +3519,7 @@
     },
     {
       "control_id": "VUL-003",
-      "domain": "Threat and vulnerability",
+      "domain": "Vulnerability and exposure management",
       "service_model": "All cloud",
       "control_objective": "Remediate provider vulnerabilities",
       "expected_outcome": "Provider-managed vulnerabilities are prioritised and remediated within contracted timeframes.",
@@ -3559,7 +3559,7 @@
     },
     {
       "control_id": "VUL-004",
-      "domain": "Threat and vulnerability",
+      "domain": "Vulnerability and exposure management",
       "service_model": "IaaS/PaaS",
       "control_objective": "Remediate customer vulnerabilities",
       "expected_outcome": "Customer-managed code, guests and dependencies are remediated within approved timeframes.",
@@ -3601,7 +3601,7 @@
     },
     {
       "control_id": "VUL-005",
-      "domain": "Threat and vulnerability",
+      "domain": "Vulnerability and exposure management",
       "service_model": "All cloud",
       "control_objective": "Authorise penetration testing",
       "expected_outcome": "Security testing follows provider rules and customer approval requirements.",
@@ -3641,7 +3641,7 @@
     },
     {
       "control_id": "VUL-006",
-      "domain": "Threat and vulnerability",
+      "domain": "Vulnerability and exposure management",
       "service_model": "All cloud",
       "control_objective": "Manage vulnerability disclosure",
       "expected_outcome": "Reported vulnerabilities receive acknowledgement, triage and tracked resolution.",
@@ -3682,7 +3682,7 @@
     },
     {
       "control_id": "VUL-007",
-      "domain": "Threat and vulnerability",
+      "domain": "Vulnerability and exposure management",
       "service_model": "All cloud",
       "control_objective": "Protect against malicious code",
       "expected_outcome": "Managed service layers detect and contain malicious code appropriate to the service.",
@@ -38757,6 +38757,5768 @@
           "ITIL Infrastructure and Platform Management"
         ],
         "provider_contractual_reference": "Core infrastructure responsibility schedule — File-service audit logging §__"
+      }
+    },
+    {
+      "control_id": "VEM-008",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Define the vulnerability-management scope",
+      "expected_outcome": "All technologies requiring vulnerability assessment are explicitly in scope.",
+      "test": "Compare the approved scope with the asset catalogue and investigate exclusions.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Assessment scope"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Assessment scope §__"
+      }
+    },
+    {
+      "control_id": "VEM-009",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Reconcile assets with vulnerability coverage",
+      "expected_outcome": "Every in-scope asset is associated with a current assessment method.",
+      "test": "Reconcile asset records to scanner targets, agents or approved alternative assessments.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Coverage reconciliation"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Coverage reconciliation §__"
+      }
+    },
+    {
+      "control_id": "VEM-010",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Monitor vulnerability-agent coverage",
+      "expected_outcome": "Missing, disabled or stale assessment agents are identified within the required interval.",
+      "test": "Disable a test agent and verify coverage monitoring reports the affected asset.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Agent coverage"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Agent coverage §__"
+      }
+    },
+    {
+      "control_id": "VEM-011",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Perform external vulnerability assessment",
+      "expected_outcome": "Internet-exposed assets are assessed from an external perspective at the required frequency.",
+      "test": "Sample exposed assets and verify recent external assessment results.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "External scanning"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — External scanning §__"
+      }
+    },
+    {
+      "control_id": "VEM-012",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Perform internal vulnerability assessment",
+      "expected_outcome": "Internal network assets are assessed at the required frequency.",
+      "test": "Sample internal assets and verify recent assessment results.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Internal scanning"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Internal scanning §__"
+      }
+    },
+    {
+      "control_id": "VEM-013",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Perform authenticated vulnerability assessment",
+      "expected_outcome": "Supported systems receive credentialed assessment of installed software and configuration.",
+      "test": "Sample supported systems and verify recent successful authenticated scans.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Authenticated scanning"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Authenticated scanning §__"
+      }
+    },
+    {
+      "control_id": "VEM-014",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Assess network-device vulnerabilities",
+      "expected_outcome": "Routers, switches, firewalls and network appliances are assessed for applicable vulnerabilities.",
+      "test": "Sample network devices and trace versions to recent vulnerability results.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Network-device assessment"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Network-device assessment §__"
+      }
+    },
+    {
+      "control_id": "VEM-015",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Assess firmware vulnerabilities",
+      "expected_outcome": "Firmware and embedded-management components are checked against relevant advisories.",
+      "test": "Sample hardware assets and compare firmware versions with current vendor advisories.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Firmware assessment"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Firmware assessment §__"
+      }
+    },
+    {
+      "control_id": "VEM-016",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Assess cloud-resource exposure",
+      "expected_outcome": "Cloud resources are evaluated for vulnerabilities and externally exploitable configurations.",
+      "test": "Sample cloud resources and verify current workload and exposure assessment results.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Cloud exposure assessment"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Cloud exposure assessment §__"
+      }
+    },
+    {
+      "control_id": "VEM-017",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Assess running container workloads",
+      "expected_outcome": "Deployed containers are assessed for vulnerable packages and runtime exposure.",
+      "test": "Sample running workloads and trace deployed image digests to current findings.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Runtime container assessment"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Runtime container assessment §__"
+      }
+    },
+    {
+      "control_id": "VEM-018",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Maintain software-component inventories",
+      "expected_outcome": "Applications expose a current inventory of third-party components and versions.",
+      "test": "Sample applications and verify a current component inventory or SBOM.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Software component inventory"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Software component inventory §__"
+      }
+    },
+    {
+      "control_id": "VEM-019",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Scan application dependencies",
+      "expected_outcome": "Application dependencies are checked for known vulnerabilities before release and while supported.",
+      "test": "Introduce a safe vulnerable test dependency and verify the dependency scanner reports it.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Dependency scanning"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Dependency scanning §__"
+      }
+    },
+    {
+      "control_id": "VEM-020",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Scan source code for vulnerability patterns",
+      "expected_outcome": "Application source is statically analysed before production release.",
+      "test": "Submit a safe test weakness and verify static analysis identifies it.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Static application testing"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Static application testing §__"
+      }
+    },
+    {
+      "control_id": "VEM-021",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Test running applications for vulnerabilities",
+      "expected_outcome": "Deployed applications are dynamically assessed against their exposed behaviour.",
+      "test": "Sample production applications and verify recent authorised dynamic-test results.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Dynamic application testing"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Dynamic application testing §__"
+      }
+    },
+    {
+      "control_id": "VEM-022",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Assess API vulnerabilities",
+      "expected_outcome": "In-scope APIs are tested for authentication, authorisation, input and business-logic weaknesses.",
+      "test": "Sample APIs and verify recent API-specific security-test coverage.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "API security testing"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — API security testing §__"
+      }
+    },
+    {
+      "control_id": "VEM-023",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Scan infrastructure-as-code for vulnerabilities",
+      "expected_outcome": "Infrastructure definitions are checked for vulnerable or unsafe configurations before deployment.",
+      "test": "Submit a prohibited test configuration and verify the pipeline reports or blocks it.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "IaC vulnerability scanning"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — IaC vulnerability scanning §__"
+      }
+    },
+    {
+      "control_id": "VEM-024",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Validate vulnerability-scanner credentials",
+      "expected_outcome": "Assessment credentials remain functional and sufficiently privileged for the intended checks.",
+      "test": "Review scanner authentication success and test a failed credential condition.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Scanner credential health"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Scanner credential health §__"
+      }
+    },
+    {
+      "control_id": "VEM-025",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Control disruptive vulnerability testing",
+      "expected_outcome": "Potentially disruptive checks run only within approved scope and conditions.",
+      "test": "Sample intrusive scan configurations and verify approval and safety settings.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Scan safety"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Scan safety §__"
+      }
+    },
+    {
+      "control_id": "VEM-026",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Ingest vendor vulnerability advisories",
+      "expected_outcome": "Relevant vendor advisories are reviewed against the technology inventory.",
+      "test": "Sample applicable advisories and trace each to an impact decision.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Vendor advisory intake"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Vendor advisory intake §__"
+      }
+    },
+    {
+      "control_id": "VEM-027",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Ingest known-exploited vulnerability information",
+      "expected_outcome": "Known-exploited vulnerability catalogues are matched against organisational exposure.",
+      "test": "Add a controlled test entry and verify matching assets are identified.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Known-exploited vulnerabilities"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Known-exploited vulnerabilities §__"
+      }
+    },
+    {
+      "control_id": "VEM-028",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Apply threat intelligence to vulnerability prioritisation",
+      "expected_outcome": "Active exploitation intelligence changes the priority of affected findings.",
+      "test": "Sample intelligence-driven priority changes and verify the source and decision.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Threat-informed prioritisation"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Threat-informed prioritisation §__"
+      }
+    },
+    {
+      "control_id": "VEM-029",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Apply asset criticality to vulnerability prioritisation",
+      "expected_outcome": "Finding priority reflects the business importance of the affected asset.",
+      "test": "Sample findings across criticality tiers and recalculate their priority.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Asset-criticality context"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Asset-criticality context §__"
+      }
+    },
+    {
+      "control_id": "VEM-030",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Calculate a risk-based vulnerability priority",
+      "expected_outcome": "Each actionable finding has a repeatable priority based on severity, exploitability, exposure and impact.",
+      "test": "Sample findings and independently reproduce the assigned priority.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Risk scoring"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Risk scoring §__"
+      }
+    },
+    {
+      "control_id": "VEM-031",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Define vulnerability-remediation timeframes",
+      "expected_outcome": "Each risk class has an approved target for treatment or exception.",
+      "test": "Inspect the current standard and verify targets exist for every risk class.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Remediation timeframes"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Remediation timeframes §__"
+      }
+    },
+    {
+      "control_id": "VEM-032",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Assign each vulnerability finding to an owner",
+      "expected_outcome": "Every actionable finding has one accountable remediation owner.",
+      "test": "Sample open findings and verify a current accountable owner.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Finding ownership"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Finding ownership §__"
+      }
+    },
+    {
+      "control_id": "VEM-033",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Escalate emergency vulnerabilities",
+      "expected_outcome": "Vulnerabilities meeting emergency criteria trigger expedited assessment and treatment.",
+      "test": "Run a tabletop test and verify escalation, decision and communication timing.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Emergency vulnerability response"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Emergency vulnerability response §__"
+      }
+    },
+    {
+      "control_id": "VEM-034",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Define compensating controls for deferred remediation",
+      "expected_outcome": "Deferred findings have documented controls that reduce the stated exposure.",
+      "test": "Sample deferred findings and verify implemented compensating controls.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Compensating controls"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Compensating controls §__"
+      }
+    },
+    {
+      "control_id": "VEM-035",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Approve vulnerability exceptions",
+      "expected_outcome": "Each accepted vulnerability risk has authorised justification, scope and owner.",
+      "test": "Sample active exceptions and verify approval and required fields.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Risk exceptions"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Risk exceptions §__"
+      }
+    },
+    {
+      "control_id": "VEM-036",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Expire vulnerability exceptions",
+      "expected_outcome": "Exceptions are reassessed or closed before their approved expiry.",
+      "test": "Sample expired and near-expiry exceptions and verify timely disposition.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Exception expiry"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Exception expiry §__"
+      }
+    },
+    {
+      "control_id": "VEM-037",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Manage vulnerability false positives",
+      "expected_outcome": "Suppressed findings have documented validation and review criteria.",
+      "test": "Sample suppressed findings and reproduce the false-positive decision.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "False-positive management"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — False-positive management §__"
+      }
+    },
+    {
+      "control_id": "VEM-038",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Rescan remediated vulnerabilities",
+      "expected_outcome": "Remediation is technically verified before a finding is closed.",
+      "test": "Sample closed findings and verify a successful post-remediation assessment.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Remediation verification"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Remediation verification §__"
+      }
+    },
+    {
+      "control_id": "VEM-039",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Retain vulnerability-closure evidence",
+      "expected_outcome": "Closed findings retain evidence of the corrective action and verification result.",
+      "test": "Sample historical closures and verify complete evidence remains available.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Closure evidence"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Closure evidence §__"
+      }
+    },
+    {
+      "control_id": "VEM-040",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Monitor vulnerability backlog age",
+      "expected_outcome": "Overdue and ageing findings are visible to accountable owners.",
+      "test": "Recalculate backlog age from finding dates and compare with reported metrics.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Backlog ageing"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Backlog ageing §__"
+      }
+    },
+    {
+      "control_id": "VEM-041",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Measure vulnerability exposure duration",
+      "expected_outcome": "The time from identification to verified closure is measured for each finding.",
+      "test": "Sample findings and reproduce reported exposure duration from lifecycle timestamps.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Exposure-window metrics"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Exposure-window metrics §__"
+      }
+    },
+    {
+      "control_id": "VEM-042",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Report vulnerability-remediation performance",
+      "expected_outcome": "Stakeholders receive accurate performance against approved treatment targets.",
+      "test": "Recalculate sampled SLA metrics from source findings and compare with the report.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Remediation reporting"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Remediation reporting §__"
+      }
+    },
+    {
+      "control_id": "VEM-043",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Notify customers of provider vulnerabilities",
+      "expected_outcome": "The provider communicates relevant service vulnerabilities and mitigations within contracted timeframes.",
+      "test": "Sample provider advisories and compare notification timing and content with contract terms.",
+      "owner_assignment": "CSP",
+      "shared_control_component": [
+        "Provider vulnerability notification"
+      ],
+      "rasci": {
+        "csp": "R/A",
+        "csc": "C",
+        "customer_soc": "I",
+        "third_party": "—"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Vulnerability and exposure management provider service terms — Provider vulnerability notification §__"
+      }
+    },
+    {
+      "control_id": "VEM-044",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Coordinate supplier vulnerability remediation",
+      "expected_outcome": "Supplier-owned findings are tracked to treatment or authorised acceptance.",
+      "test": "Sample supplier findings and verify ownership, escalation and closure evidence.",
+      "owner_assignment": "3PTY",
+      "shared_control_component": [
+        "Supplier vulnerability coordination"
+      ],
+      "rasci": {
+        "csp": "—",
+        "csc": "A",
+        "customer_soc": "I",
+        "third_party": "R"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Vulnerability and exposure management supplier agreement — Supplier vulnerability coordination §__"
+      }
+    },
+    {
+      "control_id": "VEM-045",
+      "domain": "Vulnerability and exposure management",
+      "service_model": "All models",
+      "control_objective": "Identify end-of-support exposure",
+      "expected_outcome": "Assets using unsupported technology are identified before or when support ends.",
+      "test": "Compare lifecycle data with asset versions and verify identified unsupported assets.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "End-of-support exposure"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "TVM-02",
+          "TVM-03"
+        ],
+        "iso_iec_27017_2026": [
+          "8.8",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-pro-04",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — End-of-support exposure §__"
+      }
+    },
+    {
+      "control_id": "CTI-001",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Assign an owner to the cyber-threat-intelligence capability",
+      "expected_outcome": "The CTI capability has one accountable owner for scope, resources and outcomes.",
+      "test": "Inspect the capability record and verify one current accountable owner.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "CTI ownership"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — CTI ownership §__"
+      }
+    },
+    {
+      "control_id": "CTI-002",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Define priority intelligence requirements",
+      "expected_outcome": "Collection and analysis are directed by approved stakeholder intelligence questions.",
+      "test": "Sample current requirements and verify owner, priority and review date.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Priority intelligence requirements"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Priority intelligence requirements §__"
+      }
+    },
+    {
+      "control_id": "CTI-003",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Record intelligence-consumer requirements",
+      "expected_outcome": "CTI products reflect the decisions and timeframes of their intended consumers.",
+      "test": "Sample consumer requirements and trace them to delivered intelligence products.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Consumer requirements"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Consumer requirements §__"
+      }
+    },
+    {
+      "control_id": "CTI-004",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Maintain a threat-intelligence collection plan",
+      "expected_outcome": "Each intelligence requirement has identified sources, cadence and collection owner.",
+      "test": "Sample requirements and verify complete current collection-plan entries.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Collection planning"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Collection planning §__"
+      }
+    },
+    {
+      "control_id": "CTI-005",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Maintain an inventory of intelligence sources",
+      "expected_outcome": "Every active feed and source has an owner, purpose, terms and lifecycle state.",
+      "test": "Reconcile platform-configured sources with the approved source inventory.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Source inventory"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Source inventory §__"
+      }
+    },
+    {
+      "control_id": "CTI-006",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Approve threat-intelligence sources",
+      "expected_outcome": "New intelligence sources are assessed for value, risk, legality and cost before use.",
+      "test": "Sample source additions and verify approval preceded ingestion.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Source approval"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Source approval §__"
+      }
+    },
+    {
+      "control_id": "CTI-007",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Collect government threat intelligence",
+      "expected_outcome": "Relevant government advisories and feeds are ingested or reviewed within the required interval.",
+      "test": "Publish or identify a controlled advisory and verify timely intake.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Government intelligence collection"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Government intelligence collection §__"
+      }
+    },
+    {
+      "control_id": "CTI-008",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Collect commercial threat intelligence",
+      "expected_outcome": "Contracted commercial intelligence is ingested according to its service terms.",
+      "test": "Sample licensed feeds and verify current successful collection.",
+      "owner_assignment": "3PTY",
+      "shared_control_component": [
+        "Commercial intelligence feed"
+      ],
+      "rasci": {
+        "csp": "—",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "R"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cyber threat intelligence supplier agreement — Commercial intelligence feed §__"
+      }
+    },
+    {
+      "control_id": "CTI-009",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Collect open-source threat intelligence",
+      "expected_outcome": "Approved open sources are collected with provenance retained.",
+      "test": "Sample open-source records and verify source and collection time.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Open-source intelligence"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Open-source intelligence §__"
+      }
+    },
+    {
+      "control_id": "CTI-010",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Collect cloud-provider threat intelligence",
+      "expected_outcome": "Provider advisories and service-specific threat findings are made available to the customer.",
+      "test": "Sample provider intelligence items and verify customer accessibility and timing.",
+      "owner_assignment": "CSP",
+      "shared_control_component": [
+        "Provider threat intelligence"
+      ],
+      "rasci": {
+        "csp": "R/A",
+        "csc": "C",
+        "customer_soc": "R",
+        "third_party": "—"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cyber threat intelligence provider service terms — Provider threat intelligence §__"
+      }
+    },
+    {
+      "control_id": "CTI-011",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Authenticate STIX/TAXII collection",
+      "expected_outcome": "Automated intelligence exchange uses approved authenticated connections.",
+      "test": "Inspect sampled TAXII connections and verify authentication and encryption.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "TAXII authentication"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — TAXII authentication §__"
+      }
+    },
+    {
+      "control_id": "CTI-012",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Monitor intelligence-feed availability",
+      "expected_outcome": "Failed or interrupted feeds are detected within the required interval.",
+      "test": "Interrupt a test feed and verify alert creation and ownership.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Feed availability"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Feed availability §__"
+      }
+    },
+    {
+      "control_id": "CTI-013",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Monitor intelligence-feed freshness",
+      "expected_outcome": "Stale feeds are identified before consumers rely on outdated intelligence.",
+      "test": "Age a test feed beyond its threshold and verify a freshness alert.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Feed freshness"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Feed freshness §__"
+      }
+    },
+    {
+      "control_id": "CTI-014",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Validate intelligence-feed structure",
+      "expected_outcome": "Malformed or schema-incompatible intelligence is quarantined or rejected.",
+      "test": "Submit a malformed test object and verify validation handling.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Feed schema validation"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Feed schema validation §__"
+      }
+    },
+    {
+      "control_id": "CTI-015",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Deduplicate threat-intelligence records",
+      "expected_outcome": "Equivalent observations are consolidated without losing provenance.",
+      "test": "Submit duplicate test indicators and verify a single correlated record retains both sources.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Intelligence deduplication"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Intelligence deduplication §__"
+      }
+    },
+    {
+      "control_id": "CTI-016",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Normalise threat-intelligence data",
+      "expected_outcome": "Collected intelligence is represented in the approved common structure.",
+      "test": "Sample records from different sources and verify required normalised fields.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Intelligence normalisation"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Intelligence normalisation §__"
+      }
+    },
+    {
+      "control_id": "CTI-017",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Enrich threat-intelligence records",
+      "expected_outcome": "Operational intelligence includes approved contextual enrichment needed by consumers.",
+      "test": "Sample indicators and verify required enrichment fields and timestamps.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Intelligence enrichment"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Intelligence enrichment §__"
+      }
+    },
+    {
+      "control_id": "CTI-018",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Score intelligence-source reliability",
+      "expected_outcome": "Each source has a documented and periodically reviewed reliability assessment.",
+      "test": "Sample sources and reproduce their reliability score from evidence.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Source reliability"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Source reliability §__"
+      }
+    },
+    {
+      "control_id": "CTI-019",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Score intelligence confidence",
+      "expected_outcome": "Each assessed intelligence item states confidence using the approved scale.",
+      "test": "Sample assessed items and verify confidence rationale and scale use.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Intelligence confidence"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Intelligence confidence §__"
+      }
+    },
+    {
+      "control_id": "CTI-020",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Assess intelligence relevance",
+      "expected_outcome": "Collected intelligence is evaluated against organisational technology, geography and threat exposure.",
+      "test": "Sample intelligence items and verify a documented relevance decision.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Intelligence relevance"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Intelligence relevance §__"
+      }
+    },
+    {
+      "control_id": "CTI-021",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Validate threat indicators before operational use",
+      "expected_outcome": "Indicators meet defined quality criteria before blocking or alerting use.",
+      "test": "Sample operational indicators and verify validation evidence preceded activation.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Indicator validation"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Indicator validation §__"
+      }
+    },
+    {
+      "control_id": "CTI-022",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Expire threat indicators",
+      "expected_outcome": "Indicators are automatically or manually retired when their validity period ends.",
+      "test": "Create a short-lived test indicator and verify timely expiry.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Indicator expiry"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Indicator expiry §__"
+      }
+    },
+    {
+      "control_id": "CTI-023",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Revoke invalid threat indicators",
+      "expected_outcome": "Confirmed invalid indicators are removed from operational consumers promptly.",
+      "test": "Revoke a test indicator and verify removal from connected controls.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Indicator revocation"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Indicator revocation §__"
+      }
+    },
+    {
+      "control_id": "CTI-024",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Suppress harmful intelligence matches",
+      "expected_outcome": "Known benign or damaging matches are excluded with documented scope and review.",
+      "test": "Sample suppressions and verify justification, owner and expiry.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Indicator suppression"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Indicator suppression §__"
+      }
+    },
+    {
+      "control_id": "CTI-025",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Apply Traffic Light Protocol markings",
+      "expected_outcome": "Shared intelligence carries and preserves the applicable TLP marking.",
+      "test": "Sample received and disseminated items and compare handling with their TLP marking.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "TLP handling"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — TLP handling §__"
+      }
+    },
+    {
+      "control_id": "CTI-026",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Enforce intelligence-licensing restrictions",
+      "expected_outcome": "Intelligence use and redistribution remain within source licence terms.",
+      "test": "Sample licensed intelligence flows and verify permitted consumers and uses.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Intelligence licensing"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Intelligence licensing §__"
+      }
+    },
+    {
+      "control_id": "CTI-027",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Protect sensitive intelligence",
+      "expected_outcome": "Sensitive intelligence is stored and transmitted according to its classification.",
+      "test": "Sample sensitive intelligence objects and verify access and transport controls.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Intelligence protection"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Intelligence protection §__"
+      }
+    },
+    {
+      "control_id": "CTI-028",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Maintain threat-actor profiles",
+      "expected_outcome": "Relevant threat actors have current profiles with provenance and confidence.",
+      "test": "Sample actor profiles and verify current sources, confidence and review date.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Threat-actor profiling"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Threat-actor profiling §__"
+      }
+    },
+    {
+      "control_id": "CTI-029",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Track threat campaigns",
+      "expected_outcome": "Relevant campaigns are linked to actors, behaviours, infrastructure and affected sectors.",
+      "test": "Sample campaigns and verify supported relationships and timestamps.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Campaign tracking"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Campaign tracking §__"
+      }
+    },
+    {
+      "control_id": "CTI-030",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Maintain malware intelligence",
+      "expected_outcome": "Relevant malware records include behaviour, infrastructure and detection context.",
+      "test": "Sample malware records and verify current behavioural and technical context.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Malware intelligence"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Malware intelligence §__"
+      }
+    },
+    {
+      "control_id": "CTI-031",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Track adversary infrastructure",
+      "expected_outcome": "Relevant hostile infrastructure is recorded with provenance, confidence and validity.",
+      "test": "Sample infrastructure records and verify required lifecycle fields.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Adversary infrastructure"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Adversary infrastructure §__"
+      }
+    },
+    {
+      "control_id": "CTI-032",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Map intelligence to ATT&CK behaviours",
+      "expected_outcome": "Relevant intelligence is mapped to supported tactics and techniques.",
+      "test": "Sample mapped items and verify the source evidence supports each technique.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "ATT&CK mapping"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — ATT&CK mapping §__"
+      }
+    },
+    {
+      "control_id": "CTI-033",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Produce strategic threat intelligence",
+      "expected_outcome": "Leadership receives intelligence about material long-term threats and implications.",
+      "test": "Sample strategic products and trace conclusions to intelligence requirements and sources.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Strategic intelligence"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Strategic intelligence §__"
+      }
+    },
+    {
+      "control_id": "CTI-034",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Produce operational threat intelligence",
+      "expected_outcome": "Security leaders receive intelligence about active campaigns and likely operational impact.",
+      "test": "Sample operational products and verify actionable campaign and impact analysis.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Operational intelligence"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Operational intelligence §__"
+      }
+    },
+    {
+      "control_id": "CTI-035",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Produce tactical and technical threat intelligence",
+      "expected_outcome": "Defenders receive timely behaviours, indicators and defensive recommendations.",
+      "test": "Sample technical products and verify usable defensive content and validity periods.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Tactical intelligence"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Tactical intelligence §__"
+      }
+    },
+    {
+      "control_id": "CTI-036",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Disseminate intelligence to authorised consumers",
+      "expected_outcome": "Approved consumers receive relevant intelligence within its required timeframe.",
+      "test": "Sample intelligence products and compare recipients and delivery time with requirements.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Intelligence dissemination"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Intelligence dissemination §__"
+      }
+    },
+    {
+      "control_id": "CTI-037",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Integrate intelligence with detection engineering",
+      "expected_outcome": "Relevant intelligence produces traceable detection changes or review decisions.",
+      "test": "Sample intelligence-driven changes and trace them to deployed detection content.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Detection integration"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Detection integration §__"
+      }
+    },
+    {
+      "control_id": "CTI-038",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Integrate intelligence with threat hunting",
+      "expected_outcome": "Relevant intelligence produces traceable hunt hypotheses or tasking.",
+      "test": "Sample intelligence-led hunts and verify the originating intelligence and outcome.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Threat-hunting integration"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Threat-hunting integration §__"
+      }
+    },
+    {
+      "control_id": "CTI-039",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Integrate intelligence with incident response",
+      "expected_outcome": "Responders can obtain current intelligence about observed indicators, actors and behaviours.",
+      "test": "Sample incidents and verify relevant intelligence enrichment was available.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Incident-response integration"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Incident-response integration §__"
+      }
+    },
+    {
+      "control_id": "CTI-040",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Integrate intelligence with vulnerability prioritisation",
+      "expected_outcome": "Exploitation intelligence changes the treatment priority of affected vulnerabilities.",
+      "test": "Sample prioritisation changes and trace them to current intelligence.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Vulnerability integration"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Vulnerability integration §__"
+      }
+    },
+    {
+      "control_id": "CTI-041",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Manage intelligence requests for information",
+      "expected_outcome": "Consumer questions are prioritised, assigned and answered or closed with rationale.",
+      "test": "Sample RFIs and verify owner, response, timeliness and closure evidence.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Requests for information"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Requests for information §__"
+      }
+    },
+    {
+      "control_id": "CTI-042",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Track intelligence collection gaps",
+      "expected_outcome": "Unanswered requirements and unavailable sources are recorded and reviewed.",
+      "test": "Sample active gaps and verify owner, impact and treatment decision.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Collection gaps"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Collection gaps §__"
+      }
+    },
+    {
+      "control_id": "CTI-043",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Collect consumer feedback on intelligence",
+      "expected_outcome": "Intelligence consumers can record usefulness, timeliness and unmet needs.",
+      "test": "Sample delivered products and verify feedback was requested and recorded.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Consumer feedback"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — Consumer feedback §__"
+      }
+    },
+    {
+      "control_id": "CTI-044",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Measure intelligence effectiveness",
+      "expected_outcome": "The CTI capability reports measurable contribution to detection, hunting, response and risk decisions.",
+      "test": "Recalculate sampled effectiveness metrics from operational evidence.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "CTI effectiveness"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "R/A",
+        "customer_soc": "C",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cloud responsibility schedule — CTI effectiveness §__"
+      }
+    },
+    {
+      "control_id": "CTI-045",
+      "domain": "Cyber threat intelligence",
+      "service_model": "All models",
+      "control_objective": "Notify customers of provider intelligence-service changes",
+      "expected_outcome": "Provider changes affecting threat findings or intelligence delivery are communicated in advance.",
+      "test": "Sample service changes and compare notification timing with contract terms.",
+      "owner_assignment": "CSP",
+      "shared_control_component": [
+        "Provider CTI change notice"
+      ],
+      "rasci": {
+        "csp": "R/A",
+        "csc": "C",
+        "customer_soc": "I",
+        "third_party": "—"
+      },
+      "ism_applicability": [
+        "Detect",
+        "Respond"
+      ],
+      "ism_mapping_strength": "Contextual",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "TVM-01",
+          "LOG-05",
+          "SEF-05"
+        ],
+        "iso_iec_27017_2026": [
+          "5.7",
+          "8.16"
+        ],
+        "ism_v2026_09_4": [
+          "ism-principle-det-01",
+          "ism-principle-det-02"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Cyber threat intelligence provider service terms — Provider CTI change notice §__"
+      }
+    },
+    {
+      "control_id": "ATO-001",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Determine applicable accreditation and assurance schemes",
+      "expected_outcome": "Every system records the government, regulatory, contractual and industry assurance schemes that apply.",
+      "test": "Sample systems and trace documented applicability decisions to their obligations.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Scheme applicability"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-0714"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM",
+          "Australian Government PSPF",
+          "NIST SP 800-37 Rev. 2"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Scheme applicability §__"
+      }
+    },
+    {
+      "control_id": "ATO-002",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Appoint a system owner",
+      "expected_outcome": "Every system has one accountable owner for security, documentation and authorisation preparation.",
+      "test": "Sample system records and verify one current appointed owner.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "System ownership"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-0714"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM",
+          "Australian Government PSPF",
+          "NIST SP 800-37 Rev. 2"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — System ownership §__"
+      }
+    },
+    {
+      "control_id": "ATO-003",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Appoint an authorising officer",
+      "expected_outcome": "Every system has an executive authorised to accept its operational security risk.",
+      "test": "Sample systems and verify a current appointment with sufficient delegated authority.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Authorising officer"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-1526"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Authorise",
+          "Australian Government PSPF",
+          "NIST SP 800-37 Rev. 2 — Authorize"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Authorising officer §__"
+      }
+    },
+    {
+      "control_id": "ATO-004",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Define the independent assessor role",
+      "expected_outcome": "Assessment responsibilities and limitations are documented separately from the authorisation decision.",
+      "test": "Inspect assessment terms and verify the assessor cannot issue the system ATO.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Assessor role"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-0027"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government IRAP",
+          "NIST SP 800-53A Rev. 5",
+          "NIST SP 800-37 Rev. 2 — Assess"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Assessor role §__"
+      }
+    },
+    {
+      "control_id": "ATO-005",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Define the authorisation boundary",
+      "expected_outcome": "Components, services, data flows and environments included in the decision are unambiguously identified.",
+      "test": "Compare the documented boundary with architecture and asset records.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Authorisation boundary"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-1634"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Categorise",
+          "NIST SP 800-37 Rev. 2 — Categorize"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Authorisation boundary §__"
+      }
+    },
+    {
+      "control_id": "ATO-006",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Identify interconnected systems",
+      "expected_outcome": "Every connection crossing the authorisation boundary has an owner and authorisation dependency.",
+      "test": "Sample boundary connections and verify documented counterpart systems and owners.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Interconnection dependencies"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-1634"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Categorise",
+          "NIST SP 800-37 Rev. 2 — Categorize"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Interconnection dependencies §__"
+      }
+    },
+    {
+      "control_id": "ATO-007",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Determine information classification",
+      "expected_outcome": "The system records the highest classification and handling requirements of information it processes.",
+      "test": "Sample data holdings and reproduce the documented classification decision.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Information classification"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-1634"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Categorise",
+          "NIST SP 800-37 Rev. 2 — Categorize"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Information classification §__"
+      }
+    },
+    {
+      "control_id": "ATO-008",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Determine system business criticality",
+      "expected_outcome": "The system records the business impact of loss or compromise.",
+      "test": "Review the criticality assessment and verify it reflects current business services.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Business criticality"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-1634"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Categorise",
+          "NIST SP 800-37 Rev. 2 — Categorize"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Business criticality §__"
+      }
+    },
+    {
+      "control_id": "ATO-009",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Define system security objectives",
+      "expected_outcome": "Confidentiality, integrity, availability and resilience objectives are approved for the system.",
+      "test": "Inspect system objectives and verify approval by the appropriate owner.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Security objectives"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-1634"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Categorise",
+          "NIST SP 800-37 Rev. 2 — Categorize"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Security objectives §__"
+      }
+    },
+    {
+      "control_id": "ATO-010",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Classify control implementation types",
+      "expected_outcome": "Each selected control is identified as common, inherited, shared or system-specific.",
+      "test": "Sample selected controls and verify their implementation type and provider are recorded.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Control implementation model"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-1635"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Select",
+          "NIST SP 800-37 Rev. 2 — Select",
+          "NIST SP 800-53 Rev. 5"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Control implementation model §__"
+      }
+    },
+    {
+      "control_id": "ATO-011",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Select a security-control baseline",
+      "expected_outcome": "The system has an approved baseline appropriate to its classification, criticality and obligations.",
+      "test": "Reperform the baseline selection for a sampled system.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Control baseline"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-1635"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Select",
+          "NIST SP 800-37 Rev. 2 — Select",
+          "NIST SP 800-53 Rev. 5"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Control baseline §__"
+      }
+    },
+    {
+      "control_id": "ATO-012",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Tailor the security-control baseline",
+      "expected_outcome": "Additions, modifications and removals from the baseline are justified and approved.",
+      "test": "Sample tailored controls and verify documented rationale and approval.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Control tailoring"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-1635"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Select",
+          "NIST SP 800-37 Rev. 2 — Select",
+          "NIST SP 800-53 Rev. 5"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Control tailoring §__"
+      }
+    },
+    {
+      "control_id": "ATO-013",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Approve compensating controls",
+      "expected_outcome": "Alternative controls are formally accepted where the selected control cannot be implemented as written.",
+      "test": "Sample compensating controls and verify equivalence analysis and approval.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Compensating controls"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-1635"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Select",
+          "NIST SP 800-37 Rev. 2 — Select",
+          "NIST SP 800-53 Rev. 5"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Compensating controls §__"
+      }
+    },
+    {
+      "control_id": "ATO-014",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Approve control exclusions",
+      "expected_outcome": "Each excluded control has documented non-applicability and approval.",
+      "test": "Sample exclusions and verify the stated conditions remain true.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Control exclusions"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-1635"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Select",
+          "NIST SP 800-37 Rev. 2 — Select",
+          "NIST SP 800-53 Rev. 5"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Control exclusions §__"
+      }
+    },
+    {
+      "control_id": "ATO-015",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Maintain the shared-control responsibility matrix",
+      "expected_outcome": "Provider, customer, SOC and third-party implementation responsibilities are assigned for every selected control.",
+      "test": "Sample controls and verify one clear implementation owner and supporting parties.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Control responsibility matrix"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-1635"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Select",
+          "NIST SP 800-37 Rev. 2 — Select",
+          "NIST SP 800-53 Rev. 5"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Control responsibility matrix §__"
+      }
+    },
+    {
+      "control_id": "ATO-016",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Maintain the system security plan",
+      "expected_outcome": "The system security plan accurately describes the boundary, architecture, controls and implementation status.",
+      "test": "Sample plan sections and reconcile them with current system evidence.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "System security plan"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-0039"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Cyber security documentation",
+          "IRAP Consumer Guide"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — System security plan §__"
+      }
+    },
+    {
+      "control_id": "ATO-017",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Maintain the cyber security incident response plan",
+      "expected_outcome": "The authorisation package contains a system-specific and tested incident response plan.",
+      "test": "Inspect the plan and verify current contacts, scenarios and exercise evidence.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Incident response plan"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-0039"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Cyber security documentation",
+          "IRAP Consumer Guide"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Incident response plan §__"
+      }
+    },
+    {
+      "control_id": "ATO-018",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Maintain the change and configuration management plan",
+      "expected_outcome": "The authorisation package defines how security-impacting changes and configurations are governed.",
+      "test": "Sample recent changes and trace them to the documented process.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Change and configuration plan"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-0039"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Cyber security documentation",
+          "IRAP Consumer Guide"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Change and configuration plan §__"
+      }
+    },
+    {
+      "control_id": "ATO-019",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Maintain the continuous monitoring plan",
+      "expected_outcome": "The authorisation package defines control monitoring, evidence, frequencies, thresholds and reporting.",
+      "test": "Sample monitoring activities and compare execution with the approved plan.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Continuous monitoring plan"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-1587"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Monitor",
+          "NIST SP 800-37 Rev. 2 — Monitor",
+          "NIST SP 800-137"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Continuous monitoring plan §__"
+      }
+    },
+    {
+      "control_id": "ATO-020",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Maintain the security assessment plan",
+      "expected_outcome": "Each assessment has approved objectives, controls, methods, evidence requirements and schedule.",
+      "test": "Inspect a completed assessment and verify execution followed the approved plan.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Security assessment plan"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-0027"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government IRAP",
+          "NIST SP 800-53A Rev. 5",
+          "NIST SP 800-37 Rev. 2 — Assess"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Security assessment plan §__"
+      }
+    },
+    {
+      "control_id": "ATO-021",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Maintain the assessment controls matrix",
+      "expected_outcome": "The assessment status and evidence for every in-scope control are traceable.",
+      "test": "Sample assessed controls and reconcile matrix entries to evidence and findings.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Assessment controls matrix"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-0027"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government IRAP",
+          "NIST SP 800-53A Rev. 5",
+          "NIST SP 800-37 Rev. 2 — Assess"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Assessment controls matrix §__"
+      }
+    },
+    {
+      "control_id": "ATO-022",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Maintain an authorisation evidence repository",
+      "expected_outcome": "Current package artefacts and supporting evidence are controlled, versioned and retrievable.",
+      "test": "Sample package references and verify the exact approved evidence version is available.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Authorisation evidence"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-0039"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Cyber security documentation",
+          "IRAP Consumer Guide"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Authorisation evidence §__"
+      }
+    },
+    {
+      "control_id": "ATO-023",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Provide provider assurance evidence",
+      "expected_outcome": "The cloud provider supplies current evidence for inherited and provider-operated controls.",
+      "test": "Sample inherited controls and verify current provider evidence covers the service, region and period.",
+      "owner_assignment": "CSP",
+      "shared_control_component": [
+        "Provider assurance evidence"
+      ],
+      "rasci": {
+        "csp": "R/A",
+        "csc": "C",
+        "customer_soc": "I",
+        "third_party": "—"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-0027"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government IRAP",
+          "NIST SP 800-53A Rev. 5",
+          "NIST SP 800-37 Rev. 2 — Assess"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Provider assurance schedule — Provider assurance evidence §__"
+      }
+    },
+    {
+      "control_id": "ATO-024",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Verify assessor competence",
+      "expected_outcome": "The assessor holds the qualifications and experience required by the applicable scheme.",
+      "test": "Inspect assessor credentials and validate currency and scope.",
+      "owner_assignment": "3PTY",
+      "shared_control_component": [
+        "Assessor competence"
+      ],
+      "rasci": {
+        "csp": "I",
+        "csc": "A",
+        "customer_soc": "I",
+        "third_party": "R"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-0027"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government IRAP",
+          "NIST SP 800-53A Rev. 5",
+          "NIST SP 800-37 Rev. 2 — Assess"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Independent assessment agreement — Assessor competence §__"
+      }
+    },
+    {
+      "control_id": "ATO-025",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Verify assessor independence",
+      "expected_outcome": "The assessor is free from conflicts that could impair objective assessment.",
+      "test": "Review declarations, prior work and reporting lines for conflicts.",
+      "owner_assignment": "3PTY",
+      "shared_control_component": [
+        "Assessor independence"
+      ],
+      "rasci": {
+        "csp": "I",
+        "csc": "A",
+        "customer_soc": "I",
+        "third_party": "R"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-0027"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government IRAP",
+          "NIST SP 800-53A Rev. 5",
+          "NIST SP 800-37 Rev. 2 — Assess"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Independent assessment agreement — Assessor independence §__"
+      }
+    },
+    {
+      "control_id": "ATO-026",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Assess control implementation",
+      "expected_outcome": "The assessor determines whether each in-scope control has been implemented as documented.",
+      "test": "Sample assessment workpapers and reproduce the implementation conclusion.",
+      "owner_assignment": "3PTY",
+      "shared_control_component": [
+        "Implementation assessment"
+      ],
+      "rasci": {
+        "csp": "I",
+        "csc": "A",
+        "customer_soc": "I",
+        "third_party": "R"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-0027"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government IRAP",
+          "NIST SP 800-53A Rev. 5",
+          "NIST SP 800-37 Rev. 2 — Assess"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Independent assessment agreement — Implementation assessment §__"
+      }
+    },
+    {
+      "control_id": "ATO-027",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Assess control operating effectiveness",
+      "expected_outcome": "The assessor determines whether each in-scope control operates as intended over the assessed period.",
+      "test": "Sample assessment tests and verify sufficient evidence supports the effectiveness conclusion.",
+      "owner_assignment": "3PTY",
+      "shared_control_component": [
+        "Effectiveness assessment"
+      ],
+      "rasci": {
+        "csp": "I",
+        "csc": "A",
+        "customer_soc": "I",
+        "third_party": "R"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-0027"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government IRAP",
+          "NIST SP 800-53A Rev. 5",
+          "NIST SP 800-37 Rev. 2 — Assess"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Independent assessment agreement — Effectiveness assessment §__"
+      }
+    },
+    {
+      "control_id": "ATO-028",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Issue the security assessment report",
+      "expected_outcome": "Assessment results, risks, weaknesses and recommendations are formally reported.",
+      "test": "Inspect the final report and reconcile findings with workpapers and the controls matrix.",
+      "owner_assignment": "3PTY",
+      "shared_control_component": [
+        "Security assessment report"
+      ],
+      "rasci": {
+        "csp": "I",
+        "csc": "A",
+        "customer_soc": "I",
+        "third_party": "R"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-0027"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government IRAP",
+          "NIST SP 800-53A Rev. 5",
+          "NIST SP 800-37 Rev. 2 — Assess"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Independent assessment agreement — Security assessment report §__"
+      }
+    },
+    {
+      "control_id": "ATO-029",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Document assessment evidence limitations",
+      "expected_outcome": "Gaps in evidence, sampling, time period or service scope are explicitly recorded.",
+      "test": "Sample assessment limitations and verify their impact is reflected in conclusions.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Assessment limitations"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-0027"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government IRAP",
+          "NIST SP 800-53A Rev. 5",
+          "NIST SP 800-37 Rev. 2 — Assess"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Assessment limitations §__"
+      }
+    },
+    {
+      "control_id": "ATO-030",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Assign an owner to each assessment finding",
+      "expected_outcome": "Every finding has one accountable remediation owner.",
+      "test": "Sample open findings and verify a current accountable owner.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Finding ownership"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-0027"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Plan of action and milestones",
+          "NIST SP 800-37 Rev. 2 — Assess"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Finding ownership §__"
+      }
+    },
+    {
+      "control_id": "ATO-031",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Maintain a plan of action and milestones",
+      "expected_outcome": "Each unresolved weakness has planned actions, milestones and target dates.",
+      "test": "Sample open weaknesses and verify complete current POA&M entries.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Plan of action and milestones"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-0027"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Plan of action and milestones",
+          "NIST SP 800-37 Rev. 2 — Assess"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Plan of action and milestones §__"
+      }
+    },
+    {
+      "control_id": "ATO-032",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Prioritise authorisation findings",
+      "expected_outcome": "Finding priority reflects system risk, exposure and authorisation impact.",
+      "test": "Sample findings and reproduce the priority from documented criteria.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Finding prioritisation"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-0027"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Plan of action and milestones",
+          "NIST SP 800-37 Rev. 2 — Assess"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Finding prioritisation §__"
+      }
+    },
+    {
+      "control_id": "ATO-033",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Approve deferred authorisation findings",
+      "expected_outcome": "Deferred findings have documented residual risk, treatment rationale, owner and expiry.",
+      "test": "Sample deferred findings and verify approval and current expiry.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Finding deferral"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-0027"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Plan of action and milestones",
+          "NIST SP 800-37 Rev. 2 — Assess"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Finding deferral §__"
+      }
+    },
+    {
+      "control_id": "ATO-034",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Verify remediation of authorisation findings",
+      "expected_outcome": "A finding is closed only after corrective action is independently verified.",
+      "test": "Sample closed findings and inspect verification evidence.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Remediation verification"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-0027"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Plan of action and milestones",
+          "NIST SP 800-37 Rev. 2 — Assess"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Remediation verification §__"
+      }
+    },
+    {
+      "control_id": "ATO-035",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Validate authorisation-package completeness",
+      "expected_outcome": "Every mandatory package artefact is current and approved before submission.",
+      "test": "Apply the package checklist and reproduce the recorded completeness decision.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Package completeness"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-1526"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Authorise",
+          "Australian Government PSPF",
+          "NIST SP 800-37 Rev. 2 — Authorize"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Package completeness §__"
+      }
+    },
+    {
+      "control_id": "ATO-036",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Determine residual system risk",
+      "expected_outcome": "The authorising officer receives a documented view of remaining risk and uncertainty.",
+      "test": "Sample the risk determination and trace it to findings, threats and control evidence.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Residual risk determination"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-1526"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Authorise",
+          "Australian Government PSPF",
+          "NIST SP 800-37 Rev. 2 — Authorize"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Residual risk determination §__"
+      }
+    },
+    {
+      "control_id": "ATO-037",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Grant an ongoing authority to operate",
+      "expected_outcome": "An ongoing ATO is issued only when residual risk is formally accepted.",
+      "test": "Inspect an ongoing ATO and verify the decision, scope, approver and accepted risks.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Ongoing ATO"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-1526"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Authorise",
+          "Australian Government PSPF",
+          "NIST SP 800-37 Rev. 2 — Authorize"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Ongoing ATO §__"
+      }
+    },
+    {
+      "control_id": "ATO-038",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Grant a conditional authority to operate",
+      "expected_outcome": "A constrained ATO records the permitted scope, conditions and outstanding actions.",
+      "test": "Sample conditional ATOs and verify enforceable conditions and tracked actions.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Conditional ATO"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-1526"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Authorise",
+          "Australian Government PSPF",
+          "NIST SP 800-37 Rev. 2 — Authorize"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Conditional ATO §__"
+      }
+    },
+    {
+      "control_id": "ATO-039",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Deny authority to operate",
+      "expected_outcome": "A denied ATO records the unacceptable risks and conditions required for reconsideration.",
+      "test": "Inspect a denial decision or tabletop scenario and verify documented rationale and next steps.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "ATO denial"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-1526"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Authorise",
+          "Australian Government PSPF",
+          "NIST SP 800-37 Rev. 2 — Authorize"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — ATO denial §__"
+      }
+    },
+    {
+      "control_id": "ATO-040",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Record authorisation operating constraints",
+      "expected_outcome": "Restrictions imposed by the authorising officer are documented and communicated to operators.",
+      "test": "Sample constrained systems and verify the restrictions are implemented.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Operating constraints"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-1526"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Authorise",
+          "Australian Government PSPF",
+          "NIST SP 800-37 Rev. 2 — Authorize"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Operating constraints §__"
+      }
+    },
+    {
+      "control_id": "ATO-041",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Set authorisation expiry",
+      "expected_outcome": "Each time-limited authorisation has a clear end date and renewal lead time.",
+      "test": "Sample authorisations and verify expiry monitoring and renewal initiation.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "ATO expiry"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-1526"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Authorise",
+          "Australian Government PSPF",
+          "NIST SP 800-37 Rev. 2 — Authorize"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — ATO expiry §__"
+      }
+    },
+    {
+      "control_id": "ATO-042",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Report system security status annually",
+      "expected_outcome": "The system owner provides the authorising officer an annual security status report.",
+      "test": "Sample systems and verify a complete report was delivered within the annual interval.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Annual security status"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-1587"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Monitor",
+          "NIST SP 800-37 Rev. 2 — Monitor",
+          "NIST SP 800-137"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Annual security status §__"
+      }
+    },
+    {
+      "control_id": "ATO-043",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Detect material changes affecting authorisation",
+      "expected_outcome": "Changes to boundary, architecture, data, threats or controls trigger an authorisation-impact review.",
+      "test": "Sample material changes and verify timely impact decisions.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Material-change trigger"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-1587"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Monitor",
+          "NIST SP 800-37 Rev. 2 — Monitor",
+          "NIST SP 800-137"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Material-change trigger §__"
+      }
+    },
+    {
+      "control_id": "ATO-044",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Reauthorise after significant change",
+      "expected_outcome": "A system receives a new decision when change invalidates the existing risk basis.",
+      "test": "Sample significant changes and verify reauthorisation preceded unrestricted operation.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Reauthorisation"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-1526"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Authorise",
+          "Australian Government PSPF",
+          "NIST SP 800-37 Rev. 2 — Authorize"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Reauthorisation §__"
+      }
+    },
+    {
+      "control_id": "ATO-045",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Revoke authority to operate",
+      "expected_outcome": "The authorising officer can withdraw authorisation when residual risk becomes unacceptable.",
+      "test": "Review a revocation exercise or decision and verify access, operation and communication actions.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "ATO revocation"
+      ],
+      "rasci": {
+        "csp": "S",
+        "csc": "A",
+        "customer_soc": "R",
+        "third_party": "I"
+      },
+      "ism_applicability": [
+        "Governance"
+      ],
+      "ism_mapping_strength": "Direct",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [
+          "ism-1526"
+        ],
+        "accreditation_assurance_frameworks": [
+          "Australian Government ISM — Authorise",
+          "Australian Government PSPF",
+          "NIST SP 800-37 Rev. 2 — Authorize"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — ATO revocation §__"
+      }
+    },
+    {
+      "control_id": "ATO-046",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Define ISO certification scope",
+      "expected_outcome": "The ISMS certification boundary accurately identifies included organisations, locations, services and exclusions.",
+      "test": "Compare the certification statement with current operations and service boundaries.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "ISO certification scope"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [],
+      "ism_mapping_strength": "Not applicable",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [],
+        "accreditation_assurance_frameworks": [
+          "ISO/IEC 27001:2022",
+          "ISO/IEC 17021-1:2015",
+          "AICPA SOC 2",
+          "PCI DSS 4.0.1",
+          "CSA STAR"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — ISO certification scope §__"
+      }
+    },
+    {
+      "control_id": "ATO-047",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Maintain ISO certification surveillance",
+      "expected_outcome": "Required surveillance and recertification activities are completed before certification lapses.",
+      "test": "Inspect the certification schedule and latest accredited certification-body reports.",
+      "owner_assignment": "3PTY",
+      "shared_control_component": [
+        "ISO surveillance"
+      ],
+      "rasci": {
+        "csp": "I",
+        "csc": "A",
+        "customer_soc": "I",
+        "third_party": "R"
+      },
+      "ism_applicability": [],
+      "ism_mapping_strength": "Not applicable",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [],
+        "accreditation_assurance_frameworks": [
+          "ISO/IEC 27001:2022",
+          "ISO/IEC 17021-1:2015",
+          "AICPA SOC 2",
+          "PCI DSS 4.0.1",
+          "CSA STAR"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "Independent assessment agreement — ISO surveillance §__"
+      }
+    },
+    {
+      "control_id": "ATO-048",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Evaluate SOC assurance reports",
+      "expected_outcome": "SOC report scope, period, exceptions, subservice organisations and customer controls are assessed.",
+      "test": "Sample a SOC report review and verify all material limitations received treatment decisions.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "SOC report evaluation"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [],
+      "ism_mapping_strength": "Not applicable",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [],
+        "accreditation_assurance_frameworks": [
+          "ISO/IEC 27001:2022",
+          "ISO/IEC 17021-1:2015",
+          "AICPA SOC 2",
+          "PCI DSS 4.0.1",
+          "CSA STAR"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — SOC report evaluation §__"
+      }
+    },
+    {
+      "control_id": "ATO-049",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Maintain PCI DSS attestation",
+      "expected_outcome": "In-scope payment environments retain a current applicable assessment and attestation.",
+      "test": "Verify the current AOC or ROC covers the actual payment-data environment.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "PCI DSS attestation"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [],
+      "ism_mapping_strength": "Not applicable",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [],
+        "accreditation_assurance_frameworks": [
+          "ISO/IEC 27001:2022",
+          "ISO/IEC 17021-1:2015",
+          "AICPA SOC 2",
+          "PCI DSS 4.0.1",
+          "CSA STAR"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — PCI DSS attestation §__"
+      }
+    },
+    {
+      "control_id": "ATO-050",
+      "domain": "Security accreditation, assurance and authority to operate",
+      "service_model": "All models",
+      "control_objective": "Validate accreditation and certification claims",
+      "expected_outcome": "Public or contractual assurance claims accurately state the scheme, scope, period and issuing authority.",
+      "test": "Sample claims and reconcile them to current authoritative evidence.",
+      "owner_assignment": "CSC",
+      "shared_control_component": [
+        "Assurance claims"
+      ],
+      "rasci": {
+        "csp": "C",
+        "csc": "R/A",
+        "customer_soc": "I",
+        "third_party": "C"
+      },
+      "ism_applicability": [],
+      "ism_mapping_strength": "Not applicable",
+      "references": {
+        "csa_ccm_v4_1_control_ids": [
+          "GRC-01",
+          "STA-01",
+          "A&A-02"
+        ],
+        "iso_iec_27017_2026": [
+          "5.1",
+          "5.35",
+          "5.36"
+        ],
+        "ism_v2026_09_4": [],
+        "accreditation_assurance_frameworks": [
+          "ISO/IEC 27001:2022",
+          "ISO/IEC 17021-1:2015",
+          "AICPA SOC 2",
+          "PCI DSS 4.0.1",
+          "CSA STAR"
+        ],
+        "service_management_frameworks": [
+          "ISO/IEC 20000-1:2018"
+        ],
+        "provider_contractual_reference": "System authorisation framework — Assurance claims §__"
       }
     }
   ]
