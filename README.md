@@ -1,22 +1,20 @@
 # Cloud Shared Responsibility Explorer
 
-GitHub Pages-ready export of Version 23.
-
-## Contents
-
-- `index.html` — interactive responsibility explorer
-- `matrix.json` — complete 1,191-control catalogue (schema 1.21.0)
-- `.nojekyll` — disables Jekyll processing for GitHub Pages
+GitHub Pages-ready export of Version 31.
 
 ## Publish with GitHub Pages
 
-1. Extract these files into the root of a GitHub repository.
-2. Commit and push them to the default branch.
-3. Open **Settings → Pages** in GitHub.
-4. Select **Deploy from a branch**, choose the default branch and `/ (root)`, then save.
+1. Upload `index.html`, `matrix.json`, and `.nojekyll` to the root of a GitHub repository.
+2. In the repository, open **Settings → Pages**.
+3. Under **Build and deployment**, select **Deploy from a branch**.
+4. Select the branch containing these files and the `/ (root)` folder.
 
 The application is static and requires no build step or server-side runtime.
 
-## Version 23 addition
+## Contents
 
-The Security Accreditation, Assurance and Authority to Operate layer contains 50 atomic controls covering authorisation boundaries, categorisation, control baselines, documentation, independent assessment, POA&Ms, residual-risk decisions, ATO outcomes, continuous authorisation and industry certification or attestation.
+- `index.html` — interactive explorer.
+- `matrix.json` — catalogue of 1,191 atomic controls.
+- `.nojekyll` — disables Jekyll processing for direct static hosting.
+
+The lifecycle view uses responsibility functions as rows and 11 uncoloured lifecycle-stage headings as columns. COBIT pillar colours appear only within matrix intersections.
