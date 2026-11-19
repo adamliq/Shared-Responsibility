@@ -19,4 +19,11 @@ The application is static and requires no build step or server-side runtime.
 
 The lifecycle view uses responsibility functions as rows and 11 uncoloured lifecycle-stage headings as columns. COBIT pillar colours appear only within matrix intersections.
 
-The relationship map view is a mind map with the shared-responsibility hub at the centre. It links the four RASCI actors (customer governance, customer SOC, cloud provider and third party) to each control layer. Line weight shows how many in-scope controls give an actor a role, and each node is coloured by the actor holding the most accountable assignments. Selecting an actor or a layer filters the control catalogue.
+The **Relationships** view offers four diagrams, all driven by the same filters:
+
+- **Mind map**: the shared-responsibility hub, the four RASCI actors (customer governance, customer SOC, cloud provider and third party) and their links to each control layer, weighted by control count.
+- **Sankey flow**: traces each assignment from actor, through its RASCI role (R/A, A, R, S, C, I), into a control layer.
+- **Actor chord**: ribbons show how many controls each pair of actors shares, coloured by the actor more often accountable. A side panel ranks the pairs and breaks each one down by who is accountable.
+- **Heatmap**: control layers × actors, shaded by the share of each layer's controls where the actor holds the selected role.
+
+Selecting an actor, role or layer in any diagram filters the control catalogue.
