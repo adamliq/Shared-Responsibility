@@ -18,3 +18,5 @@ The application is static and requires no build step or server-side runtime.
 - `.nojekyll` — disables Jekyll processing for direct static hosting.
 
 The lifecycle view uses responsibility functions as rows and 11 uncoloured lifecycle-stage headings as columns. COBIT pillar colours appear only within matrix intersections.
+
+The relationship map view is a mind map with the shared-responsibility hub at the centre. It links the four RASCI actors (customer governance, customer SOC, cloud provider and third party) to each control layer. Line weight shows how many in-scope controls give an actor a role, and each node is coloured by the actor holding the most accountable assignments. Selecting an actor or a layer filters the control catalogue.
