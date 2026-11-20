@@ -27,3 +27,12 @@ The **Relationships** view offers four diagrams, all driven by the same filters:
 - **Heatmap**: control layers × actors, shaded by the share of each layer's controls where the actor holds the selected role.
 
 Selecting an actor, role or layer in any diagram filters the control catalogue.
+
+The **Platform lifecycle** view now switches between the original matrix and four diagrams built from the lifecycle data:
+
+- **Sankey flow**: lifecycle stage → responsibility function → COBIT pillar, with bands coloured by pillar.
+- **Stage–layer network**: the 11 stages in order, linked to the control layers each one engages. Layers are ordered by when they are most active, and line weight shows in-scope controls.
+- **Stage arcs**: arcs join stages that share control layers, and a bar under each stage shows its mix of COBIT pillars.
+- **Heatmap**: pillars against stages (how many responsibility functions engage each pillar), followed by a stage-by-layer grid showing when each layer is engaged.
+
+The on-premises section and COBIT pillar filters narrow every diagram. Selecting a stage, pillar or layer in a diagram filters the control catalogue.
