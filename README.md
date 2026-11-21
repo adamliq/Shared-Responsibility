@@ -19,14 +19,14 @@ The application is static and requires no build step or server-side runtime.
 
 The lifecycle view uses responsibility functions as rows and 11 uncoloured lifecycle-stage headings as columns. COBIT pillar colours appear only within matrix intersections.
 
-The **Relationships** view offers four diagrams, all driven by the same filters:
+The **Allocation** and **Parties involved** views each switch between the original matrix and four diagrams built from the control-layer × service-model share data. The parties are customer governance, customer SOC and cloud provider:
 
-- **Mind map**: the shared-responsibility hub, the four RASCI actors (customer governance, customer SOC, cloud provider and third party) and their links to each control layer, weighted by control count.
-- **Sankey flow**: traces each assignment from actor, through its RASCI role (R/A, A, R, S, C, I), into a control layer.
-- **Actor chord**: ribbons show how many controls each pair of actors shares, coloured by the actor more often accountable. A side panel ranks the pairs and breaks each one down by who is accountable.
-- **Heatmap**: control layers × actors, shaded by the share of each layer's controls where the actor holds the selected role.
+- **Sankey flow**: service model → party → control layer. In Allocation, band width is the party's share of each layer, in percentage points. In Parties involved, each band is one layer in which the party is involved.
+- **Party–layer network**: each party is linked to the control layers it takes part in, weighted by its average share or by the number of service models that involve it. Selecting a service model reweights the lines for that model.
+- **Model arcs**: arcs join the 16 most similar pairs of service models, and a bar under each model shows its average party mix.
+- **Heatmap**: control layers against service models. Allocation cells are split by party share, and selecting a party in the RASCI actor filter focuses on its share. Involvement cells show which parties take part.
 
-Selecting an actor, role or layer in any diagram filters the control catalogue.
+Selecting a service model, party or layer in a diagram filters the control catalogue.
 
 The **Platform lifecycle** view now switches between the original matrix and four diagrams built from the lifecycle data:
 
