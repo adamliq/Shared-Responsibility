@@ -36,3 +36,10 @@ The **Platform lifecycle** view now switches between the original matrix and fou
 - **Heatmap**: pillars against stages (how many responsibility functions engage each pillar), followed by a stage-by-layer grid showing when each layer is engaged.
 
 The on-premises section and COBIT pillar filters narrow every diagram. Selecting a stage, pillar or layer in a diagram filters the control catalogue.
+
+The **On-prem cross-cut** view has the same switch between the original matrix and four diagrams built from the section, role and pillar data:
+
+- **Sankey flow**: on-premises section → responsibility function → COBIT pillar. Left bands are shaded by the section's role (primary, support or consulted) and right bands are coloured by pillar.
+- **Section–function network**: each section is linked to the functions it holds a role in. Line weight, shade and dashes show the role, and each function lists its pillars.
+- **Section arcs**: arcs join sections that both hold a primary or support role in the same function, and a bar under each section shows its mix of roles.
+- **Heatmap**: pillars against sections (functions engaged, split into P/S/C), followed by a grid of the control layers each section covers.
