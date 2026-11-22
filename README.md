@@ -50,3 +50,14 @@ The **Failure scenarios** view has the same switch between its original involvem
 - **Scenario–layer network**: each scenario is linked to the control layers its recovery draws on. Layers used by every scenario sit at the top.
 - **Scenario arcs**: arcs join scenarios by how much their section–function involvement overlaps, labelled with the number of control layers they share. Each scenario shows its involvement, layer count and recovery targets.
 - **Heatmap**: the scenarios side by side, showing sections involved per function, functions involved per section, and the control layers each scenario uses.
+
+Every view also has a **Graph** tab: a Neo4j-style property graph of that view's data, with node labels, typed relationships carrying properties, a properties panel and draggable nodes.
+
+| View | Nodes | Relationships |
+| --- | --- | --- |
+| Allocation / Parties involved | Party, ServiceModel, ControlLayer | `ALLOCATES` / `INVOLVES`, `HOLDS_SHARE` / `INVOLVED_IN` |
+| On-prem cross-cut | Section, Function, Pillar, ControlLayer | `PRIMARY_FOR`, `SUPPORTS`, `CONSULTED_ON`, `ALIGNS_TO`, `COVERS` |
+| Platform lifecycle | Stage, Pillar, ControlLayer | `NEXT`, `EMPHASISES`, `ENGAGES` |
+| Failure scenarios | Scenario, Section, ControlLayer | `INVOLVES`, `DRAWS_ON` |
+
+The **Cypher** button shows a `CREATE` script for the current graph, ready to copy or download as a `.cypher` file and run in Neo4j Browser or `cypher-shell`.
