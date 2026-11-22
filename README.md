@@ -61,3 +61,17 @@ Every view also has a **Graph** tab: a Neo4j-style property graph of that view's
 | Failure scenarios | Scenario, Section, ControlLayer | `INVOLVES`, `DRAWS_ON` |
 
 The **Cypher** button shows a `CREATE` script for the current graph, ready to copy or download as a `.cypher` file and run in Neo4j Browser or `cypher-shell`.
+
+The **Combined graph** view joins every data set into one property graph:
+
+- **Nodes:** parties and RASCI actors (including third party), service models, control layers, the 51 control domains, on-premises sections, responsibility functions, COBIT pillars, lifecycle stages and failure scenarios.
+- **Expanding controls:** select a domain and choose **Expand** to add its individual controls, each linked to the parties it assigns by RASCI code.
+- **Type chips:** the chips in the overview panel show or hide each node type.
+- **Cypher › Full dataset:** exports all 1,191 controls with their RASCI assignments, domains and standards references. Nodes load in `UNWIND` batches with uniqueness constraints, so the import suits `cypher-shell` or Neo4j Browser.
+
+The Combined graph view includes a **Cypher console** for running read-only queries against the full dataset: 1,325 nodes and 5,877 relationships, including all 1,191 controls.
+
+- **Supported Cypher:** `MATCH`, `OPTIONAL MATCH`, `WHERE`, `WITH`, `UNWIND` and `RETURN` (with `DISTINCT`, `ORDER BY`, `SKIP` and `LIMIT`); label, property and relationship-type patterns; variable-length paths (up to 15 hops) and named paths; aggregates (`count`, `collect`, `sum`, `avg`, `min`, `max`); `CASE`; and the common string, list and graph functions.
+- **Results:** nodes, relationships and paths appear as a graph, which also includes relationships between returned nodes, as in Neo4j Browser. Every result can be viewed as a table and downloaded as CSV.
+- **Help:** an Examples menu offers ready-made queries, and the Syntax button lists everything supported.
+- **Limits:** writes (`CREATE`, `MERGE`, `SET`, `DELETE`, `CALL`) are rejected. Runaway queries stop at 50,000 rows or after too many explored paths.
