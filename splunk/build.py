@@ -6,8 +6,9 @@ index.html (service-model shares, on-premises sections, lifecycle stages and
 failure scenarios), then writes a complete Splunk app to splunk/shared_responsibility
 and, with --package, a .tgz ready to install.
 
-Requires Python 3.9+ and Node.js (used only to read the JavaScript constants
-from index.html so the explorer and the app share one source of truth).
+Requires Python 3.9+. The control catalogue (matrix.json) and reference data
+(reference.json) are shared with the standalone explorer, so both always agree.
+Building the React page needs Node.js 22+ and npm.
 
     python3 splunk/build.py            # regenerate the app directory
     python3 splunk/build.py --package  # also write dist/shared_responsibility-<version>.tgz
@@ -38,15 +39,18 @@ NO_ROLE = {"—", "N/A", ""}
 
 
 def read_reference_data():
-    """Evaluate the reference constants in index.html with Node and return them as JSON."""
-    script = r"""
-const fs=require('fs');const h=fs.readFileSync(process.argv[1],'utf8');
-const s=h.slice(h.indexOf('const MODELS'),h.indexOf('let controls'));
-const out=new Function(s+';return {MODELS,MODEL_INFO,LAYERS,ONPREM_PILLARS,ONPREM_RESPONSIBILITIES,ONPREM_SECTIONS,PLATFORM_LIFECYCLE,FAILURE_SCENARIOS}')();
-process.stdout.write(JSON.stringify(out));
-"""
-    result = subprocess.run(["node", "-e", script, str(ROOT / "index.html")], check=True, capture_output=True, text=True)
-    return json.loads(result.stdout)
+    """Reads reference.json (shared with the explorer) into the shapes the lookup builders use."""
+    ref = json.loads((ROOT / "reference.json").read_text(encoding="utf-8"))
+    return {
+        "MODELS": [m["id"] for m in ref["service_models"]],
+        "MODEL_INFO": {m["id"]: m.get("definition", "") for m in ref["service_models"]},
+        "LAYERS": ref["control_layers"],
+        "ONPREM_PILLARS": ref["cobit_pillars"],
+        "ONPREM_RESPONSIBILITIES": ref["responsibility_functions"],
+        "ONPREM_SECTIONS": ref["onprem_sections"],
+        "PLATFORM_LIFECYCLE": ref["lifecycle_stages"],
+        "FAILURE_SCENARIOS": ref["failure_scenarios"],
+    }
 
 
 def write_csv(name, header, rows):
@@ -576,6 +580,7 @@ def copy_explorer():
     (target / "explorer.js").write_text(html[start + len("<script>"):end].strip() + "\n", encoding="utf-8")
     (target / "index.html").write_text(html[:start] + '<script>window.i18n_register=window.i18n_register||function(){};</script><script src="explorer.js"></script>' + html[end + len("</script>"):], encoding="utf-8")
     shutil.copy2(ROOT / "matrix.json", target / "matrix.json")
+    shutil.copy2(ROOT / "reference.json", target / "reference.json")
     for icon in sorted((ROOT / "splunk" / "static").glob("*.png")):
         shutil.copy2(icon, APP_DIR / "static" / icon.name)
 

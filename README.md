@@ -4,7 +4,7 @@ GitHub Pages-ready export of Version 31.
 
 ## Publish with GitHub Pages
 
-1. Upload `index.html`, `matrix.json`, and `.nojekyll` to the root of a GitHub repository.
+1. Upload `index.html`, `matrix.json`, `reference.json` and `.nojekyll` to the root of a GitHub repository.
 2. In the repository, open **Settings → Pages**.
 3. Under **Build and deployment**, select **Deploy from a branch**.
 4. Select the branch containing these files and the `/ (root)` folder.
@@ -15,6 +15,9 @@ The application is static and requires no build step or server-side runtime.
 
 - `index.html` — interactive explorer.
 - `matrix.json` — catalogue of 1,191 atomic controls.
+- `reference.json` — reference data: service-model allocation shares by control layer, on-premises sections and responsibility functions, COBIT pillars, lifecycle stages and failure scenarios.
+- `examples/profile-example.json` — a fictional organisation profile.
+- `docs/organisation-profile.md` — how to add your own organisation's information.
 - `.nojekyll` — disables Jekyll processing for direct static hosting.
 
 The lifecycle view uses responsibility functions as rows and 11 uncoloured lifecycle-stage headings as columns. COBIT pillar colours appear only within matrix intersections.
@@ -79,3 +82,23 @@ The Combined graph view includes a **Cypher console** for running read-only quer
 ## Splunk app (proof of concept)
 
 `splunk/` holds a Splunk app built from the same data. It has lookups for every data set, a Splunk UI Toolkit (React) explorer page that reads them live, Dashboard Studio dashboards, scheduled control-evidence searches you can run from the page, and the bundled standalone explorer. To build it, run `python3 splunk/build.py --package`. [splunk/README.md](splunk/README.md) covers installation and what the app contains.
+
+## Organisation profiles
+
+**Organisation profile** (top right of the explorer) adds your own information on top of the published baseline. A profile can hold:
+
+- named parties and providers;
+- systems;
+- control applicability and justifications;
+- RASCI changes, owners, contract references and evidence links;
+- custom controls;
+- allocation shares and failure scenarios.
+
+**Importing:** a JSON profile, or a CSV tailoring workbook edited in a spreadsheet. Each import is validated and previewed before it's applied.
+
+**Exporting:** the profile itself, the tailoring workbook, a tailoring report and a Statement of Applicability.
+
+**Where profiles are kept:** only in the browser. Nothing is uploaded, and profiles shouldn't be committed to this public repository.
+
+[docs/organisation-profile.md](docs/organisation-profile.md) covers the schema and the workbook columns.
+

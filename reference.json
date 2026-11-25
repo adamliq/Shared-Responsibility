@@ -1,0 +1,2513 @@
+{
+ "schema_version": "1.0.0",
+ "title": "Shared responsibility reference data",
+ "description": "Service-model allocation shares by control layer, on-premises sections and responsibility functions, COBIT pillars, platform lifecycle stages and failure scenarios used by the Shared Responsibility Explorer.",
+ "service_models": [
+  {
+   "id": "On-premises",
+   "definition": "The organisation operates the full technology stack in facilities it controls."
+  },
+  {
+   "id": "IaaS",
+   "definition": "The provider operates physical infrastructure and virtualisation; the customer manages operating systems, workloads, data and most security configuration."
+  },
+  {
+   "id": "PaaS",
+   "definition": "The provider operates the infrastructure and application platform; the customer manages applications, identities, data and configuration."
+  },
+  {
+   "id": "SaaS",
+   "definition": "The provider operates the application and supporting stack; the customer manages use, identities, data, configuration and monitoring integration."
+  },
+  {
+   "id": "FaaS",
+   "definition": "The provider operates the event-driven runtime and infrastructure; the customer manages function code, identities, data, triggers and configuration."
+  },
+  {
+   "id": "BaaS",
+   "definition": "Backend as a Service provides managed databases, user authentication, push notifications and other pre-made backend capabilities so developers can focus on the client-side application."
+  },
+  {
+   "id": "SECaaS",
+   "definition": "Security as a Service integrates capabilities such as anti-malware, authentication and intrusion detection into the customer’s cloud environment."
+  },
+  {
+   "id": "DaaS",
+   "definition": "Desktop as a Service delivers provider-hosted virtual desktop infrastructure so users can stream a managed desktop environment to supported devices."
+  },
+  {
+   "id": "DBaaS",
+   "definition": "Database as a Service provides a managed database without requiring the customer to provision physical hardware or install and operate database software."
+  },
+  {
+   "id": "IDaaS",
+   "definition": "Identity as a Service outsources digital gatekeeping—including authentication, password infrastructure and multi-factor authentication—to an identity provider such as Microsoft Entra ID."
+  },
+  {
+   "id": "CaaS",
+   "definition": "Containers as a Service provides managed servers and container orchestration, such as Kubernetes; the customer manages containers, images, configuration and application code."
+  }
+ ],
+ "control_layers": [
+  {
+   "id": "governance",
+   "label": "Data classification and accountability",
+   "hint": "Governance, data and compliance",
+   "domains": [
+    "Governance",
+    "Data security and privacy",
+    "Compliance and legal",
+    "Assurance"
+   ],
+   "share": [
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100
+   ],
+   "soc": [
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    20,
+    15,
+    10,
+    15,
+    10
+   ]
+  },
+  {
+   "id": "endpoint",
+   "label": "Client and endpoint protection",
+   "hint": "Endpoint and access edge",
+   "domains": [
+    "Endpoint security",
+    "Human resources security",
+    "Mobile security"
+   ],
+   "share": [
+    100,
+    100,
+    100,
+    85,
+    80,
+    80,
+    60,
+    55,
+    80,
+    65,
+    90
+   ],
+   "soc": [
+    30,
+    30,
+    30,
+    25,
+    25,
+    25,
+    35,
+    30,
+    25,
+    30,
+    30
+   ]
+  },
+  {
+   "id": "identity",
+   "label": "Identity and access management",
+   "hint": "Identity, privilege and secrets",
+   "domains": [
+    "Identity and access management",
+    "Key management and cryptography"
+   ],
+   "share": [
+    100,
+    100,
+    70,
+    65,
+    65,
+    55,
+    45,
+    55,
+    60,
+    35,
+    75
+   ],
+   "soc": [
+    25,
+    25,
+    20,
+    20,
+    20,
+    20,
+    25,
+    20,
+    20,
+    20,
+    25
+   ]
+  },
+  {
+   "id": "application",
+   "label": "Application-level controls",
+   "hint": "Applications, data and workloads",
+   "domains": [
+    "Application and interface security",
+    "Data security and privacy",
+    "Change control and configuration management",
+    "Vulnerability management"
+   ],
+   "share": [
+    100,
+    100,
+    60,
+    55,
+    50,
+    45,
+    40,
+    60,
+    45,
+    45,
+    80
+   ],
+   "soc": [
+    20,
+    20,
+    15,
+    15,
+    15,
+    15,
+    25,
+    20,
+    15,
+    20,
+    20
+   ]
+  },
+  {
+   "id": "network",
+   "label": "Network controls",
+   "hint": "Segmentation and traffic protection",
+   "domains": [
+    "Infrastructure and virtualization security",
+    "Network security"
+   ],
+   "share": [
+    100,
+    70,
+    45,
+    20,
+    15,
+    15,
+    20,
+    20,
+    20,
+    15,
+    55
+   ],
+   "soc": [
+    30,
+    25,
+    20,
+    10,
+    10,
+    10,
+    15,
+    10,
+    10,
+    10,
+    20
+   ]
+  },
+  {
+   "id": "host",
+   "label": "Host infrastructure",
+   "hint": "Compute, platform and resilience",
+   "domains": [
+    "Infrastructure and virtualization security",
+    "Business continuity and operational resilience",
+    "Supply chain management"
+   ],
+   "share": [
+    100,
+    45,
+    10,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    20
+   ],
+   "soc": [
+    20,
+    15,
+    5,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    10
+   ]
+  },
+  {
+   "id": "physical",
+   "label": "Physical security",
+   "hint": "Facilities and hardware",
+   "domains": [
+    "Physical security"
+   ],
+   "share": [
+    100,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "soc": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "operations",
+   "label": "Security operations",
+   "hint": "Logging, detection, response and forensics",
+   "domains": [
+    "Logging and monitoring",
+    "Log collection and pipeline assurance",
+    "Detection engineering",
+    "Threat hunting",
+    "Incident response",
+    "Digital forensics",
+    "Security incident management, e-discovery and cloud forensics"
+   ],
+   "share": [
+    100,
+    75,
+    70,
+    65,
+    65,
+    55,
+    50,
+    55,
+    55,
+    55,
+    70
+   ],
+   "soc": [
+    65,
+    55,
+    55,
+    50,
+    50,
+    45,
+    40,
+    45,
+    45,
+    45,
+    55
+   ]
+  },
+  {
+   "id": "finops",
+   "label": "FinOps and cost accountability",
+   "hint": "Cost ownership, allocation, forecasting and optimisation",
+   "domains": [
+    "FinOps and cost accountability"
+   ],
+   "share": [
+    100,
+    80,
+    75,
+    70,
+    75,
+    70,
+    70,
+    70,
+    70,
+    70,
+    75
+   ],
+   "soc": [
+    0,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+   ]
+  },
+  {
+   "id": "service",
+   "label": "Service and operational incidents",
+   "hint": "Service ownership, support, restoration and improvement",
+   "domains": [
+    "Service management and operational incidents"
+   ],
+   "share": [
+    100,
+    75,
+    65,
+    55,
+    70,
+    60,
+    55,
+    55,
+    55,
+    55,
+    65
+   ],
+   "soc": [
+    5,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10
+   ]
+  },
+  {
+   "id": "continuity",
+   "label": "Availability, backup and continuity",
+   "hint": "Availability design, backup, recovery and continuity",
+   "domains": [
+    "Availability, backup, recovery and continuity"
+   ],
+   "share": [
+    100,
+    80,
+    70,
+    60,
+    70,
+    65,
+    60,
+    60,
+    60,
+    60,
+    70
+   ],
+   "soc": [
+    5,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10
+   ]
+  },
+  {
+   "id": "data-governance",
+   "label": "Data governance, privacy and records",
+   "hint": "Data accountability, privacy operations and records lifecycle",
+   "domains": [
+    "Data governance, privacy and records management"
+   ],
+   "share": [
+    100,
+    90,
+    85,
+    80,
+    85,
+    80,
+    80,
+    80,
+    80,
+    80,
+    85
+   ],
+   "soc": [
+    0,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+   ]
+  },
+  {
+   "id": "performance",
+   "label": "Performance, capacity and scalability",
+   "hint": "Performance objectives, demand, limits and scaling",
+   "domains": [
+    "Performance, capacity and scalability"
+   ],
+   "share": [
+    100,
+    75,
+    60,
+    45,
+    65,
+    55,
+    50,
+    50,
+    50,
+    50,
+    65
+   ],
+   "soc": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "architecture",
+   "label": "Architecture and technical governance",
+   "hint": "Design authority, patterns, interoperability and technical debt",
+   "domains": [
+    "Architecture and technical governance"
+   ],
+   "share": [
+    100,
+    90,
+    85,
+    80,
+    85,
+    80,
+    80,
+    80,
+    80,
+    80,
+    85
+   ],
+   "soc": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "change-release",
+   "label": "Change, release and environments",
+   "hint": "Assessment, approvals, readiness, rollback, windows, promotion and validation",
+   "domains": [
+    "Change, release and environment management"
+   ],
+   "share": [
+    100,
+    85,
+    75,
+    60,
+    70,
+    65,
+    65,
+    60,
+    60,
+    60,
+    75
+   ],
+   "soc": [
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10
+   ]
+  },
+  {
+   "id": "network-carrier",
+   "label": "Network and carrier operations",
+   "hint": "Circuits, addressing, capacity, resilience, faults, maintenance and lifecycle",
+   "domains": [
+    "Network and carrier operations"
+   ],
+   "share": [
+    100,
+    80,
+    65,
+    45,
+    65,
+    55,
+    50,
+    50,
+    50,
+    45,
+    70
+   ],
+   "soc": [
+    15,
+    15,
+    10,
+    10,
+    10,
+    10,
+    15,
+    10,
+    10,
+    10,
+    15
+   ]
+  },
+  {
+   "id": "onprem-operations",
+   "label": "On-premises infrastructure and operations",
+   "hint": "Facilities, power, cooling, compute, virtualisation, storage and site operations",
+   "domains": [
+    "On-premises infrastructure and operations"
+   ],
+   "share": [
+    100,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "soc": [
+    10,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "asset-cmdb",
+   "label": "Asset, CMDB and lifecycle management",
+   "hint": "Ownership, discovery, relationships, entitlements, refresh and disposal",
+   "domains": [
+    "Asset, CMDB and lifecycle management",
+    "Asset management"
+   ],
+   "share": [
+    100,
+    95,
+    90,
+    85,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90,
+    90
+   ],
+   "soc": [
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+   ]
+  },
+  {
+   "id": "virtualisation",
+   "label": "Virtualisation and platform operations",
+   "hint": "Hypervisors, clusters, management planes, templates and platform upgrades",
+   "domains": [
+    "Virtualisation and platform operations",
+    "Provider infrastructure",
+    "Runtime and middleware"
+   ],
+   "share": [
+    100,
+    40,
+    15,
+    0,
+    10,
+    5,
+    5,
+    0,
+    5,
+    0,
+    30
+   ],
+   "soc": [
+    10,
+    10,
+    5,
+    0,
+    5,
+    5,
+    5,
+    0,
+    5,
+    0,
+    10
+   ]
+  },
+  {
+   "id": "storage-media",
+   "label": "Storage and media operations",
+   "hint": "SAN/NAS, capacity, replication, removable media, tape handling and off-site storage",
+   "domains": [
+    "Storage and media operations"
+   ],
+   "share": [
+    100,
+    75,
+    55,
+    20,
+    50,
+    45,
+    40,
+    35,
+    40,
+    30,
+    60
+   ],
+   "soc": [
+    10,
+    10,
+    10,
+    5,
+    10,
+    10,
+    10,
+    5,
+    10,
+    5,
+    10
+   ]
+  },
+  {
+   "id": "supplier-commercial",
+   "label": "Supplier, procurement and commercial",
+   "hint": "Purchasing, warranties, support contracts, renewals, service credits and exit",
+   "domains": [
+    "Supplier, procurement and commercial management",
+    "Supply chain",
+    "Exit and portability"
+   ],
+   "share": [
+    100,
+    90,
+    85,
+    80,
+    85,
+    80,
+    80,
+    80,
+    80,
+    80,
+    85
+   ],
+   "soc": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "os-compute",
+   "label": "Operating system and compute operations",
+   "hint": "Windows/Linux lifecycle, services, jobs, patching, filesystems and compute health",
+   "domains": [
+    "Operating system and compute operations",
+    "Operating system security"
+   ],
+   "share": [
+    100,
+    80,
+    25,
+    0,
+    10,
+    10,
+    10,
+    20,
+    10,
+    0,
+    45
+   ],
+   "soc": [
+    15,
+    15,
+    10,
+    0,
+    5,
+    5,
+    5,
+    10,
+    5,
+    0,
+    10
+   ]
+  },
+  {
+   "id": "ucc",
+   "label": "Unified communications and collaboration",
+   "hint": "Voice, video, messaging, conferencing, rooms, recording and carrier operations",
+   "domains": [
+    "Unified communications and collaboration operations"
+   ],
+   "share": [
+    100,
+    80,
+    70,
+    40,
+    65,
+    60,
+    55,
+    65,
+    55,
+    50,
+    70
+   ],
+   "soc": [
+    10,
+    10,
+    10,
+    5,
+    10,
+    10,
+    10,
+    10,
+    10,
+    5,
+    10
+   ]
+  },
+  {
+   "id": "euc",
+   "label": "End-user computing and workplace services",
+   "hint": "Devices, builds, software, peripherals, printing, VDI and workplace support",
+   "domains": [
+    "End-user computing and workplace services",
+    "Endpoint security"
+   ],
+   "share": [
+    100,
+    90,
+    80,
+    60,
+    80,
+    75,
+    70,
+    65,
+    70,
+    60,
+    85
+   ],
+   "soc": [
+    15,
+    15,
+    10,
+    10,
+    10,
+    10,
+    15,
+    10,
+    10,
+    10,
+    15
+   ]
+  },
+  {
+   "id": "iac",
+   "label": "Configuration, automation and infrastructure as code",
+   "hint": "Repositories, modules, pipelines, policy, state, drift, deployment and recovery",
+   "domains": [
+    "Configuration, automation and infrastructure as code",
+    "Configuration management"
+   ],
+   "share": [
+    100,
+    90,
+    80,
+    60,
+    85,
+    75,
+    75,
+    65,
+    70,
+    65,
+    85
+   ],
+   "soc": [
+    10,
+    10,
+    10,
+    5,
+    10,
+    10,
+    10,
+    5,
+    10,
+    10,
+    10
+   ]
+  },
+  {
+   "id": "core-infra",
+   "label": "Core infrastructure services",
+   "hint": "Directory, DNS, DHCP, time, PKI, IPAM, file services and replication",
+   "domains": [
+    "Core infrastructure services"
+   ],
+   "share": [
+    100,
+    95,
+    80,
+    70,
+    75,
+    70,
+    75,
+    80,
+    70,
+    75,
+    85
+   ],
+   "soc": [
+    20,
+    20,
+    15,
+    10,
+    15,
+    15,
+    15,
+    15,
+    15,
+    15,
+    20
+   ]
+  },
+  {
+   "id": "vulnerability-exposure",
+   "label": "Vulnerability and exposure management",
+   "hint": "Coverage, assessment, prioritisation, remediation, exceptions and exposure metrics",
+   "domains": [
+    "Vulnerability and exposure management"
+   ],
+   "share": [
+    100,
+    90,
+    80,
+    70,
+    80,
+    75,
+    75,
+    75,
+    75,
+    70,
+    85
+   ],
+   "soc": [
+    35,
+    35,
+    30,
+    25,
+    30,
+    30,
+    30,
+    30,
+    30,
+    25,
+    35
+   ]
+  },
+  {
+   "id": "cti",
+   "label": "Cyber threat intelligence",
+   "hint": "Requirements, collection, analysis, indicators, intelligence products and operational integration",
+   "domains": [
+    "Cyber threat intelligence"
+   ],
+   "share": [
+    100,
+    85,
+    75,
+    70,
+    80,
+    75,
+    75,
+    75,
+    75,
+    70,
+    80
+   ],
+   "soc": [
+    70,
+    65,
+    60,
+    55,
+    65,
+    60,
+    60,
+    60,
+    60,
+    55,
+    65
+   ]
+  },
+  {
+   "id": "ato",
+   "label": "Security accreditation, assurance and authority to operate",
+   "hint": "Boundary, controls, evidence, assessment, risk acceptance, ATO and continuous authorisation",
+   "domains": [
+    "Security accreditation, assurance and authority to operate"
+   ],
+   "share": [
+    100,
+    95,
+    90,
+    85,
+    90,
+    85,
+    85,
+    85,
+    85,
+    85,
+    90
+   ],
+   "soc": [
+    25,
+    25,
+    20,
+    20,
+    25,
+    20,
+    20,
+    20,
+    20,
+    20,
+    25
+   ]
+  }
+ ],
+ "cobit_pillars": [
+  {
+   "label": "Govern",
+   "code": "EDM",
+   "meaning": "Evaluate, Direct and Monitor",
+   "color": "#f59e0b"
+  },
+  {
+   "label": "Plan & Design",
+   "code": "APO",
+   "meaning": "Align, Plan and Organise",
+   "color": "#9b6cff"
+  },
+  {
+   "label": "Build & Change",
+   "code": "BAI",
+   "meaning": "Build, Acquire and Implement",
+   "color": "#0794d2"
+  },
+  {
+   "label": "Deliver & Operate",
+   "code": "DSS",
+   "meaning": "Deliver, Service and Support",
+   "color": "#20c77a"
+  },
+  {
+   "label": "Monitor & Assure",
+   "code": "MEA",
+   "meaning": "Monitor, Evaluate and Assess",
+   "color": "#ee6fa8"
+  }
+ ],
+ "responsibility_functions": [
+  {
+   "label": "Service governance",
+   "pillars": [
+    "EDM",
+    "APO",
+    "MEA"
+   ]
+  },
+  {
+   "label": "Facilities",
+   "pillars": [
+    "APO",
+    "BAI",
+    "DSS",
+    "MEA"
+   ]
+  },
+  {
+   "label": "Network operations",
+   "pillars": [
+    "APO",
+    "BAI",
+    "DSS",
+    "MEA"
+   ]
+  },
+  {
+   "label": "Compute & platform",
+   "pillars": [
+    "APO",
+    "BAI",
+    "DSS",
+    "MEA"
+   ]
+  },
+  {
+   "label": "Application & data",
+   "pillars": [
+    "APO",
+    "BAI",
+    "DSS",
+    "MEA"
+   ]
+  },
+  {
+   "label": "Workplace services",
+   "pillars": [
+    "APO",
+    "BAI",
+    "DSS",
+    "MEA"
+   ]
+  },
+  {
+   "label": "Customer SOC",
+   "pillars": [
+    "APO",
+    "BAI",
+    "DSS",
+    "MEA"
+   ]
+  },
+  {
+   "label": "Suppliers",
+   "pillars": [
+    "EDM",
+    "APO",
+    "BAI",
+    "DSS",
+    "MEA"
+   ]
+  }
+ ],
+ "onprem_sections": [
+  {
+   "id": "op-governance",
+   "label": "Governance, architecture and assurance",
+   "hint": "Ownership, design authority, accreditation, risk and commercial governance",
+   "layers": [
+    "governance",
+    "architecture",
+    "ato",
+    "supplier-commercial"
+   ],
+   "roles": [
+    "P",
+    "—",
+    "—",
+    "C",
+    "C",
+    "C",
+    "S",
+    "C"
+   ]
+  },
+  {
+   "id": "op-facilities",
+   "label": "Facilities and data centre",
+   "hint": "Sites, power, cooling, racks, physical protection and environmental operations",
+   "layers": [
+    "onprem-operations",
+    "physical"
+   ],
+   "roles": [
+    "C",
+    "P",
+    "S",
+    "S",
+    "—",
+    "—",
+    "C",
+    "S"
+   ]
+  },
+  {
+   "id": "op-network",
+   "label": "Network and carrier",
+   "hint": "LAN, WAN, internet, circuits, addressing, segmentation and traffic services",
+   "layers": [
+    "network-carrier",
+    "network"
+   ],
+   "roles": [
+    "C",
+    "C",
+    "P",
+    "S",
+    "C",
+    "—",
+    "S",
+    "S"
+   ]
+  },
+  {
+   "id": "op-compute",
+   "label": "Compute, hardware and operating systems",
+   "hint": "Servers, firmware, operating systems, jobs, patching and compute health",
+   "layers": [
+    "os-compute",
+    "host",
+    "asset-cmdb"
+   ],
+   "roles": [
+    "C",
+    "S",
+    "C",
+    "P",
+    "C",
+    "—",
+    "S",
+    "S"
+   ]
+  },
+  {
+   "id": "op-platform",
+   "label": "Virtualisation and automation platforms",
+   "hint": "Hypervisors, clusters, templates, orchestration, configuration and IaC",
+   "layers": [
+    "virtualisation",
+    "iac"
+   ],
+   "roles": [
+    "C",
+    "—",
+    "C",
+    "P",
+    "S",
+    "—",
+    "S",
+    "S"
+   ]
+  },
+  {
+   "id": "op-storage",
+   "label": "Storage, backup and continuity",
+   "hint": "SAN/NAS, replication, backup, recovery, media and continuity",
+   "layers": [
+    "storage-media",
+    "continuity"
+   ],
+   "roles": [
+    "C",
+    "S",
+    "C",
+    "P",
+    "C",
+    "—",
+    "S",
+    "S"
+   ]
+  },
+  {
+   "id": "op-core",
+   "label": "Core infrastructure services",
+   "hint": "Directory, DNS, DHCP, time, PKI, IPAM, file services and identity",
+   "layers": [
+    "core-infra",
+    "identity"
+   ],
+   "roles": [
+    "C",
+    "—",
+    "S",
+    "P",
+    "S",
+    "C",
+    "S",
+    "S"
+   ]
+  },
+  {
+   "id": "op-workplace",
+   "label": "End-user and workplace services",
+   "hint": "Endpoints, builds, software, printing, VDI, rooms and user support",
+   "layers": [
+    "euc",
+    "endpoint",
+    "ucc"
+   ],
+   "roles": [
+    "C",
+    "—",
+    "S",
+    "S",
+    "C",
+    "P",
+    "S",
+    "S"
+   ]
+  },
+  {
+   "id": "op-appdata",
+   "label": "Applications, data and performance",
+   "hint": "Application controls, data governance, privacy, records and capacity",
+   "layers": [
+    "application",
+    "data-governance",
+    "performance"
+   ],
+   "roles": [
+    "P",
+    "—",
+    "C",
+    "S",
+    "P",
+    "C",
+    "S",
+    "S"
+   ]
+  },
+  {
+   "id": "op-service",
+   "label": "Service, change and financial operations",
+   "hint": "ITSM, incidents, releases, environments, cost and service improvement",
+   "layers": [
+    "service",
+    "change-release",
+    "finops"
+   ],
+   "roles": [
+    "P",
+    "C",
+    "C",
+    "S",
+    "S",
+    "S",
+    "C",
+    "S"
+   ]
+  },
+  {
+   "id": "op-cyber",
+   "label": "Cyber operations and exposure",
+   "hint": "Logging, detection, response, forensics, vulnerabilities, hunting and intelligence",
+   "layers": [
+    "operations",
+    "vulnerability-exposure",
+    "cti"
+   ],
+   "roles": [
+    "C",
+    "—",
+    "S",
+    "S",
+    "S",
+    "C",
+    "P",
+    "S"
+   ]
+  }
+ ],
+ "lifecycle_stages": [
+  {
+   "id": "lc-initiate",
+   "label": "1. Initiate and justify",
+   "hint": "Business need, outcomes, sponsorship, funding, risk appetite and platform mandate",
+   "layers": [
+    "governance",
+    "architecture",
+    "finops",
+    "ato"
+   ],
+   "pillars": [
+    [
+     "EDM",
+     "APO"
+    ],
+    [
+     "APO"
+    ],
+    [
+     "APO"
+    ],
+    [
+     "APO"
+    ],
+    [
+     "APO"
+    ],
+    [
+     "APO"
+    ],
+    [
+     "APO"
+    ],
+    [
+     "EDM",
+     "APO"
+    ]
+   ]
+  },
+  {
+   "id": "lc-design",
+   "label": "2. Architect and design",
+   "hint": "Reference architecture, service model, security, data, integration and operational design",
+   "layers": [
+    "architecture",
+    "network",
+    "host",
+    "application",
+    "data-governance",
+    "physical",
+    "core-infra",
+    "identity"
+   ],
+   "pillars": [
+    [
+     "APO"
+    ],
+    [
+     "APO"
+    ],
+    [
+     "APO"
+    ],
+    [
+     "APO"
+    ],
+    [
+     "APO"
+    ],
+    [
+     "APO"
+    ],
+    [
+     "APO"
+    ],
+    [
+     "APO"
+    ]
+   ]
+  },
+  {
+   "id": "lc-source",
+   "label": "3. Source and contract",
+   "hint": "Market approach, product selection, licensing, support, warranties, obligations and exit terms",
+   "layers": [
+    "supplier-commercial",
+    "asset-cmdb",
+    "finops",
+    "architecture"
+   ],
+   "pillars": [
+    [
+     "EDM",
+     "APO"
+    ],
+    [
+     "APO",
+     "BAI"
+    ],
+    [
+     "APO",
+     "BAI"
+    ],
+    [
+     "APO",
+     "BAI"
+    ],
+    [
+     "APO",
+     "BAI"
+    ],
+    [
+     "APO",
+     "BAI"
+    ],
+    [
+     "APO"
+    ],
+    [
+     "EDM",
+     "APO",
+     "BAI"
+    ]
+   ]
+  },
+  {
+   "id": "lc-build",
+   "label": "4. Build and configure",
+   "hint": "Facilities readiness, infrastructure deployment, platform configuration, automation and security controls",
+   "layers": [
+    "onprem-operations",
+    "network-carrier",
+    "host",
+    "virtualisation",
+    "os-compute",
+    "core-infra",
+    "storage-media",
+    "iac",
+    "application"
+   ],
+   "pillars": [
+    [
+     "APO"
+    ],
+    [
+     "BAI"
+    ],
+    [
+     "BAI"
+    ],
+    [
+     "BAI"
+    ],
+    [
+     "BAI"
+    ],
+    [
+     "BAI"
+    ],
+    [
+     "BAI"
+    ],
+    [
+     "BAI"
+    ]
+   ]
+  },
+  {
+   "id": "lc-integrate",
+   "label": "5. Integrate and migrate",
+   "hint": "Connectivity, identity, data migration, application integration, tooling and operational integration",
+   "layers": [
+    "network",
+    "identity",
+    "data-governance",
+    "application",
+    "core-infra",
+    "change-release",
+    "iac"
+   ],
+   "pillars": [
+    [
+     "APO"
+    ],
+    [
+     "BAI"
+    ],
+    [
+     "BAI"
+    ],
+    [
+     "BAI"
+    ],
+    [
+     "BAI"
+    ],
+    [
+     "BAI"
+    ],
+    [
+     "BAI"
+    ],
+    [
+     "BAI"
+    ]
+   ]
+  },
+  {
+   "id": "lc-assure",
+   "label": "6. Test, assure and accredit",
+   "hint": "Functional, resilience, performance and security testing, evidence, assessment and authority to operate",
+   "layers": [
+    "ato",
+    "vulnerability-exposure",
+    "operations",
+    "performance",
+    "continuity",
+    "change-release"
+   ],
+   "pillars": [
+    [
+     "MEA"
+    ],
+    [
+     "BAI",
+     "MEA"
+    ],
+    [
+     "BAI",
+     "MEA"
+    ],
+    [
+     "BAI",
+     "MEA"
+    ],
+    [
+     "BAI",
+     "MEA"
+    ],
+    [
+     "BAI",
+     "MEA"
+    ],
+    [
+     "BAI",
+     "MEA"
+    ],
+    [
+     "BAI",
+     "MEA"
+    ]
+   ]
+  },
+  {
+   "id": "lc-transition",
+   "label": "7. Transition and release",
+   "hint": "Release readiness, service acceptance, documentation, training, cutover, rollback and early-life support",
+   "layers": [
+    "change-release",
+    "service",
+    "continuity",
+    "asset-cmdb",
+    "euc"
+   ],
+   "pillars": [
+    [
+     "APO",
+     "MEA"
+    ],
+    [
+     "DSS"
+    ],
+    [
+     "BAI",
+     "DSS"
+    ],
+    [
+     "BAI",
+     "DSS"
+    ],
+    [
+     "BAI",
+     "DSS"
+    ],
+    [
+     "BAI",
+     "DSS"
+    ],
+    [
+     "BAI",
+     "DSS"
+    ],
+    [
+     "BAI",
+     "DSS"
+    ]
+   ]
+  },
+  {
+   "id": "lc-operate",
+   "label": "8. Operate and support",
+   "hint": "Routine platform, infrastructure, workplace, service, supplier and security operations",
+   "layers": [
+    "onprem-operations",
+    "service",
+    "network-carrier",
+    "host",
+    "virtualisation",
+    "os-compute",
+    "core-infra",
+    "storage-media",
+    "euc",
+    "ucc",
+    "operations"
+   ],
+   "pillars": [
+    [
+     "MEA"
+    ],
+    [
+     "DSS",
+     "MEA"
+    ],
+    [
+     "DSS",
+     "MEA"
+    ],
+    [
+     "DSS",
+     "MEA"
+    ],
+    [
+     "DSS",
+     "MEA"
+    ],
+    [
+     "DSS",
+     "MEA"
+    ],
+    [
+     "DSS",
+     "MEA"
+    ],
+    [
+     "DSS",
+     "MEA"
+    ]
+   ]
+  },
+  {
+   "id": "lc-monitor",
+   "label": "9. Monitor and improve",
+   "hint": "Health, capacity, control effectiveness, threat monitoring, service review and continual improvement",
+   "layers": [
+    "operations",
+    "performance",
+    "vulnerability-exposure",
+    "cti",
+    "service",
+    "finops"
+   ],
+   "pillars": [
+    [
+     "EDM",
+     "MEA"
+    ],
+    [
+     "MEA"
+    ],
+    [
+     "MEA"
+    ],
+    [
+     "MEA"
+    ],
+    [
+     "MEA"
+    ],
+    [
+     "MEA"
+    ],
+    [
+     "DSS",
+     "MEA"
+    ],
+    [
+     "MEA"
+    ]
+   ]
+  },
+  {
+   "id": "lc-change",
+   "label": "10. Change and modernise",
+   "hint": "Upgrades, patches, enhancements, automation, architecture refresh and technical-debt reduction",
+   "layers": [
+    "architecture",
+    "change-release",
+    "iac",
+    "vulnerability-exposure",
+    "asset-cmdb",
+    "virtualisation",
+    "os-compute"
+   ],
+   "pillars": [
+    [
+     "APO",
+     "MEA"
+    ],
+    [
+     "APO",
+     "BAI"
+    ],
+    [
+     "APO",
+     "BAI"
+    ],
+    [
+     "APO",
+     "BAI"
+    ],
+    [
+     "APO",
+     "BAI"
+    ],
+    [
+     "APO",
+     "BAI"
+    ],
+    [
+     "APO",
+     "BAI"
+    ],
+    [
+     "APO",
+     "BAI"
+    ]
+   ]
+  },
+  {
+   "id": "lc-retire",
+   "label": "11. Retire, archive and dispose",
+   "hint": "Decommissioning, data retention or destruction, asset disposal, contract closure and residual-risk confirmation",
+   "layers": [
+    "asset-cmdb",
+    "storage-media",
+    "data-governance",
+    "supplier-commercial",
+    "continuity",
+    "change-release",
+    "ato"
+   ],
+   "pillars": [
+    [
+     "EDM",
+     "APO",
+     "MEA"
+    ],
+    [
+     "DSS",
+     "MEA"
+    ],
+    [
+     "BAI",
+     "DSS",
+     "MEA"
+    ],
+    [
+     "BAI",
+     "DSS",
+     "MEA"
+    ],
+    [
+     "BAI",
+     "DSS",
+     "MEA"
+    ],
+    [
+     "BAI",
+     "DSS",
+     "MEA"
+    ],
+    [
+     "DSS",
+     "MEA"
+    ],
+    [
+     "BAI",
+     "DSS",
+     "MEA"
+    ]
+   ]
+  }
+ ],
+ "failure_scenarios": [
+  {
+   "id": "dr-primary-server-room-flood",
+   "number": 1,
+   "title": "Primary server room flood",
+   "label": "Scenario 1 · Primary server room flood",
+   "summary": "A burst water pipe destroys the primary VMware cluster, SAN and on-site backup NAS. The disaster-recovery team must activate a branch recovery site and restore critical on-premises services from the latest usable off-site copy.",
+   "objective": "Restore Tier 1 systems within 4 hours, Tier 2 systems within 8 hours, and limit data loss to 24 hours.",
+   "metrics": [
+    {
+     "value": "4 h",
+     "label": "Tier 1 RTO"
+    },
+    {
+     "value": "24 h",
+     "label": "Maximum data loss / RPO"
+    }
+   ],
+   "phases": [
+    "Assess and declare",
+    "Prepare the recovery site",
+    "Restore Tier 1 systems",
+    "Restore Tier 2 systems",
+    "Return to normal"
+   ],
+   "layers": [
+    "governance",
+    "physical",
+    "network-carrier",
+    "network",
+    "host",
+    "virtualisation",
+    "storage-media",
+    "continuity",
+    "core-infra",
+    "identity",
+    "application",
+    "data-governance",
+    "service",
+    "change-release",
+    "operations",
+    "supplier-commercial",
+    "ato"
+   ],
+   "involved": {
+    "op-governance": [
+     1,
+     1,
+     0,
+     0,
+     1,
+     1,
+     1,
+     1
+    ],
+    "op-facilities": [
+     1,
+     1,
+     0,
+     1,
+     0,
+     0,
+     0,
+     1
+    ],
+    "op-network": [
+     1,
+     0,
+     1,
+     1,
+     0,
+     1,
+     1,
+     1
+    ],
+    "op-compute": [
+     1,
+     1,
+     1,
+     1,
+     1,
+     0,
+     1,
+     1
+    ],
+    "op-platform": [
+     0,
+     0,
+     1,
+     1,
+     1,
+     0,
+     1,
+     1
+    ],
+    "op-storage": [
+     1,
+     1,
+     1,
+     1,
+     1,
+     0,
+     1,
+     1
+    ],
+    "op-core": [
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ],
+    "op-workplace": [
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     0
+    ],
+    "op-appdata": [
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ],
+    "op-service": [
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ],
+    "op-cyber": [
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": "cloud-identity-outage",
+   "number": 2,
+   "title": "Cloud identity outage",
+   "label": "Scenario 2 · Cloud identity outage",
+   "summary": "The cloud identity provider stops authenticating users, locking staff and administrators out of cloud services, VPN access and federated on-premises applications while the underlying hardware remains available.",
+   "objective": "Regain identity-tenant administration within 30 minutes, restore critical remote access within 2 hours, and make ERP and email usable within 4 hours.",
+   "metrics": [
+    {
+     "value": "30 min",
+     "label": "Admin access target"
+    },
+    {
+     "value": "4 h",
+     "label": "Business-app target"
+    }
+   ],
+   "phases": [
+    "Confirm scope and provider status",
+    "Use break-glass access",
+    "Rollback or invoke authentication fallbacks",
+    "Communicate out of band",
+    "Revert fallbacks and review logs"
+   ],
+   "layers": [
+    "governance",
+    "network-carrier",
+    "network",
+    "host",
+    "virtualisation",
+    "storage-media",
+    "core-infra",
+    "identity",
+    "endpoint",
+    "euc",
+    "application",
+    "data-governance",
+    "service",
+    "change-release",
+    "operations",
+    "vulnerability-exposure",
+    "supplier-commercial",
+    "ato"
+   ],
+   "involved": {
+    "op-governance": [
+     1,
+     0,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1
+    ],
+    "op-facilities": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "op-network": [
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ],
+    "op-compute": [
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ],
+    "op-platform": [
+     1,
+     0,
+     1,
+     1,
+     0,
+     0,
+     1,
+     1
+    ],
+    "op-storage": [
+     1,
+     0,
+     1,
+     1,
+     0,
+     0,
+     1,
+     1
+    ],
+    "op-core": [
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ],
+    "op-workplace": [
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ],
+    "op-appdata": [
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ],
+    "op-service": [
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ],
+    "op-cyber": [
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": "malware-outbreak",
+   "number": 3,
+   "title": "Malware outbreak",
+   "label": "Scenario 3 · Malware outbreak",
+   "summary": "Ransomware spreads from a phished endpoint into the server network, encrypting file shares, virtual machines and the backup NAS. Containment, evidence preservation and clean identity recovery must precede restoration.",
+   "objective": "Contain spread within 1 hour, rebuild or verify clean identity within 24 hours, restore Tier 1 systems within 48 hours, and complete hardened recovery within 2 weeks.",
+   "metrics": [
+    {
+     "value": "1 h",
+     "label": "Containment target"
+    },
+    {
+     "value": "48 h",
+     "label": "Tier 1 restore target"
+    }
+   ],
+   "phases": [
+    "Contain",
+    "Investigate and preserve evidence",
+    "Rebuild identity",
+    "Restore from clean backups",
+    "Reconnect and monitor"
+   ],
+   "layers": [
+    "governance",
+    "network-carrier",
+    "network",
+    "host",
+    "virtualisation",
+    "storage-media",
+    "continuity",
+    "core-infra",
+    "identity",
+    "endpoint",
+    "euc",
+    "application",
+    "data-governance",
+    "service",
+    "change-release",
+    "operations",
+    "vulnerability-exposure",
+    "cti",
+    "supplier-commercial",
+    "ato"
+   ],
+   "involved": {
+    "op-governance": [
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ],
+    "op-facilities": [
+     1,
+     1,
+     0,
+     1,
+     0,
+     0,
+     1,
+     1
+    ],
+    "op-network": [
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ],
+    "op-compute": [
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ],
+    "op-platform": [
+     1,
+     0,
+     1,
+     1,
+     1,
+     0,
+     1,
+     1
+    ],
+    "op-storage": [
+     1,
+     0,
+     1,
+     1,
+     1,
+     0,
+     1,
+     1
+    ],
+    "op-core": [
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ],
+    "op-workplace": [
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ],
+    "op-appdata": [
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ],
+    "op-service": [
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ],
+    "op-cyber": [
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": "onprem-gateway-failure",
+   "number": 4,
+   "title": "On-premises gateway failure",
+   "label": "Scenario 4 · On-premises gateway failure",
+   "summary": "The edge firewall fails after a firmware update, cutting the office off from internet, cloud, remote users and branch connectivity while internal servers remain operational and no data restore is required.",
+   "objective": "Provide temporary internet access for critical staff within 1 hour, restore VPN and site-to-site tunnels within 4 hours, and complete permanent replacement within one business day.",
+   "metrics": [
+    {
+     "value": "1 h",
+     "label": "Temporary access target"
+    },
+    {
+     "value": "4 h",
+     "label": "VPN and tunnel target"
+    }
+   ],
+   "phases": [
+    "Diagnose gateway versus carrier",
+    "Fail over or replace the gateway",
+    "Use interim connectivity workarounds",
+    "Verify routes, tunnels and dependent services",
+    "Review change and resilience controls"
+   ],
+   "layers": [
+    "governance",
+    "network-carrier",
+    "network",
+    "host",
+    "virtualisation",
+    "storage-media",
+    "continuity",
+    "core-infra",
+    "identity",
+    "endpoint",
+    "euc",
+    "application",
+    "service",
+    "change-release",
+    "operations",
+    "supplier-commercial",
+    "iac"
+   ],
+   "involved": {
+    "op-governance": [
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ],
+    "op-facilities": [
+     1,
+     1,
+     1,
+     1,
+     0,
+     0,
+     0,
+     1
+    ],
+    "op-network": [
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ],
+    "op-compute": [
+     1,
+     0,
+     1,
+     1,
+     1,
+     0,
+     1,
+     1
+    ],
+    "op-platform": [
+     1,
+     0,
+     1,
+     1,
+     1,
+     0,
+     1,
+     1
+    ],
+    "op-storage": [
+     1,
+     0,
+     1,
+     1,
+     0,
+     0,
+     1,
+     1
+    ],
+    "op-core": [
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ],
+    "op-workplace": [
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ],
+    "op-appdata": [
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ],
+    "op-service": [
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ],
+    "op-cyber": [
+     1,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ]
+   }
+  }
+ ]
+}
