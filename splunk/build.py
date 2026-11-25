@@ -11,6 +11,9 @@ from index.html so the explorer and the app share one source of truth).
 
     python3 splunk/build.py            # regenerate the app directory
     python3 splunk/build.py --package  # also write dist/shared_responsibility-<version>.tgz
+    python3 splunk/build.py --skip-ui  # reuse the last React build in splunk/react/dist
+
+The React explorer page (Splunk UI Toolkit) is built with npm from splunk/react.
 """
 import argparse
 import csv
@@ -23,7 +26,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 APP_ID = "shared_responsibility"
 APP_DIR = ROOT / "splunk" / APP_ID
-VERSION = "0.1.0"
+VERSION = "0.2.0"
+UI_DIR = ROOT / "splunk" / "react"
 PARTIES = [
     ("csc", "Customer governance"),
     ("customer_soc", "Customer SOC"),
@@ -137,8 +141,9 @@ def build_lookups(matrix, ref):
                                                    [[i + 1, st["label"], lid, layer_label.get(lid, lid)] for i, st in enumerate(stages) for lid in st["layers"]])
 
     scenarios = ref["FAILURE_SCENARIOS"]
-    counts["srm_scenarios.csv"] = write_csv("srm_scenarios.csv", ["scenario_number", "scenario_id", "scenario", "summary", "objective", "phases"],
-                                            [[sc.get("number", i + 1), sc["id"], sc["title"], sc["summary"], sc["objective"], mv(sc["phases"])]
+    counts["srm_scenarios.csv"] = write_csv("srm_scenarios.csv", ["scenario_number", "scenario_id", "scenario", "summary", "objective", "phases", "metrics"],
+                                            [[sc.get("number", i + 1), sc["id"], sc["title"], sc["summary"], sc["objective"], mv(sc["phases"]),
+                                              mv(f"{m['label']}={m['value']}" for m in sc.get("metrics", []))]
                                              for i, sc in enumerate(scenarios)])
     counts["srm_scenario_involvement.csv"] = write_csv(
         "srm_scenario_involvement.csv", ["scenario", "section_id", "section", "function", "involved"],
@@ -441,7 +446,7 @@ def build_conf(views):
     write("default/app.conf", f"""
 [install]
 is_configured = false
-build = 1
+build = 2
 
 [ui]
 is_visible = true
@@ -462,7 +467,8 @@ version = {VERSION}
 """)
     write("default/data/ui/nav/default.xml", """
 <nav search_view="search" color="#0B6689">
-  <view name="srm_overview" default="true" />
+  <view name="srm_explorer" default="true" />
+  <view name="srm_overview" />
   <collection label="Responsibility">
     <view name="srm_allocation" />
     <view name="srm_onprem" />
@@ -471,7 +477,7 @@ version = {VERSION}
   </collection>
   <view name="srm_controls" />
   <view name="srm_evidence" />
-  <a href="/static/app/shared_responsibility/explorer/index.html" target="_blank">Explorer and graph ↗</a>
+  <a href="/static/app/shared_responsibility/explorer/index.html" target="_blank">Standalone explorer ↗</a>
   <view name="search" />
 </nav>
 """)
@@ -538,6 +544,8 @@ WHAT IT CONTAINS
 - Lookups generated from the explorer's data: srm_controls (1,191 controls), srm_rasci,
   srm_layer_shares, srm_sections, srm_section_roles, srm_lifecycle_*, srm_scenario_* and more.
   Every lookup has a definition named <file>_lookup, for example | inputlookup srm_controls_lookup
+- Explorer: a Splunk UI Toolkit (React) page, the app's default view, that reads the lookups live,
+  runs evidence checks on demand and queries the combined graph with read-only Cypher.
 - Dashboard Studio dashboards: {", ".join(views)}
 - Seven scheduled evidence searches ("SRM Evidence - <control>") that evidence logging controls
   from Splunk's own data and append results to the srm_evidence KV Store collection.
@@ -545,7 +553,8 @@ WHAT IT CONTAINS
   from the app navigation.
 
 SET UP
-1. Install the app (Apps > Manage Apps > Install app from file) and restart if prompted.
+1. Install the app (Apps > Manage Apps > Install app from file), then restart Splunk so
+   Splunk Web picks up the Explorer page template.
 2. Edit the srm_monitored_indexes macro to list the indexes that hold your security data.
 3. Run any check immediately with | savedsearch "SRM Evidence - LOG-004"; they are otherwise
    scheduled hourly (LOG-010 daily).
@@ -571,6 +580,51 @@ def copy_explorer():
         shutil.copy2(icon, APP_DIR / "static" / icon.name)
 
 
+def build_ui(skip):
+    """Builds the Splunk UI Toolkit page and installs its bundle, template and view."""
+    bundle = UI_DIR / "dist" / "explorer.js"
+    if not skip:
+        npm = shutil.which("npm")
+        if not npm:
+            raise SystemExit("npm is required to build the React page (or pass --skip-ui to reuse splunk/react/dist).")
+        if not (UI_DIR / "node_modules").exists():
+            subprocess.run([npm, "ci", "--no-audit", "--no-fund"], cwd=UI_DIR, check=True)
+        subprocess.run([npm, "run", "build"], cwd=UI_DIR, check=True)
+    if not bundle.exists():
+        raise SystemExit("splunk/react/dist/explorer.js is missing; run without --skip-ui.")
+    pages = APP_DIR / "appserver" / "static" / "pages"
+    pages.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(bundle, pages / "explorer.js")
+    # Splunk UI Toolkit page template. It uses only make_url() expressions, with no Python code
+    # blocks, and loads Splunk's config and i18n scripts before the page bundle.
+    write("appserver/templates/srm_explorer.html", f"""
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Shared Responsibility Explorer</title>
+    </head>
+    <body>
+        <script src="${{make_url('/config?autoload=1')}}" crossorigin="use-credentials"></script>
+        <script src="${{make_url('/static/js/i18n.js')}}"></script>
+        <script src="${{make_url('/i18ncatalog?autoload=1')}}"></script>
+        <script>
+            __splunkd_partials__ = ${{json_decode(splunkd)}};
+        </script>
+        <script src="${{make_url('/static/app/{APP_ID}/pages/explorer.js')}}"></script>
+    </body>
+</html>
+""")
+    write("default/data/ui/views/srm_explorer.xml", f"""
+<?xml version="1.0"?>
+<view template="{APP_ID}:/templates/srm_explorer.html" type="html" isDashboard="False">
+    <label>Explorer</label>
+</view>
+""")
+    return (pages / "explorer.js").stat().st_size
+
+
 def package():
     dist = ROOT / "splunk" / "dist"
     dist.mkdir(exist_ok=True)
@@ -588,6 +642,7 @@ def package():
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--package", action="store_true", help="also write splunk/dist/<app>-<version>.tgz")
+    parser.add_argument("--skip-ui", action="store_true", help="reuse the existing React build instead of running npm")
     args = parser.parse_args()
     matrix = json.loads((ROOT / "matrix.json").read_text(encoding="utf-8"))
     ref = read_reference_data()
@@ -599,9 +654,10 @@ def main():
     views = build_dashboards(ref)
     build_conf(views)
     copy_explorer()
+    ui_size = build_ui(args.skip_ui)
     for name, n in counts.items():
         print(f"  lookups/{name}: {n} rows")
-    print(f"  {len(views)} dashboards, {len(EVIDENCE_CHECKS)} evidence searches")
+    print(f"  {len(views)} dashboards, {len(EVIDENCE_CHECKS)} evidence searches, React explorer page ({ui_size / 1048576:.1f} MB bundle)")
     if args.package:
         print(f"Packaged {package().relative_to(ROOT)}")
 

@@ -1,5 +1,6 @@
 <nav search_view="search" color="#0B6689">
-  <view name="srm_overview" default="true" />
+  <view name="srm_explorer" default="true" />
+  <view name="srm_overview" />
   <collection label="Responsibility">
     <view name="srm_allocation" />
     <view name="srm_onprem" />
@@ -8,6 +9,6 @@
   </collection>
   <view name="srm_controls" />
   <view name="srm_evidence" />
-  <a href="/static/app/shared_responsibility/explorer/index.html" target="_blank">Explorer and graph ↗</a>
+  <a href="/static/app/shared_responsibility/explorer/index.html" target="_blank">Standalone explorer ↗</a>
   <view name="search" />
 </nav>

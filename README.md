@@ -78,4 +78,4 @@ The Combined graph view includes a **Cypher console** for running read-only quer
 
 ## Splunk app (proof of concept)
 
-`splunk/` holds a Splunk app built from the same data: lookups for every data set, Dashboard Studio dashboards, scheduled control-evidence searches and the bundled explorer. To build it, run `python3 splunk/build.py --package`. [splunk/README.md](splunk/README.md) covers installation and what the app contains.
+`splunk/` holds a Splunk app built from the same data. It has lookups for every data set, a Splunk UI Toolkit (React) explorer page that reads them live, Dashboard Studio dashboards, scheduled control-evidence searches you can run from the page, and the bundled standalone explorer. To build it, run `python3 splunk/build.py --package`. [splunk/README.md](splunk/README.md) covers installation and what the app contains.
