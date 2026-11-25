@@ -1,0 +1,94 @@
+{
+  "profile_version": "1.0",
+  "organisation": {
+    "name": "Example Agency",
+    "description": "A fictional organisation used to demonstrate organisation profiles. Replace every value with your own."
+  },
+  "parties": {
+    "csc": { "name": "Example Agency Cyber Governance", "contact": "governance@example.org" },
+    "customer_soc": { "name": "Example Agency SOC (managed service)", "contact": "soc@example.org" },
+    "csp": { "name": "Primary cloud provider" },
+    "third_party": { "name": "Managed service partner" }
+  },
+  "providers": {
+    "IaaS": "Example Cloud Platform",
+    "SaaS": "Example Productivity Suite",
+    "IDaaS": "Example Identity Service"
+  },
+  "systems": [
+    { "id": "hr", "name": "HR system", "service_model": "SaaS", "provider": "Example HR Vendor", "criticality": "Tier 2", "owner": "Head of People" },
+    { "id": "case-mgmt", "name": "Case management platform", "service_model": "PaaS", "provider": "Example Cloud Platform", "criticality": "Tier 1", "owner": "Chief Information Officer" },
+    { "id": "identity", "name": "Workforce identity", "service_model": "IDaaS", "provider": "Example Identity Service", "criticality": "Tier 1", "owner": "Identity Services Manager" }
+  ],
+  "controls": {
+    "GOV-001": {
+      "owner": "Chief Information Security Officer",
+      "evidence": [{ "title": "Cloud security governance framework", "url": "https://intranet.example.org/policies/cloud-governance", "reviewed": "2026-09-30" }]
+    },
+    "GOV-004": {
+      "contract_ref": "Cloud services agreement §12.3; Security schedule §2",
+      "owner": "Procurement and Contracts"
+    },
+    "LOG-004": {
+      "rasci": { "third_party": "S" },
+      "owner": "SOC Manager",
+      "notes": "The managed service partner operates the log collectors."
+    },
+    "LOG-010": {
+      "contract_ref": "Managed SOC agreement §5.1 (12-month searchable retention)",
+      "evidence": [{ "title": "Retention configuration review", "url": "https://intranet.example.org/evidence/log-retention", "reviewed": "2026-10-15" }]
+    },
+    "CTI-008": {
+      "applicable": false,
+      "justification": "No commercial threat-intelligence subscription; intelligence is received through the national sharing programme (see CTI-007)."
+    },
+    "FIN-001": { "applicable": false, "justification": "Cloud costs are managed centrally by the parent department under its own FinOps controls." },
+    "FIN-002": { "applicable": false, "justification": "Cloud costs are managed centrally by the parent department under its own FinOps controls." },
+    "EXT-001": {
+      "owner": "Chief Information Officer",
+      "contract_ref": "Cloud services agreement §18 (exit assistance)"
+    }
+  },
+  "custom_controls": [
+    {
+      "control_id": "EXA-001",
+      "domain": "Governance",
+      "control_objective": "Report cloud control exceptions to the audit committee",
+      "expected_outcome": "Open control exceptions and their remediation dates are reviewed by the audit committee each quarter.",
+      "test": "Inspect the last two quarterly audit committee packs for the cloud control exception report.",
+      "service_model": "All cloud",
+      "owner_assignment": "CSC",
+      "rasci": { "csc": "R/A", "customer_soc": "C", "csp": "I", "third_party": "—" },
+      "owner": "Chief Risk Officer"
+    }
+  ],
+  "allocation": {
+    "operations": {
+      "SaaS": { "customer": 10, "soc": 70, "provider": 20 }
+    }
+  },
+  "failure_scenarios": [
+    {
+      "id": "example-saas-outage",
+      "title": "Productivity suite outage",
+      "summary": "The SaaS productivity suite is unavailable for most staff for a full business day. Teams must switch to documented fallbacks and coordinate through the provider's incident process.",
+      "objective": "Restore critical communications within 2 hours and full service within 1 business day.",
+      "metrics": [{ "value": "2 h", "label": "Critical communications" }, { "value": "1 day", "label": "Full service" }],
+      "phases": ["Confirm provider incident", "Activate communication fallbacks", "Prioritise critical users", "Restore and verify service", "Review with the provider"],
+      "layers": ["service", "continuity", "identity", "supplier-commercial", "euc", "ucc"],
+      "involved": {
+        "op-governance": [1, 0, 0, 0, 1, 1, 0, 1],
+        "op-facilities": [0, 0, 0, 0, 0, 0, 0, 0],
+        "op-network": [0, 0, 1, 0, 0, 1, 0, 0],
+        "op-compute": [0, 0, 0, 0, 0, 0, 0, 0],
+        "op-platform": [0, 0, 0, 0, 0, 0, 0, 0],
+        "op-storage": [0, 0, 0, 0, 1, 0, 0, 0],
+        "op-core": [1, 0, 1, 1, 1, 1, 1, 1],
+        "op-workplace": [1, 0, 0, 0, 1, 1, 0, 1],
+        "op-appdata": [1, 0, 0, 0, 1, 1, 0, 1],
+        "op-service": [1, 0, 1, 1, 1, 1, 1, 1],
+        "op-cyber": [0, 0, 0, 0, 0, 0, 1, 0]
+      }
+    }
+  ]
+}

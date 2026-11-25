@@ -8,7 +8,7 @@ A Splunk app generated from this repository's control matrix. It makes the 1,191
 python3 splunk/build.py --package     # needs Python 3.9+, Node.js 22+ and npm
 ```
 
-This builds the React page (running `npm ci` the first time), regenerates `splunk/shared_responsibility/` and writes `splunk/dist/shared_responsibility-0.2.0.tgz`. Use `--skip-ui` to reuse the last React build. To install the package in Splunk, go to **Apps › Manage Apps › Install app from file**, then **restart Splunk**: Splunk Web only discovers a new app's page templates at startup. `build.py` and `splunk/react/src` are the sources of truth, so edit them rather than the generated files.
+This builds the React page (running `npm ci` the first time), regenerates `splunk/shared_responsibility/` and writes `splunk/dist/shared_responsibility-0.3.0.tgz`. Use `--skip-ui` to reuse the last React build. To install the package in Splunk, go to **Apps › Manage Apps › Install app from file**, then **restart Splunk**: Splunk Web only discovers a new app's page templates at startup. The lookups come from the repository's `matrix.json` and `reference.json`, so the app and the standalone explorer always agree. `build.py` and `splunk/react/src` are the sources of truth, so edit them rather than the generated files.
 
 After installing:
 
@@ -24,7 +24,7 @@ After installing:
 | **Explorer page** (React, the app's default view) | Built with Splunk UI Toolkit (`@splunk/react-ui`, `@splunk/react-page`, `@splunk/search-job`). Lookups and the latest evidence load through live searches. **Allocation:** a layer × service-model matrix with a details panel. **Controls:** a sortable, filterable table with expandable rows. **Evidence:** each check with a **Run now** button (or **Run all checks**) that runs its saved search and refreshes the results. **Graph & Cypher:** the combined property graph rebuilt from the lookups, with expandable domains and the read-only Cypher console showing graph and table results. |
 | **Dashboards** (Dashboard Studio) | Overview, Responsibility Allocation (party → layer Sankey by service model), Control Catalogue, On-premises Cross-cut, Platform Lifecycle, Failure Scenarios, Control Evidence. |
 | **Evidence searches** (7) | `SRM Evidence - <control>` scheduled searches. They evidence logging controls from data every Splunk instance holds, and write results through the `srm_record_evidence` macro. |
-| **Standalone explorer** | The original single-file explorer (every diagram view) under `appserver/static/explorer`, linked from the app navigation as *Standalone explorer*. |
+| **Standalone explorer** | The single-file explorer (every diagram view) under `appserver/static/explorer`, with its `reference.json` and the example organisation profile. It's linked from the app navigation as *Standalone explorer*. Its **Organisation profile** feature works inside Splunk; profiles are kept in each user's browser, as on the website. |
 
 ### Evidence checks
 
@@ -53,7 +53,7 @@ Each result is `pass`, `fail` or `no_evidence`. To add a check, add an entry to 
 
 ## Verification
 
-Version 0.2.0 was tested on Splunk Enterprise 9.4 (the `splunk/splunk:9.4` container), driving the React page in a browser:
+Version 0.3.0 was rebuilt from a clean checkout and tested on Splunk Enterprise 9.4 (the `splunk/splunk:9.4` container), driving the React page and the standalone explorer in a browser. In the standalone explorer, the example organisation profile applies and persists. The React page:
 
 - **Loading:** all lookups load in about 2 seconds.
 - **Allocation:** selecting a layer filters the control table (Security operations → 146 controls), and rows expand.
@@ -71,6 +71,7 @@ Version 0.2.0 was tested on Splunk Enterprise 9.4 (the `splunk/splunk:9.4` conta
 
 ## Limits of the proof of concept
 
+- **Organisation profiles in the React page:** the React page and the lookups show the published baseline. Organisation profiles apply only in the standalone explorer. Sharing a profile through Splunk (KV Store overrides with role-based editing) is the next step.
 - **React page coverage:** the React page covers allocation, controls, evidence and the graph. The on-premises, lifecycle and failure-scenario diagrams are available as Dashboard Studio dashboards and in the standalone explorer, but not yet as React components.
 - **Page template:** the page depends on a custom page template, which Splunk has deprecated from Enterprise 10.4 (see Verification).
 - **Evidence:** the seven checks cover logging controls that Splunk can evidence about itself. Most of the other 1,184 controls need searches written against your own data, or a manual-attestation workflow.

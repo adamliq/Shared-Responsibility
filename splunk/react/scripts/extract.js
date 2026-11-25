@@ -25,5 +25,6 @@ const out = `/* eslint-disable */
 ${parts.join('\n')}
 export { GR_PALETTE, grLayout, CY, CY_EXAMPLES };
 `;
+fs.mkdirSync(path.join(__dirname, '../src/generated'), { recursive: true });
 fs.writeFileSync(path.join(__dirname, '../src/generated/engine.js'), out);
 console.log(`Extracted engine (${(out.length / 1024).toFixed(0)} KB) to src/generated/engine.js`);

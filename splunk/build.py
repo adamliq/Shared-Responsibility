@@ -27,7 +27,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 APP_ID = "shared_responsibility"
 APP_DIR = ROOT / "splunk" / APP_ID
-VERSION = "0.2.0"
+VERSION = "0.3.0"
 UI_DIR = ROOT / "splunk" / "react"
 PARTIES = [
     ("csc", "Customer governance"),
@@ -450,7 +450,7 @@ def build_conf(views):
     write("default/app.conf", f"""
 [install]
 is_configured = false
-build = 2
+build = 3
 
 [ui]
 is_visible = true
@@ -581,6 +581,8 @@ def copy_explorer():
     (target / "index.html").write_text(html[:start] + '<script>window.i18n_register=window.i18n_register||function(){};</script><script src="explorer.js"></script>' + html[end + len("</script>"):], encoding="utf-8")
     shutil.copy2(ROOT / "matrix.json", target / "matrix.json")
     shutil.copy2(ROOT / "reference.json", target / "reference.json")
+    (target / "examples").mkdir(exist_ok=True)
+    shutil.copy2(ROOT / "examples" / "profile-example.json", target / "examples" / "profile-example.json")
     for icon in sorted((ROOT / "splunk" / "static").glob("*.png")):
         shutil.copy2(icon, APP_DIR / "static" / icon.name)
 

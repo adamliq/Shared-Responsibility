@@ -1,4 +1,4 @@
-Shared Responsibility for Splunk (shared_responsibility) - version 0.2.0 - proof of concept
+Shared Responsibility for Splunk (shared_responsibility) - version 0.3.0 - proof of concept
 
 WHAT IT CONTAINS
 - Lookups generated from the explorer's data: srm_controls (1,191 controls), srm_rasci,
