@@ -9,6 +9,6 @@
   </collection>
   <view name="srm_controls" />
   <view name="srm_evidence" />
-  <a href="/static/app/shared_responsibility/explorer/index.html" target="_blank">Standalone explorer ↗</a>
+  <a href="/static/app/shared_responsibility/explorer/index.html" target="_blank">Standalone explorer (demo data) ↗</a>
   <view name="search" />
 </nav>

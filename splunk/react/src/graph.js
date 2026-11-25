@@ -9,7 +9,7 @@ export const PARTIES = [
     { key: 'csp', label: 'Cloud provider', shareField: 'provider_pct' },
     { key: 'third_party', label: 'Third party', shareField: null },
 ];
-export const NODE_TYPES = ['Party', 'ServiceModel', 'ControlLayer', 'Domain', 'Section', 'Function', 'Pillar', 'Stage', 'Scenario', 'Control'];
+export const NODE_TYPES = ['Party', 'ServiceModel', 'ControlLayer', 'Domain', 'Section', 'Function', 'Pillar', 'Stage', 'Scenario', 'Control', 'System'];
 const ROLE_TYPES = { P: 'PRIMARY_FOR', S: 'SUPPORTS', C: 'CONSULTED_ON' };
 const NUMERIC = new Set(['customer_pct', 'soc_pct', 'provider_pct', 'stage_order', 'section_order', 'function_order', 'scenario_number', 'involved', 'metric', 'checked_at']);
 
@@ -56,8 +56,18 @@ export function buildGraph(data, { allControls = false, expandedDomains = new Se
     const fnIndex = new Map(functions.map((f, i) => [f.label, i]));
     const models = data.serviceModels.map((m) => m.service_model);
 
-    PARTIES.forEach((p) => add(`party:${p.key}`, 'Party', p.label, { rasci_actor: p.key }, { r: 32 }));
-    data.serviceModels.forEach((m) => add(`model:${m.service_model}`, 'ServiceModel', m.service_model, { definition: m.definition }, { r: 22 }));
+    const partyLabel = new Map((data.parties || []).map((p) => [p.party_key, p.party]));
+    PARTIES.forEach((p) => add(`party:${p.key}`, 'Party', partyLabel.get(p.key) || p.label, { rasci_actor: p.key }, { r: 32 }));
+    data.serviceModels.forEach((m) => add(`model:${m.service_model}`, 'ServiceModel', m.service_model, { definition: m.definition, ...(m.provider ? { provider: m.provider } : {}) }, { r: 22 }));
+    (data.systems || []).forEach((s) => {
+        const id = `system:${s.system_id}`;
+        const props = {};
+        [['description', s.description], ['provider', s.provider], ['criticality', s.criticality], ['owner', s.owner], ['service_model', s.service_model]].forEach(([k, v]) => {
+            if (v) props[k] = v;
+        });
+        add(id, 'System', s.system, props, { r: 22 });
+        if (s.service_model && models.includes(s.service_model)) link(id, `model:${s.service_model}`, 'USES_MODEL');
+    });
     layers.forEach((l) => add(`layer:${l.layer_id}`, 'ControlLayer', l.layer, { scope: l.scope, domains: layerDomains.get(l.layer_id) || [] }, { r: 24 }));
     domains.forEach((d) =>
         add(`domain:${d}`, 'Domain', d, {
@@ -152,12 +162,19 @@ export function buildGraph(data, { allControls = false, expandedDomains = new Se
 
 // Lists every control carries (possibly empty); other framework lists appear only when populated.
 const LIST_FIELDS = new Set(['ism_applicability', 'shared_control_component', 'layer_ids', 'accountable_party', 'csa_ccm_v4_1_control_ids', 'iso_iec_27017_2026', 'ism_v2026_09_4']);
+const PROFILE_FIELDS = new Set(['applicable', 'source', 'tailored', 'justification', 'owner', 'evidence_links', 'notes']);
 export function controlProps(c) {
-    // The lookups hold the published baseline, where every control applies; organisation
-    // profiles (which can mark controls out of scope) live only in the standalone explorer.
-    const props = { applicable: true, objective: c.objective };
+    // Matches the standalone explorer's control properties, including an organisation's own
+    // information (applicability, justification, owner, tailoring, evidence and notes).
+    const props = { applicable: c.applicable !== 'No', objective: c.objective };
+    if (c.justification) props.justification = c.justification;
+    if (c.owner) props.owner = c.owner;
+    if (c.tailored) props.tailored = mv(c.tailored);
+    if (c.source === 'custom') props.custom = true;
+    if (c.evidence_links) props.evidence = mv(c.evidence_links);
+    if (c.notes) props.notes = c.notes;
     Object.entries(c).forEach(([k, v]) => {
-        if (['objective', 'rasci_csp', 'rasci_csc', 'rasci_customer_soc', 'rasci_third_party', 'accountable_party', 'layer_ids'].includes(k)) return;
+        if (PROFILE_FIELDS.has(k) || ['objective', 'rasci_csp', 'rasci_csc', 'rasci_customer_soc', 'rasci_third_party', 'accountable_party', 'layer_ids', '_key', '_user'].includes(k)) return;
         if (k === 'provider_contractual_reference' || k === 'expected_outcome' || k === 'test' || k === 'domain' || k === 'service_model' || k === 'owner_assignment' || k === 'ism_mapping_strength' || k === 'control_id') {
             props[k] = v;
         } else if (LIST_FIELDS.has(k) || k.endsWith('_ids') || k.endsWith('_frameworks') || k.endsWith('_capabilities') || /^is[om]_/.test(k)) {

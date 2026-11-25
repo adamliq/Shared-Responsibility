@@ -5,6 +5,9 @@ import Modal from '@splunk/react-ui/Modal';
 import TabBar from '@splunk/react-ui/TabBar';
 import WaitSpinner from '@splunk/react-ui/WaitSpinner';
 import { loadAll } from './data';
+import { getDatasetInfo } from './kv';
+import DataTab from './components/DataTab';
+import EditControl from './components/EditControl';
 import { mv, PARTIES } from './graph';
 import { Grid2, Lead, Muted, Page } from './styles';
 import AllocationTab from './components/AllocationTab';
@@ -13,7 +16,7 @@ import EvidenceTab from './components/EvidenceTab';
 import GraphTab from './components/GraphTab';
 import { StatusChip } from './components/ControlsTab';
 
-const DEFAULT_FILTERS = { q: '', owner: 'All', party: 'All', role: 'Any', ism: 'All', layer: null };
+const DEFAULT_FILTERS = { q: '', owner: 'All', party: 'All', role: 'Any', ism: 'All', layer: null, scope: 'All' };
 
 export default function App() {
     const [data, setData] = useState(null);
@@ -24,12 +27,19 @@ export default function App() {
     const [layer, setLayer] = useState(null);
     const [filters, setFilters] = useState(DEFAULT_FILTERS);
     const [openControl, setOpenControl] = useState(null);
+    const [info, setInfo] = useState(null);
+    const [editing, setEditing] = useState(null);
     const returnFocus = useRef(null);
 
-    useEffect(() => {
-        loadAll((done, total) => setProgress([done, total]))
-            .then(setData)
+    const reload = () =>
+        Promise.all([loadAll((done, total) => setProgress([done, total])), getDatasetInfo()])
+            .then(([d, i]) => {
+                setData(d);
+                setInfo(i);
+            })
             .catch((e) => setError(e.message || String(e)));
+    useEffect(() => {
+        reload();
     }, []);
 
     const setEvidence = (rows) =>
@@ -52,20 +62,30 @@ export default function App() {
             </Page>
         );
     }
+    if (!data.controls.length) {
+        return (
+            <Page>
+                <Heading level={1}>Set up Shared Responsibility</Heading>
+                <DataTab data={data} info={info} onReload={reload} setup />
+            </Page>
+        );
+    }
     const control = openControl && data.controlById.get(openControl);
     const ev = control && data.evidenceByControl.get(control.control_id);
     return (
         <Page>
             <Heading level={1}>Shared Responsibility Explorer</Heading>
             <Lead>
-                {data.controls.length.toLocaleString()} atomic controls across {data.layers.length} control layers and {data.serviceModels.length} service models, read
-                live from this app's lookups and evidence collection.
+                <b>{info && info.meta && info.meta.source === 'own' ? info.meta.name || 'Your organisation’s data' : 'Demo dataset'}</b> ·{' '}
+                {data.controls.length.toLocaleString()} atomic controls across {data.layers.length} control layers and {data.serviceModels.length} service models, read live
+                from this app's KV Store collections. Manage the data on the <b>Data</b> tab.
             </Lead>
             <TabBar activeTabId={tab} onChange={(e, { selectedTabId }) => setTab(selectedTabId)}>
                 <TabBar.Tab label="Allocation" tabId="allocation" />
                 <TabBar.Tab label="Controls" tabId="controls" />
                 <TabBar.Tab label="Evidence" tabId="evidence" />
                 <TabBar.Tab label="Graph & Cypher" tabId="graph" />
+                <TabBar.Tab label="Data" tabId="data" />
             </TabBar>
             <div style={{ marginTop: 16 }}>
                 {tab === 'allocation' && (
@@ -81,10 +101,12 @@ export default function App() {
                         }}
                     />
                 )}
-                {tab === 'controls' && <ControlsTab data={data} filters={filters} setFilters={setFilters} />}
+                {tab === 'controls' && <ControlsTab data={data} filters={filters} setFilters={setFilters} onEdit={setEditing} />}
+                {tab === 'data' && <DataTab data={data} info={info} onReload={reload} />}
                 {tab === 'evidence' && <EvidenceTab data={data} onEvidence={setEvidence} />}
                 {tab === 'graph' && <GraphTab data={data} onOpenControl={setOpenControl} />}
             </div>
+            {editing && <EditControl control={editing} info={info} onClose={() => setEditing(null)} onSaved={reload} />}
             <Modal open={!!control} onRequestClose={() => setOpenControl(null)} returnFocus={returnFocus} style={{ width: 760 }}>
                 {control && (
                     <>
@@ -111,6 +133,18 @@ export default function App() {
                                 <dd>{mv(control.csa_ccm_v4_1_control_ids).join(', ') || '—'}</dd>
                                 <dt>ISM</dt>
                                 <dd>{mv(control.ism_v2026_09_4).join(', ') || '—'}</dd>
+                                <dt>Applicability</dt>
+                                <dd>
+                                    {control.applicable === 'No' ? 'Out of scope' : 'In scope'}
+                                    {control.source && control.source !== 'baseline' ? ` · ${control.source}` : ''}
+                                    {control.justification ? ` · ${control.justification}` : ''}
+                                </dd>
+                                {control.owner && (
+                                    <>
+                                        <dt>Owner</dt>
+                                        <dd>{control.owner}</dd>
+                                    </>
+                                )}
                                 <dt>Evidence</dt>
                                 <dd>{ev ? <><StatusChip status={ev.status} /> {ev.evidence}</> : <Muted>No automated check</Muted>}</dd>
                             </Grid2>
