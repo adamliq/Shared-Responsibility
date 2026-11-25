@@ -1,0 +1,320 @@
+layer_id,layer,service_model,customer_pct,soc_pct,provider_pct
+governance,Data classification and accountability,On-premises,90,10,0
+governance,Data classification and accountability,IaaS,90,10,0
+governance,Data classification and accountability,PaaS,90,10,0
+governance,Data classification and accountability,SaaS,90,10,0
+governance,Data classification and accountability,FaaS,90,10,0
+governance,Data classification and accountability,BaaS,90,10,0
+governance,Data classification and accountability,SECaaS,80,20,0
+governance,Data classification and accountability,DaaS,85,15,0
+governance,Data classification and accountability,DBaaS,90,10,0
+governance,Data classification and accountability,IDaaS,85,15,0
+governance,Data classification and accountability,CaaS,90,10,0
+endpoint,Client and endpoint protection,On-premises,70,30,0
+endpoint,Client and endpoint protection,IaaS,70,30,0
+endpoint,Client and endpoint protection,PaaS,70,30,0
+endpoint,Client and endpoint protection,SaaS,60,25,15
+endpoint,Client and endpoint protection,FaaS,55,25,20
+endpoint,Client and endpoint protection,BaaS,55,25,20
+endpoint,Client and endpoint protection,SECaaS,25,35,40
+endpoint,Client and endpoint protection,DaaS,25,30,45
+endpoint,Client and endpoint protection,DBaaS,55,25,20
+endpoint,Client and endpoint protection,IDaaS,35,30,35
+endpoint,Client and endpoint protection,CaaS,60,30,10
+identity,Identity and access management,On-premises,75,25,0
+identity,Identity and access management,IaaS,75,25,0
+identity,Identity and access management,PaaS,50,20,30
+identity,Identity and access management,SaaS,45,20,35
+identity,Identity and access management,FaaS,45,20,35
+identity,Identity and access management,BaaS,35,20,45
+identity,Identity and access management,SECaaS,20,25,55
+identity,Identity and access management,DaaS,35,20,45
+identity,Identity and access management,DBaaS,40,20,40
+identity,Identity and access management,IDaaS,15,20,65
+identity,Identity and access management,CaaS,50,25,25
+application,Application-level controls,On-premises,80,20,0
+application,Application-level controls,IaaS,80,20,0
+application,Application-level controls,PaaS,45,15,40
+application,Application-level controls,SaaS,40,15,45
+application,Application-level controls,FaaS,35,15,50
+application,Application-level controls,BaaS,30,15,55
+application,Application-level controls,SECaaS,15,25,60
+application,Application-level controls,DaaS,40,20,40
+application,Application-level controls,DBaaS,30,15,55
+application,Application-level controls,IDaaS,25,20,55
+application,Application-level controls,CaaS,60,20,20
+network,Network controls,On-premises,70,30,0
+network,Network controls,IaaS,45,25,30
+network,Network controls,PaaS,25,20,55
+network,Network controls,SaaS,10,10,80
+network,Network controls,FaaS,5,10,85
+network,Network controls,BaaS,5,10,85
+network,Network controls,SECaaS,5,15,80
+network,Network controls,DaaS,10,10,80
+network,Network controls,DBaaS,10,10,80
+network,Network controls,IDaaS,5,10,85
+network,Network controls,CaaS,35,20,45
+host,Host infrastructure,On-premises,80,20,0
+host,Host infrastructure,IaaS,30,15,55
+host,Host infrastructure,PaaS,5,5,90
+host,Host infrastructure,SaaS,0,0,100
+host,Host infrastructure,FaaS,0,0,100
+host,Host infrastructure,BaaS,0,0,100
+host,Host infrastructure,SECaaS,0,0,100
+host,Host infrastructure,DaaS,0,0,100
+host,Host infrastructure,DBaaS,0,0,100
+host,Host infrastructure,IDaaS,0,0,100
+host,Host infrastructure,CaaS,10,10,80
+physical,Physical security,On-premises,100,0,0
+physical,Physical security,IaaS,0,0,100
+physical,Physical security,PaaS,0,0,100
+physical,Physical security,SaaS,0,0,100
+physical,Physical security,FaaS,0,0,100
+physical,Physical security,BaaS,0,0,100
+physical,Physical security,SECaaS,0,0,100
+physical,Physical security,DaaS,0,0,100
+physical,Physical security,DBaaS,0,0,100
+physical,Physical security,IDaaS,0,0,100
+physical,Physical security,CaaS,0,0,100
+operations,Security operations,On-premises,35,65,0
+operations,Security operations,IaaS,20,55,25
+operations,Security operations,PaaS,15,55,30
+operations,Security operations,SaaS,15,50,35
+operations,Security operations,FaaS,15,50,35
+operations,Security operations,BaaS,10,45,45
+operations,Security operations,SECaaS,10,40,50
+operations,Security operations,DaaS,10,45,45
+operations,Security operations,DBaaS,10,45,45
+operations,Security operations,IDaaS,10,45,45
+operations,Security operations,CaaS,15,55,30
+finops,FinOps and cost accountability,On-premises,100,0,0
+finops,FinOps and cost accountability,IaaS,75,5,20
+finops,FinOps and cost accountability,PaaS,70,5,25
+finops,FinOps and cost accountability,SaaS,65,5,30
+finops,FinOps and cost accountability,FaaS,70,5,25
+finops,FinOps and cost accountability,BaaS,65,5,30
+finops,FinOps and cost accountability,SECaaS,65,5,30
+finops,FinOps and cost accountability,DaaS,65,5,30
+finops,FinOps and cost accountability,DBaaS,65,5,30
+finops,FinOps and cost accountability,IDaaS,65,5,30
+finops,FinOps and cost accountability,CaaS,70,5,25
+service,Service and operational incidents,On-premises,95,5,0
+service,Service and operational incidents,IaaS,65,10,25
+service,Service and operational incidents,PaaS,55,10,35
+service,Service and operational incidents,SaaS,45,10,45
+service,Service and operational incidents,FaaS,60,10,30
+service,Service and operational incidents,BaaS,50,10,40
+service,Service and operational incidents,SECaaS,45,10,45
+service,Service and operational incidents,DaaS,45,10,45
+service,Service and operational incidents,DBaaS,45,10,45
+service,Service and operational incidents,IDaaS,45,10,45
+service,Service and operational incidents,CaaS,55,10,35
+continuity,"Availability, backup and continuity",On-premises,95,5,0
+continuity,"Availability, backup and continuity",IaaS,70,10,20
+continuity,"Availability, backup and continuity",PaaS,60,10,30
+continuity,"Availability, backup and continuity",SaaS,50,10,40
+continuity,"Availability, backup and continuity",FaaS,60,10,30
+continuity,"Availability, backup and continuity",BaaS,55,10,35
+continuity,"Availability, backup and continuity",SECaaS,50,10,40
+continuity,"Availability, backup and continuity",DaaS,50,10,40
+continuity,"Availability, backup and continuity",DBaaS,50,10,40
+continuity,"Availability, backup and continuity",IDaaS,50,10,40
+continuity,"Availability, backup and continuity",CaaS,60,10,30
+data-governance,"Data governance, privacy and records",On-premises,100,0,0
+data-governance,"Data governance, privacy and records",IaaS,85,5,10
+data-governance,"Data governance, privacy and records",PaaS,80,5,15
+data-governance,"Data governance, privacy and records",SaaS,75,5,20
+data-governance,"Data governance, privacy and records",FaaS,80,5,15
+data-governance,"Data governance, privacy and records",BaaS,75,5,20
+data-governance,"Data governance, privacy and records",SECaaS,75,5,20
+data-governance,"Data governance, privacy and records",DaaS,75,5,20
+data-governance,"Data governance, privacy and records",DBaaS,75,5,20
+data-governance,"Data governance, privacy and records",IDaaS,75,5,20
+data-governance,"Data governance, privacy and records",CaaS,80,5,15
+performance,"Performance, capacity and scalability",On-premises,100,0,0
+performance,"Performance, capacity and scalability",IaaS,75,0,25
+performance,"Performance, capacity and scalability",PaaS,60,0,40
+performance,"Performance, capacity and scalability",SaaS,45,0,55
+performance,"Performance, capacity and scalability",FaaS,65,0,35
+performance,"Performance, capacity and scalability",BaaS,55,0,45
+performance,"Performance, capacity and scalability",SECaaS,50,0,50
+performance,"Performance, capacity and scalability",DaaS,50,0,50
+performance,"Performance, capacity and scalability",DBaaS,50,0,50
+performance,"Performance, capacity and scalability",IDaaS,50,0,50
+performance,"Performance, capacity and scalability",CaaS,65,0,35
+architecture,Architecture and technical governance,On-premises,100,0,0
+architecture,Architecture and technical governance,IaaS,90,0,10
+architecture,Architecture and technical governance,PaaS,85,0,15
+architecture,Architecture and technical governance,SaaS,80,0,20
+architecture,Architecture and technical governance,FaaS,85,0,15
+architecture,Architecture and technical governance,BaaS,80,0,20
+architecture,Architecture and technical governance,SECaaS,80,0,20
+architecture,Architecture and technical governance,DaaS,80,0,20
+architecture,Architecture and technical governance,DBaaS,80,0,20
+architecture,Architecture and technical governance,IDaaS,80,0,20
+architecture,Architecture and technical governance,CaaS,85,0,15
+change-release,"Change, release and environments",On-premises,90,10,0
+change-release,"Change, release and environments",IaaS,75,10,15
+change-release,"Change, release and environments",PaaS,65,10,25
+change-release,"Change, release and environments",SaaS,50,10,40
+change-release,"Change, release and environments",FaaS,60,10,30
+change-release,"Change, release and environments",BaaS,55,10,35
+change-release,"Change, release and environments",SECaaS,55,10,35
+change-release,"Change, release and environments",DaaS,50,10,40
+change-release,"Change, release and environments",DBaaS,50,10,40
+change-release,"Change, release and environments",IDaaS,50,10,40
+change-release,"Change, release and environments",CaaS,65,10,25
+network-carrier,Network and carrier operations,On-premises,85,15,0
+network-carrier,Network and carrier operations,IaaS,65,15,20
+network-carrier,Network and carrier operations,PaaS,55,10,35
+network-carrier,Network and carrier operations,SaaS,35,10,55
+network-carrier,Network and carrier operations,FaaS,55,10,35
+network-carrier,Network and carrier operations,BaaS,45,10,45
+network-carrier,Network and carrier operations,SECaaS,35,15,50
+network-carrier,Network and carrier operations,DaaS,40,10,50
+network-carrier,Network and carrier operations,DBaaS,40,10,50
+network-carrier,Network and carrier operations,IDaaS,35,10,55
+network-carrier,Network and carrier operations,CaaS,55,15,30
+onprem-operations,On-premises infrastructure and operations,On-premises,90,10,0
+onprem-operations,On-premises infrastructure and operations,IaaS,0,0,100
+onprem-operations,On-premises infrastructure and operations,PaaS,0,0,100
+onprem-operations,On-premises infrastructure and operations,SaaS,0,0,100
+onprem-operations,On-premises infrastructure and operations,FaaS,0,0,100
+onprem-operations,On-premises infrastructure and operations,BaaS,0,0,100
+onprem-operations,On-premises infrastructure and operations,SECaaS,0,0,100
+onprem-operations,On-premises infrastructure and operations,DaaS,0,0,100
+onprem-operations,On-premises infrastructure and operations,DBaaS,0,0,100
+onprem-operations,On-premises infrastructure and operations,IDaaS,0,0,100
+onprem-operations,On-premises infrastructure and operations,CaaS,0,0,100
+asset-cmdb,"Asset, CMDB and lifecycle management",On-premises,95,5,0
+asset-cmdb,"Asset, CMDB and lifecycle management",IaaS,90,5,5
+asset-cmdb,"Asset, CMDB and lifecycle management",PaaS,85,5,10
+asset-cmdb,"Asset, CMDB and lifecycle management",SaaS,80,5,15
+asset-cmdb,"Asset, CMDB and lifecycle management",FaaS,85,5,10
+asset-cmdb,"Asset, CMDB and lifecycle management",BaaS,85,5,10
+asset-cmdb,"Asset, CMDB and lifecycle management",SECaaS,85,5,10
+asset-cmdb,"Asset, CMDB and lifecycle management",DaaS,85,5,10
+asset-cmdb,"Asset, CMDB and lifecycle management",DBaaS,85,5,10
+asset-cmdb,"Asset, CMDB and lifecycle management",IDaaS,85,5,10
+asset-cmdb,"Asset, CMDB and lifecycle management",CaaS,85,5,10
+virtualisation,Virtualisation and platform operations,On-premises,90,10,0
+virtualisation,Virtualisation and platform operations,IaaS,30,10,60
+virtualisation,Virtualisation and platform operations,PaaS,10,5,85
+virtualisation,Virtualisation and platform operations,SaaS,0,0,100
+virtualisation,Virtualisation and platform operations,FaaS,5,5,90
+virtualisation,Virtualisation and platform operations,BaaS,0,5,95
+virtualisation,Virtualisation and platform operations,SECaaS,0,5,95
+virtualisation,Virtualisation and platform operations,DaaS,0,0,100
+virtualisation,Virtualisation and platform operations,DBaaS,0,5,95
+virtualisation,Virtualisation and platform operations,IDaaS,0,0,100
+virtualisation,Virtualisation and platform operations,CaaS,20,10,70
+storage-media,Storage and media operations,On-premises,90,10,0
+storage-media,Storage and media operations,IaaS,65,10,25
+storage-media,Storage and media operations,PaaS,45,10,45
+storage-media,Storage and media operations,SaaS,15,5,80
+storage-media,Storage and media operations,FaaS,40,10,50
+storage-media,Storage and media operations,BaaS,35,10,55
+storage-media,Storage and media operations,SECaaS,30,10,60
+storage-media,Storage and media operations,DaaS,30,5,65
+storage-media,Storage and media operations,DBaaS,30,10,60
+storage-media,Storage and media operations,IDaaS,25,5,70
+storage-media,Storage and media operations,CaaS,50,10,40
+supplier-commercial,"Supplier, procurement and commercial",On-premises,100,0,0
+supplier-commercial,"Supplier, procurement and commercial",IaaS,90,0,10
+supplier-commercial,"Supplier, procurement and commercial",PaaS,85,0,15
+supplier-commercial,"Supplier, procurement and commercial",SaaS,80,0,20
+supplier-commercial,"Supplier, procurement and commercial",FaaS,85,0,15
+supplier-commercial,"Supplier, procurement and commercial",BaaS,80,0,20
+supplier-commercial,"Supplier, procurement and commercial",SECaaS,80,0,20
+supplier-commercial,"Supplier, procurement and commercial",DaaS,80,0,20
+supplier-commercial,"Supplier, procurement and commercial",DBaaS,80,0,20
+supplier-commercial,"Supplier, procurement and commercial",IDaaS,80,0,20
+supplier-commercial,"Supplier, procurement and commercial",CaaS,85,0,15
+os-compute,Operating system and compute operations,On-premises,85,15,0
+os-compute,Operating system and compute operations,IaaS,65,15,20
+os-compute,Operating system and compute operations,PaaS,15,10,75
+os-compute,Operating system and compute operations,SaaS,0,0,100
+os-compute,Operating system and compute operations,FaaS,5,5,90
+os-compute,Operating system and compute operations,BaaS,5,5,90
+os-compute,Operating system and compute operations,SECaaS,5,5,90
+os-compute,Operating system and compute operations,DaaS,10,10,80
+os-compute,Operating system and compute operations,DBaaS,5,5,90
+os-compute,Operating system and compute operations,IDaaS,0,0,100
+os-compute,Operating system and compute operations,CaaS,35,10,55
+ucc,Unified communications and collaboration,On-premises,90,10,0
+ucc,Unified communications and collaboration,IaaS,70,10,20
+ucc,Unified communications and collaboration,PaaS,60,10,30
+ucc,Unified communications and collaboration,SaaS,35,5,60
+ucc,Unified communications and collaboration,FaaS,55,10,35
+ucc,Unified communications and collaboration,BaaS,50,10,40
+ucc,Unified communications and collaboration,SECaaS,45,10,45
+ucc,Unified communications and collaboration,DaaS,55,10,35
+ucc,Unified communications and collaboration,DBaaS,45,10,45
+ucc,Unified communications and collaboration,IDaaS,45,5,50
+ucc,Unified communications and collaboration,CaaS,60,10,30
+euc,End-user computing and workplace services,On-premises,85,15,0
+euc,End-user computing and workplace services,IaaS,75,15,10
+euc,End-user computing and workplace services,PaaS,70,10,20
+euc,End-user computing and workplace services,SaaS,50,10,40
+euc,End-user computing and workplace services,FaaS,70,10,20
+euc,End-user computing and workplace services,BaaS,65,10,25
+euc,End-user computing and workplace services,SECaaS,55,15,30
+euc,End-user computing and workplace services,DaaS,55,10,35
+euc,End-user computing and workplace services,DBaaS,60,10,30
+euc,End-user computing and workplace services,IDaaS,50,10,40
+euc,End-user computing and workplace services,CaaS,70,15,15
+iac,"Configuration, automation and infrastructure as code",On-premises,90,10,0
+iac,"Configuration, automation and infrastructure as code",IaaS,80,10,10
+iac,"Configuration, automation and infrastructure as code",PaaS,70,10,20
+iac,"Configuration, automation and infrastructure as code",SaaS,55,5,40
+iac,"Configuration, automation and infrastructure as code",FaaS,75,10,15
+iac,"Configuration, automation and infrastructure as code",BaaS,65,10,25
+iac,"Configuration, automation and infrastructure as code",SECaaS,65,10,25
+iac,"Configuration, automation and infrastructure as code",DaaS,60,5,35
+iac,"Configuration, automation and infrastructure as code",DBaaS,60,10,30
+iac,"Configuration, automation and infrastructure as code",IDaaS,55,10,35
+iac,"Configuration, automation and infrastructure as code",CaaS,75,10,15
+core-infra,Core infrastructure services,On-premises,80,20,0
+core-infra,Core infrastructure services,IaaS,75,20,5
+core-infra,Core infrastructure services,PaaS,65,15,20
+core-infra,Core infrastructure services,SaaS,60,10,30
+core-infra,Core infrastructure services,FaaS,60,15,25
+core-infra,Core infrastructure services,BaaS,55,15,30
+core-infra,Core infrastructure services,SECaaS,60,15,25
+core-infra,Core infrastructure services,DaaS,65,15,20
+core-infra,Core infrastructure services,DBaaS,55,15,30
+core-infra,Core infrastructure services,IDaaS,60,15,25
+core-infra,Core infrastructure services,CaaS,65,20,15
+vulnerability-exposure,Vulnerability and exposure management,On-premises,65,35,0
+vulnerability-exposure,Vulnerability and exposure management,IaaS,55,35,10
+vulnerability-exposure,Vulnerability and exposure management,PaaS,50,30,20
+vulnerability-exposure,Vulnerability and exposure management,SaaS,45,25,30
+vulnerability-exposure,Vulnerability and exposure management,FaaS,50,30,20
+vulnerability-exposure,Vulnerability and exposure management,BaaS,45,30,25
+vulnerability-exposure,Vulnerability and exposure management,SECaaS,45,30,25
+vulnerability-exposure,Vulnerability and exposure management,DaaS,45,30,25
+vulnerability-exposure,Vulnerability and exposure management,DBaaS,45,30,25
+vulnerability-exposure,Vulnerability and exposure management,IDaaS,45,25,30
+vulnerability-exposure,Vulnerability and exposure management,CaaS,50,35,15
+cti,Cyber threat intelligence,On-premises,30,70,0
+cti,Cyber threat intelligence,IaaS,20,65,15
+cti,Cyber threat intelligence,PaaS,15,60,25
+cti,Cyber threat intelligence,SaaS,15,55,30
+cti,Cyber threat intelligence,FaaS,15,65,20
+cti,Cyber threat intelligence,BaaS,15,60,25
+cti,Cyber threat intelligence,SECaaS,15,60,25
+cti,Cyber threat intelligence,DaaS,15,60,25
+cti,Cyber threat intelligence,DBaaS,15,60,25
+cti,Cyber threat intelligence,IDaaS,15,55,30
+cti,Cyber threat intelligence,CaaS,15,65,20
+ato,"Security accreditation, assurance and authority to operate",On-premises,75,25,0
+ato,"Security accreditation, assurance and authority to operate",IaaS,70,25,5
+ato,"Security accreditation, assurance and authority to operate",PaaS,70,20,10
+ato,"Security accreditation, assurance and authority to operate",SaaS,65,20,15
+ato,"Security accreditation, assurance and authority to operate",FaaS,65,25,10
+ato,"Security accreditation, assurance and authority to operate",BaaS,65,20,15
+ato,"Security accreditation, assurance and authority to operate",SECaaS,65,20,15
+ato,"Security accreditation, assurance and authority to operate",DaaS,65,20,15
+ato,"Security accreditation, assurance and authority to operate",DBaaS,65,20,15
+ato,"Security accreditation, assurance and authority to operate",IDaaS,65,20,15
+ato,"Security accreditation, assurance and authority to operate",CaaS,65,25,10

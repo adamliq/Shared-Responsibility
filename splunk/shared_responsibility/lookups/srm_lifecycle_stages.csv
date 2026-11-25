@@ -1,0 +1,12 @@
+stage_order,stage_id,stage,scope
+1,lc-initiate,1. Initiate and justify,"Business need, outcomes, sponsorship, funding, risk appetite and platform mandate"
+2,lc-design,2. Architect and design,"Reference architecture, service model, security, data, integration and operational design"
+3,lc-source,3. Source and contract,"Market approach, product selection, licensing, support, warranties, obligations and exit terms"
+4,lc-build,4. Build and configure,"Facilities readiness, infrastructure deployment, platform configuration, automation and security controls"
+5,lc-integrate,5. Integrate and migrate,"Connectivity, identity, data migration, application integration, tooling and operational integration"
+6,lc-assure,"6. Test, assure and accredit","Functional, resilience, performance and security testing, evidence, assessment and authority to operate"
+7,lc-transition,7. Transition and release,"Release readiness, service acceptance, documentation, training, cutover, rollback and early-life support"
+8,lc-operate,8. Operate and support,"Routine platform, infrastructure, workplace, service, supplier and security operations"
+9,lc-monitor,9. Monitor and improve,"Health, capacity, control effectiveness, threat monitoring, service review and continual improvement"
+10,lc-change,10. Change and modernise,"Upgrades, patches, enhancements, automation, architecture refresh and technical-debt reduction"
+11,lc-retire,"11. Retire, archive and dispose","Decommissioning, data retention or destruction, asset disposal, contract closure and residual-risk confirmation"

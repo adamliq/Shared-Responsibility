@@ -1,0 +1,75 @@
+stage_order,stage,layer_id,layer
+1,1. Initiate and justify,governance,Data classification and accountability
+1,1. Initiate and justify,architecture,Architecture and technical governance
+1,1. Initiate and justify,finops,FinOps and cost accountability
+1,1. Initiate and justify,ato,"Security accreditation, assurance and authority to operate"
+2,2. Architect and design,architecture,Architecture and technical governance
+2,2. Architect and design,network,Network controls
+2,2. Architect and design,host,Host infrastructure
+2,2. Architect and design,application,Application-level controls
+2,2. Architect and design,data-governance,"Data governance, privacy and records"
+2,2. Architect and design,physical,Physical security
+2,2. Architect and design,core-infra,Core infrastructure services
+2,2. Architect and design,identity,Identity and access management
+3,3. Source and contract,supplier-commercial,"Supplier, procurement and commercial"
+3,3. Source and contract,asset-cmdb,"Asset, CMDB and lifecycle management"
+3,3. Source and contract,finops,FinOps and cost accountability
+3,3. Source and contract,architecture,Architecture and technical governance
+4,4. Build and configure,onprem-operations,On-premises infrastructure and operations
+4,4. Build and configure,network-carrier,Network and carrier operations
+4,4. Build and configure,host,Host infrastructure
+4,4. Build and configure,virtualisation,Virtualisation and platform operations
+4,4. Build and configure,os-compute,Operating system and compute operations
+4,4. Build and configure,core-infra,Core infrastructure services
+4,4. Build and configure,storage-media,Storage and media operations
+4,4. Build and configure,iac,"Configuration, automation and infrastructure as code"
+4,4. Build and configure,application,Application-level controls
+5,5. Integrate and migrate,network,Network controls
+5,5. Integrate and migrate,identity,Identity and access management
+5,5. Integrate and migrate,data-governance,"Data governance, privacy and records"
+5,5. Integrate and migrate,application,Application-level controls
+5,5. Integrate and migrate,core-infra,Core infrastructure services
+5,5. Integrate and migrate,change-release,"Change, release and environments"
+5,5. Integrate and migrate,iac,"Configuration, automation and infrastructure as code"
+6,"6. Test, assure and accredit",ato,"Security accreditation, assurance and authority to operate"
+6,"6. Test, assure and accredit",vulnerability-exposure,Vulnerability and exposure management
+6,"6. Test, assure and accredit",operations,Security operations
+6,"6. Test, assure and accredit",performance,"Performance, capacity and scalability"
+6,"6. Test, assure and accredit",continuity,"Availability, backup and continuity"
+6,"6. Test, assure and accredit",change-release,"Change, release and environments"
+7,7. Transition and release,change-release,"Change, release and environments"
+7,7. Transition and release,service,Service and operational incidents
+7,7. Transition and release,continuity,"Availability, backup and continuity"
+7,7. Transition and release,asset-cmdb,"Asset, CMDB and lifecycle management"
+7,7. Transition and release,euc,End-user computing and workplace services
+8,8. Operate and support,onprem-operations,On-premises infrastructure and operations
+8,8. Operate and support,service,Service and operational incidents
+8,8. Operate and support,network-carrier,Network and carrier operations
+8,8. Operate and support,host,Host infrastructure
+8,8. Operate and support,virtualisation,Virtualisation and platform operations
+8,8. Operate and support,os-compute,Operating system and compute operations
+8,8. Operate and support,core-infra,Core infrastructure services
+8,8. Operate and support,storage-media,Storage and media operations
+8,8. Operate and support,euc,End-user computing and workplace services
+8,8. Operate and support,ucc,Unified communications and collaboration
+8,8. Operate and support,operations,Security operations
+9,9. Monitor and improve,operations,Security operations
+9,9. Monitor and improve,performance,"Performance, capacity and scalability"
+9,9. Monitor and improve,vulnerability-exposure,Vulnerability and exposure management
+9,9. Monitor and improve,cti,Cyber threat intelligence
+9,9. Monitor and improve,service,Service and operational incidents
+9,9. Monitor and improve,finops,FinOps and cost accountability
+10,10. Change and modernise,architecture,Architecture and technical governance
+10,10. Change and modernise,change-release,"Change, release and environments"
+10,10. Change and modernise,iac,"Configuration, automation and infrastructure as code"
+10,10. Change and modernise,vulnerability-exposure,Vulnerability and exposure management
+10,10. Change and modernise,asset-cmdb,"Asset, CMDB and lifecycle management"
+10,10. Change and modernise,virtualisation,Virtualisation and platform operations
+10,10. Change and modernise,os-compute,Operating system and compute operations
+11,"11. Retire, archive and dispose",asset-cmdb,"Asset, CMDB and lifecycle management"
+11,"11. Retire, archive and dispose",storage-media,Storage and media operations
+11,"11. Retire, archive and dispose",data-governance,"Data governance, privacy and records"
+11,"11. Retire, archive and dispose",supplier-commercial,"Supplier, procurement and commercial"
+11,"11. Retire, archive and dispose",continuity,"Availability, backup and continuity"
+11,"11. Retire, archive and dispose",change-release,"Change, release and environments"
+11,"11. Retire, archive and dispose",ato,"Security accreditation, assurance and authority to operate"

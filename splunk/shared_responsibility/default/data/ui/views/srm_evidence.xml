@@ -1,0 +1,196 @@
+<dashboard version="2" theme="dark">
+  <label>Control Evidence</label>
+  <description>Scheduled searches that evidence controls from data Splunk already holds. Each run appends a result to the srm_evidence KV Store collection.</description>
+  <definition><![CDATA[
+{
+  "title": "Control Evidence",
+  "description": "Scheduled searches that evidence controls from data Splunk already holds. Each run appends a result to the srm_evidence KV Store collection.",
+  "inputs": {},
+  "defaults": {
+    "dataSources": {
+      "ds.search": {
+        "options": {
+          "queryParameters": {
+            "earliest": "-24h@h",
+            "latest": "now"
+          }
+        }
+      }
+    }
+  },
+  "visualizations": {
+    "viz_pass": {
+      "type": "splunk.singlevalue",
+      "title": "Passing",
+      "dataSources": {
+        "primary": "ds_pass"
+      },
+      "options": {
+        "majorColor": "#1C6B2D"
+      }
+    },
+    "viz_fail": {
+      "type": "splunk.singlevalue",
+      "title": "Failing",
+      "dataSources": {
+        "primary": "ds_fail"
+      },
+      "options": {
+        "majorColor": "#9E2520"
+      }
+    },
+    "viz_none": {
+      "type": "splunk.singlevalue",
+      "title": "No evidence or not run",
+      "dataSources": {
+        "primary": "ds_none"
+      },
+      "options": {
+        "majorColor": "#7A5A00"
+      }
+    },
+    "viz_latest": {
+      "type": "splunk.table",
+      "title": "Latest result per control (run a check with | savedsearch \"SRM Evidence - <control>\")",
+      "dataSources": {
+        "primary": "ds_latest"
+      },
+      "options": {
+        "count": 20,
+        "columnFormat": {
+          "status": {
+            "rowBackgroundColors": "> table | seriesByName(\"status\") | matchValue(statusColors)"
+          }
+        }
+      },
+      "context": {
+        "statusColors": [
+          {
+            "match": "pass",
+            "value": "#1C6B2D"
+          },
+          {
+            "match": "fail",
+            "value": "#9E2520"
+          },
+          {
+            "match": "no_evidence",
+            "value": "#7A5A00"
+          },
+          {
+            "match": "not_run",
+            "value": "#3C444D"
+          }
+        ]
+      }
+    },
+    "viz_history": {
+      "type": "splunk.column",
+      "title": "Evidence results over time",
+      "dataSources": {
+        "primary": "ds_history"
+      },
+      "options": {
+        "stackMode": "stacked",
+        "seriesColorsByField": {
+          "pass": "#1C6B2D",
+          "fail": "#9E2520",
+          "no_evidence": "#7A5A00"
+        }
+      }
+    }
+  },
+  "dataSources": {
+    "ds_latest": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup srm_evidence_checks_lookup | join type=left control_id [| inputlookup srm_evidence_lookup | sort 0 - checked_at | dedup control_id] | lookup srm_controls_lookup control_id OUTPUT objective owner_assignment accountable_party | eval status=coalesce(status,\"not_run\"), last_checked=if(isnotnull(checked_at),strftime(checked_at,\"%Y-%m-%d %H:%M\"),\"—\") | table control_id objective check status evidence last_checked accountable_party saved_search | rename control_id as control objective as Objective check as Check evidence as Evidence last_checked as \"Last checked\" accountable_party as Accountable saved_search as \"Saved search\""
+      }
+    },
+    "ds_pass": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup srm_evidence_lookup | sort 0 - checked_at | dedup control_id | where status=\"pass\" | stats count"
+      }
+    },
+    "ds_fail": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup srm_evidence_lookup | sort 0 - checked_at | dedup control_id | where status=\"fail\" | stats count"
+      }
+    },
+    "ds_none": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup srm_evidence_checks_lookup | join type=left control_id [| inputlookup srm_evidence_lookup | sort 0 - checked_at | dedup control_id] | where isnull(status) OR status=\"no_evidence\" | stats count"
+      }
+    },
+    "ds_history": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup srm_evidence_lookup | eval _time=checked_at | timechart span=1h count(eval(status=\"pass\")) as pass count(eval(status=\"fail\")) as fail count(eval(status=\"no_evidence\")) as no_evidence"
+      }
+    }
+  },
+  "layout": {
+    "type": "grid",
+    "options": {
+      "width": 1440
+    },
+    "globalInputs": [],
+    "structure": [
+      {
+        "item": "viz_pass",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "w": 480,
+          "h": 130
+        }
+      },
+      {
+        "item": "viz_fail",
+        "type": "block",
+        "position": {
+          "x": 480,
+          "y": 0,
+          "w": 480,
+          "h": 130
+        }
+      },
+      {
+        "item": "viz_none",
+        "type": "block",
+        "position": {
+          "x": 960,
+          "y": 0,
+          "w": 480,
+          "h": 130
+        }
+      },
+      {
+        "item": "viz_latest",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 130,
+          "w": 1440,
+          "h": 420
+        }
+      },
+      {
+        "item": "viz_history",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 550,
+          "w": 1440,
+          "h": 320
+        }
+      }
+    ]
+  }
+}
+  ]]></definition>
+</dashboard>

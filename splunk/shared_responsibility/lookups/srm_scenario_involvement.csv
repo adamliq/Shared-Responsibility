@@ -1,0 +1,353 @@
+scenario,section_id,section,function,involved
+Primary server room flood,op-governance,"Governance, architecture and assurance",Service governance,1
+Primary server room flood,op-governance,"Governance, architecture and assurance",Facilities,1
+Primary server room flood,op-governance,"Governance, architecture and assurance",Network operations,0
+Primary server room flood,op-governance,"Governance, architecture and assurance",Compute & platform,0
+Primary server room flood,op-governance,"Governance, architecture and assurance",Application & data,1
+Primary server room flood,op-governance,"Governance, architecture and assurance",Workplace services,1
+Primary server room flood,op-governance,"Governance, architecture and assurance",Customer SOC,1
+Primary server room flood,op-governance,"Governance, architecture and assurance",Suppliers,1
+Primary server room flood,op-facilities,Facilities and data centre,Service governance,1
+Primary server room flood,op-facilities,Facilities and data centre,Facilities,1
+Primary server room flood,op-facilities,Facilities and data centre,Network operations,0
+Primary server room flood,op-facilities,Facilities and data centre,Compute & platform,1
+Primary server room flood,op-facilities,Facilities and data centre,Application & data,0
+Primary server room flood,op-facilities,Facilities and data centre,Workplace services,0
+Primary server room flood,op-facilities,Facilities and data centre,Customer SOC,0
+Primary server room flood,op-facilities,Facilities and data centre,Suppliers,1
+Primary server room flood,op-network,Network and carrier,Service governance,1
+Primary server room flood,op-network,Network and carrier,Facilities,0
+Primary server room flood,op-network,Network and carrier,Network operations,1
+Primary server room flood,op-network,Network and carrier,Compute & platform,1
+Primary server room flood,op-network,Network and carrier,Application & data,0
+Primary server room flood,op-network,Network and carrier,Workplace services,1
+Primary server room flood,op-network,Network and carrier,Customer SOC,1
+Primary server room flood,op-network,Network and carrier,Suppliers,1
+Primary server room flood,op-compute,"Compute, hardware and operating systems",Service governance,1
+Primary server room flood,op-compute,"Compute, hardware and operating systems",Facilities,1
+Primary server room flood,op-compute,"Compute, hardware and operating systems",Network operations,1
+Primary server room flood,op-compute,"Compute, hardware and operating systems",Compute & platform,1
+Primary server room flood,op-compute,"Compute, hardware and operating systems",Application & data,1
+Primary server room flood,op-compute,"Compute, hardware and operating systems",Workplace services,0
+Primary server room flood,op-compute,"Compute, hardware and operating systems",Customer SOC,1
+Primary server room flood,op-compute,"Compute, hardware and operating systems",Suppliers,1
+Primary server room flood,op-platform,Virtualisation and automation platforms,Service governance,0
+Primary server room flood,op-platform,Virtualisation and automation platforms,Facilities,0
+Primary server room flood,op-platform,Virtualisation and automation platforms,Network operations,1
+Primary server room flood,op-platform,Virtualisation and automation platforms,Compute & platform,1
+Primary server room flood,op-platform,Virtualisation and automation platforms,Application & data,1
+Primary server room flood,op-platform,Virtualisation and automation platforms,Workplace services,0
+Primary server room flood,op-platform,Virtualisation and automation platforms,Customer SOC,1
+Primary server room flood,op-platform,Virtualisation and automation platforms,Suppliers,1
+Primary server room flood,op-storage,"Storage, backup and continuity",Service governance,1
+Primary server room flood,op-storage,"Storage, backup and continuity",Facilities,1
+Primary server room flood,op-storage,"Storage, backup and continuity",Network operations,1
+Primary server room flood,op-storage,"Storage, backup and continuity",Compute & platform,1
+Primary server room flood,op-storage,"Storage, backup and continuity",Application & data,1
+Primary server room flood,op-storage,"Storage, backup and continuity",Workplace services,0
+Primary server room flood,op-storage,"Storage, backup and continuity",Customer SOC,1
+Primary server room flood,op-storage,"Storage, backup and continuity",Suppliers,1
+Primary server room flood,op-core,Core infrastructure services,Service governance,1
+Primary server room flood,op-core,Core infrastructure services,Facilities,0
+Primary server room flood,op-core,Core infrastructure services,Network operations,1
+Primary server room flood,op-core,Core infrastructure services,Compute & platform,1
+Primary server room flood,op-core,Core infrastructure services,Application & data,1
+Primary server room flood,op-core,Core infrastructure services,Workplace services,1
+Primary server room flood,op-core,Core infrastructure services,Customer SOC,1
+Primary server room flood,op-core,Core infrastructure services,Suppliers,1
+Primary server room flood,op-workplace,End-user and workplace services,Service governance,1
+Primary server room flood,op-workplace,End-user and workplace services,Facilities,0
+Primary server room flood,op-workplace,End-user and workplace services,Network operations,1
+Primary server room flood,op-workplace,End-user and workplace services,Compute & platform,1
+Primary server room flood,op-workplace,End-user and workplace services,Application & data,1
+Primary server room flood,op-workplace,End-user and workplace services,Workplace services,1
+Primary server room flood,op-workplace,End-user and workplace services,Customer SOC,1
+Primary server room flood,op-workplace,End-user and workplace services,Suppliers,0
+Primary server room flood,op-appdata,"Applications, data and performance",Service governance,1
+Primary server room flood,op-appdata,"Applications, data and performance",Facilities,0
+Primary server room flood,op-appdata,"Applications, data and performance",Network operations,1
+Primary server room flood,op-appdata,"Applications, data and performance",Compute & platform,1
+Primary server room flood,op-appdata,"Applications, data and performance",Application & data,1
+Primary server room flood,op-appdata,"Applications, data and performance",Workplace services,1
+Primary server room flood,op-appdata,"Applications, data and performance",Customer SOC,1
+Primary server room flood,op-appdata,"Applications, data and performance",Suppliers,1
+Primary server room flood,op-service,"Service, change and financial operations",Service governance,1
+Primary server room flood,op-service,"Service, change and financial operations",Facilities,1
+Primary server room flood,op-service,"Service, change and financial operations",Network operations,1
+Primary server room flood,op-service,"Service, change and financial operations",Compute & platform,1
+Primary server room flood,op-service,"Service, change and financial operations",Application & data,1
+Primary server room flood,op-service,"Service, change and financial operations",Workplace services,1
+Primary server room flood,op-service,"Service, change and financial operations",Customer SOC,1
+Primary server room flood,op-service,"Service, change and financial operations",Suppliers,1
+Primary server room flood,op-cyber,Cyber operations and exposure,Service governance,1
+Primary server room flood,op-cyber,Cyber operations and exposure,Facilities,0
+Primary server room flood,op-cyber,Cyber operations and exposure,Network operations,1
+Primary server room flood,op-cyber,Cyber operations and exposure,Compute & platform,1
+Primary server room flood,op-cyber,Cyber operations and exposure,Application & data,1
+Primary server room flood,op-cyber,Cyber operations and exposure,Workplace services,1
+Primary server room flood,op-cyber,Cyber operations and exposure,Customer SOC,1
+Primary server room flood,op-cyber,Cyber operations and exposure,Suppliers,1
+Cloud identity outage,op-governance,"Governance, architecture and assurance",Service governance,1
+Cloud identity outage,op-governance,"Governance, architecture and assurance",Facilities,0
+Cloud identity outage,op-governance,"Governance, architecture and assurance",Network operations,0
+Cloud identity outage,op-governance,"Governance, architecture and assurance",Compute & platform,1
+Cloud identity outage,op-governance,"Governance, architecture and assurance",Application & data,1
+Cloud identity outage,op-governance,"Governance, architecture and assurance",Workplace services,1
+Cloud identity outage,op-governance,"Governance, architecture and assurance",Customer SOC,1
+Cloud identity outage,op-governance,"Governance, architecture and assurance",Suppliers,1
+Cloud identity outage,op-facilities,Facilities and data centre,Service governance,0
+Cloud identity outage,op-facilities,Facilities and data centre,Facilities,0
+Cloud identity outage,op-facilities,Facilities and data centre,Network operations,0
+Cloud identity outage,op-facilities,Facilities and data centre,Compute & platform,0
+Cloud identity outage,op-facilities,Facilities and data centre,Application & data,0
+Cloud identity outage,op-facilities,Facilities and data centre,Workplace services,0
+Cloud identity outage,op-facilities,Facilities and data centre,Customer SOC,0
+Cloud identity outage,op-facilities,Facilities and data centre,Suppliers,0
+Cloud identity outage,op-network,Network and carrier,Service governance,1
+Cloud identity outage,op-network,Network and carrier,Facilities,0
+Cloud identity outage,op-network,Network and carrier,Network operations,1
+Cloud identity outage,op-network,Network and carrier,Compute & platform,1
+Cloud identity outage,op-network,Network and carrier,Application & data,1
+Cloud identity outage,op-network,Network and carrier,Workplace services,1
+Cloud identity outage,op-network,Network and carrier,Customer SOC,1
+Cloud identity outage,op-network,Network and carrier,Suppliers,1
+Cloud identity outage,op-compute,"Compute, hardware and operating systems",Service governance,1
+Cloud identity outage,op-compute,"Compute, hardware and operating systems",Facilities,0
+Cloud identity outage,op-compute,"Compute, hardware and operating systems",Network operations,1
+Cloud identity outage,op-compute,"Compute, hardware and operating systems",Compute & platform,1
+Cloud identity outage,op-compute,"Compute, hardware and operating systems",Application & data,1
+Cloud identity outage,op-compute,"Compute, hardware and operating systems",Workplace services,1
+Cloud identity outage,op-compute,"Compute, hardware and operating systems",Customer SOC,1
+Cloud identity outage,op-compute,"Compute, hardware and operating systems",Suppliers,1
+Cloud identity outage,op-platform,Virtualisation and automation platforms,Service governance,1
+Cloud identity outage,op-platform,Virtualisation and automation platforms,Facilities,0
+Cloud identity outage,op-platform,Virtualisation and automation platforms,Network operations,1
+Cloud identity outage,op-platform,Virtualisation and automation platforms,Compute & platform,1
+Cloud identity outage,op-platform,Virtualisation and automation platforms,Application & data,0
+Cloud identity outage,op-platform,Virtualisation and automation platforms,Workplace services,0
+Cloud identity outage,op-platform,Virtualisation and automation platforms,Customer SOC,1
+Cloud identity outage,op-platform,Virtualisation and automation platforms,Suppliers,1
+Cloud identity outage,op-storage,"Storage, backup and continuity",Service governance,1
+Cloud identity outage,op-storage,"Storage, backup and continuity",Facilities,0
+Cloud identity outage,op-storage,"Storage, backup and continuity",Network operations,1
+Cloud identity outage,op-storage,"Storage, backup and continuity",Compute & platform,1
+Cloud identity outage,op-storage,"Storage, backup and continuity",Application & data,0
+Cloud identity outage,op-storage,"Storage, backup and continuity",Workplace services,0
+Cloud identity outage,op-storage,"Storage, backup and continuity",Customer SOC,1
+Cloud identity outage,op-storage,"Storage, backup and continuity",Suppliers,1
+Cloud identity outage,op-core,Core infrastructure services,Service governance,1
+Cloud identity outage,op-core,Core infrastructure services,Facilities,0
+Cloud identity outage,op-core,Core infrastructure services,Network operations,1
+Cloud identity outage,op-core,Core infrastructure services,Compute & platform,1
+Cloud identity outage,op-core,Core infrastructure services,Application & data,1
+Cloud identity outage,op-core,Core infrastructure services,Workplace services,1
+Cloud identity outage,op-core,Core infrastructure services,Customer SOC,1
+Cloud identity outage,op-core,Core infrastructure services,Suppliers,1
+Cloud identity outage,op-workplace,End-user and workplace services,Service governance,1
+Cloud identity outage,op-workplace,End-user and workplace services,Facilities,0
+Cloud identity outage,op-workplace,End-user and workplace services,Network operations,1
+Cloud identity outage,op-workplace,End-user and workplace services,Compute & platform,1
+Cloud identity outage,op-workplace,End-user and workplace services,Application & data,1
+Cloud identity outage,op-workplace,End-user and workplace services,Workplace services,1
+Cloud identity outage,op-workplace,End-user and workplace services,Customer SOC,1
+Cloud identity outage,op-workplace,End-user and workplace services,Suppliers,1
+Cloud identity outage,op-appdata,"Applications, data and performance",Service governance,1
+Cloud identity outage,op-appdata,"Applications, data and performance",Facilities,0
+Cloud identity outage,op-appdata,"Applications, data and performance",Network operations,1
+Cloud identity outage,op-appdata,"Applications, data and performance",Compute & platform,1
+Cloud identity outage,op-appdata,"Applications, data and performance",Application & data,1
+Cloud identity outage,op-appdata,"Applications, data and performance",Workplace services,1
+Cloud identity outage,op-appdata,"Applications, data and performance",Customer SOC,1
+Cloud identity outage,op-appdata,"Applications, data and performance",Suppliers,1
+Cloud identity outage,op-service,"Service, change and financial operations",Service governance,1
+Cloud identity outage,op-service,"Service, change and financial operations",Facilities,0
+Cloud identity outage,op-service,"Service, change and financial operations",Network operations,1
+Cloud identity outage,op-service,"Service, change and financial operations",Compute & platform,1
+Cloud identity outage,op-service,"Service, change and financial operations",Application & data,1
+Cloud identity outage,op-service,"Service, change and financial operations",Workplace services,1
+Cloud identity outage,op-service,"Service, change and financial operations",Customer SOC,1
+Cloud identity outage,op-service,"Service, change and financial operations",Suppliers,1
+Cloud identity outage,op-cyber,Cyber operations and exposure,Service governance,1
+Cloud identity outage,op-cyber,Cyber operations and exposure,Facilities,0
+Cloud identity outage,op-cyber,Cyber operations and exposure,Network operations,1
+Cloud identity outage,op-cyber,Cyber operations and exposure,Compute & platform,1
+Cloud identity outage,op-cyber,Cyber operations and exposure,Application & data,1
+Cloud identity outage,op-cyber,Cyber operations and exposure,Workplace services,1
+Cloud identity outage,op-cyber,Cyber operations and exposure,Customer SOC,1
+Cloud identity outage,op-cyber,Cyber operations and exposure,Suppliers,1
+Malware outbreak,op-governance,"Governance, architecture and assurance",Service governance,1
+Malware outbreak,op-governance,"Governance, architecture and assurance",Facilities,0
+Malware outbreak,op-governance,"Governance, architecture and assurance",Network operations,1
+Malware outbreak,op-governance,"Governance, architecture and assurance",Compute & platform,1
+Malware outbreak,op-governance,"Governance, architecture and assurance",Application & data,1
+Malware outbreak,op-governance,"Governance, architecture and assurance",Workplace services,1
+Malware outbreak,op-governance,"Governance, architecture and assurance",Customer SOC,1
+Malware outbreak,op-governance,"Governance, architecture and assurance",Suppliers,1
+Malware outbreak,op-facilities,Facilities and data centre,Service governance,1
+Malware outbreak,op-facilities,Facilities and data centre,Facilities,1
+Malware outbreak,op-facilities,Facilities and data centre,Network operations,0
+Malware outbreak,op-facilities,Facilities and data centre,Compute & platform,1
+Malware outbreak,op-facilities,Facilities and data centre,Application & data,0
+Malware outbreak,op-facilities,Facilities and data centre,Workplace services,0
+Malware outbreak,op-facilities,Facilities and data centre,Customer SOC,1
+Malware outbreak,op-facilities,Facilities and data centre,Suppliers,1
+Malware outbreak,op-network,Network and carrier,Service governance,1
+Malware outbreak,op-network,Network and carrier,Facilities,0
+Malware outbreak,op-network,Network and carrier,Network operations,1
+Malware outbreak,op-network,Network and carrier,Compute & platform,1
+Malware outbreak,op-network,Network and carrier,Application & data,1
+Malware outbreak,op-network,Network and carrier,Workplace services,1
+Malware outbreak,op-network,Network and carrier,Customer SOC,1
+Malware outbreak,op-network,Network and carrier,Suppliers,1
+Malware outbreak,op-compute,"Compute, hardware and operating systems",Service governance,1
+Malware outbreak,op-compute,"Compute, hardware and operating systems",Facilities,0
+Malware outbreak,op-compute,"Compute, hardware and operating systems",Network operations,1
+Malware outbreak,op-compute,"Compute, hardware and operating systems",Compute & platform,1
+Malware outbreak,op-compute,"Compute, hardware and operating systems",Application & data,1
+Malware outbreak,op-compute,"Compute, hardware and operating systems",Workplace services,1
+Malware outbreak,op-compute,"Compute, hardware and operating systems",Customer SOC,1
+Malware outbreak,op-compute,"Compute, hardware and operating systems",Suppliers,1
+Malware outbreak,op-platform,Virtualisation and automation platforms,Service governance,1
+Malware outbreak,op-platform,Virtualisation and automation platforms,Facilities,0
+Malware outbreak,op-platform,Virtualisation and automation platforms,Network operations,1
+Malware outbreak,op-platform,Virtualisation and automation platforms,Compute & platform,1
+Malware outbreak,op-platform,Virtualisation and automation platforms,Application & data,1
+Malware outbreak,op-platform,Virtualisation and automation platforms,Workplace services,0
+Malware outbreak,op-platform,Virtualisation and automation platforms,Customer SOC,1
+Malware outbreak,op-platform,Virtualisation and automation platforms,Suppliers,1
+Malware outbreak,op-storage,"Storage, backup and continuity",Service governance,1
+Malware outbreak,op-storage,"Storage, backup and continuity",Facilities,0
+Malware outbreak,op-storage,"Storage, backup and continuity",Network operations,1
+Malware outbreak,op-storage,"Storage, backup and continuity",Compute & platform,1
+Malware outbreak,op-storage,"Storage, backup and continuity",Application & data,1
+Malware outbreak,op-storage,"Storage, backup and continuity",Workplace services,0
+Malware outbreak,op-storage,"Storage, backup and continuity",Customer SOC,1
+Malware outbreak,op-storage,"Storage, backup and continuity",Suppliers,1
+Malware outbreak,op-core,Core infrastructure services,Service governance,1
+Malware outbreak,op-core,Core infrastructure services,Facilities,0
+Malware outbreak,op-core,Core infrastructure services,Network operations,1
+Malware outbreak,op-core,Core infrastructure services,Compute & platform,1
+Malware outbreak,op-core,Core infrastructure services,Application & data,1
+Malware outbreak,op-core,Core infrastructure services,Workplace services,1
+Malware outbreak,op-core,Core infrastructure services,Customer SOC,1
+Malware outbreak,op-core,Core infrastructure services,Suppliers,1
+Malware outbreak,op-workplace,End-user and workplace services,Service governance,1
+Malware outbreak,op-workplace,End-user and workplace services,Facilities,0
+Malware outbreak,op-workplace,End-user and workplace services,Network operations,1
+Malware outbreak,op-workplace,End-user and workplace services,Compute & platform,1
+Malware outbreak,op-workplace,End-user and workplace services,Application & data,1
+Malware outbreak,op-workplace,End-user and workplace services,Workplace services,1
+Malware outbreak,op-workplace,End-user and workplace services,Customer SOC,1
+Malware outbreak,op-workplace,End-user and workplace services,Suppliers,1
+Malware outbreak,op-appdata,"Applications, data and performance",Service governance,1
+Malware outbreak,op-appdata,"Applications, data and performance",Facilities,0
+Malware outbreak,op-appdata,"Applications, data and performance",Network operations,1
+Malware outbreak,op-appdata,"Applications, data and performance",Compute & platform,1
+Malware outbreak,op-appdata,"Applications, data and performance",Application & data,1
+Malware outbreak,op-appdata,"Applications, data and performance",Workplace services,1
+Malware outbreak,op-appdata,"Applications, data and performance",Customer SOC,1
+Malware outbreak,op-appdata,"Applications, data and performance",Suppliers,1
+Malware outbreak,op-service,"Service, change and financial operations",Service governance,1
+Malware outbreak,op-service,"Service, change and financial operations",Facilities,0
+Malware outbreak,op-service,"Service, change and financial operations",Network operations,1
+Malware outbreak,op-service,"Service, change and financial operations",Compute & platform,1
+Malware outbreak,op-service,"Service, change and financial operations",Application & data,1
+Malware outbreak,op-service,"Service, change and financial operations",Workplace services,1
+Malware outbreak,op-service,"Service, change and financial operations",Customer SOC,1
+Malware outbreak,op-service,"Service, change and financial operations",Suppliers,1
+Malware outbreak,op-cyber,Cyber operations and exposure,Service governance,1
+Malware outbreak,op-cyber,Cyber operations and exposure,Facilities,0
+Malware outbreak,op-cyber,Cyber operations and exposure,Network operations,1
+Malware outbreak,op-cyber,Cyber operations and exposure,Compute & platform,1
+Malware outbreak,op-cyber,Cyber operations and exposure,Application & data,1
+Malware outbreak,op-cyber,Cyber operations and exposure,Workplace services,1
+Malware outbreak,op-cyber,Cyber operations and exposure,Customer SOC,1
+Malware outbreak,op-cyber,Cyber operations and exposure,Suppliers,1
+On-premises gateway failure,op-governance,"Governance, architecture and assurance",Service governance,1
+On-premises gateway failure,op-governance,"Governance, architecture and assurance",Facilities,0
+On-premises gateway failure,op-governance,"Governance, architecture and assurance",Network operations,1
+On-premises gateway failure,op-governance,"Governance, architecture and assurance",Compute & platform,1
+On-premises gateway failure,op-governance,"Governance, architecture and assurance",Application & data,1
+On-premises gateway failure,op-governance,"Governance, architecture and assurance",Workplace services,1
+On-premises gateway failure,op-governance,"Governance, architecture and assurance",Customer SOC,1
+On-premises gateway failure,op-governance,"Governance, architecture and assurance",Suppliers,1
+On-premises gateway failure,op-facilities,Facilities and data centre,Service governance,1
+On-premises gateway failure,op-facilities,Facilities and data centre,Facilities,1
+On-premises gateway failure,op-facilities,Facilities and data centre,Network operations,1
+On-premises gateway failure,op-facilities,Facilities and data centre,Compute & platform,1
+On-premises gateway failure,op-facilities,Facilities and data centre,Application & data,0
+On-premises gateway failure,op-facilities,Facilities and data centre,Workplace services,0
+On-premises gateway failure,op-facilities,Facilities and data centre,Customer SOC,0
+On-premises gateway failure,op-facilities,Facilities and data centre,Suppliers,1
+On-premises gateway failure,op-network,Network and carrier,Service governance,1
+On-premises gateway failure,op-network,Network and carrier,Facilities,0
+On-premises gateway failure,op-network,Network and carrier,Network operations,1
+On-premises gateway failure,op-network,Network and carrier,Compute & platform,1
+On-premises gateway failure,op-network,Network and carrier,Application & data,1
+On-premises gateway failure,op-network,Network and carrier,Workplace services,1
+On-premises gateway failure,op-network,Network and carrier,Customer SOC,1
+On-premises gateway failure,op-network,Network and carrier,Suppliers,1
+On-premises gateway failure,op-compute,"Compute, hardware and operating systems",Service governance,1
+On-premises gateway failure,op-compute,"Compute, hardware and operating systems",Facilities,0
+On-premises gateway failure,op-compute,"Compute, hardware and operating systems",Network operations,1
+On-premises gateway failure,op-compute,"Compute, hardware and operating systems",Compute & platform,1
+On-premises gateway failure,op-compute,"Compute, hardware and operating systems",Application & data,1
+On-premises gateway failure,op-compute,"Compute, hardware and operating systems",Workplace services,0
+On-premises gateway failure,op-compute,"Compute, hardware and operating systems",Customer SOC,1
+On-premises gateway failure,op-compute,"Compute, hardware and operating systems",Suppliers,1
+On-premises gateway failure,op-platform,Virtualisation and automation platforms,Service governance,1
+On-premises gateway failure,op-platform,Virtualisation and automation platforms,Facilities,0
+On-premises gateway failure,op-platform,Virtualisation and automation platforms,Network operations,1
+On-premises gateway failure,op-platform,Virtualisation and automation platforms,Compute & platform,1
+On-premises gateway failure,op-platform,Virtualisation and automation platforms,Application & data,1
+On-premises gateway failure,op-platform,Virtualisation and automation platforms,Workplace services,0
+On-premises gateway failure,op-platform,Virtualisation and automation platforms,Customer SOC,1
+On-premises gateway failure,op-platform,Virtualisation and automation platforms,Suppliers,1
+On-premises gateway failure,op-storage,"Storage, backup and continuity",Service governance,1
+On-premises gateway failure,op-storage,"Storage, backup and continuity",Facilities,0
+On-premises gateway failure,op-storage,"Storage, backup and continuity",Network operations,1
+On-premises gateway failure,op-storage,"Storage, backup and continuity",Compute & platform,1
+On-premises gateway failure,op-storage,"Storage, backup and continuity",Application & data,0
+On-premises gateway failure,op-storage,"Storage, backup and continuity",Workplace services,0
+On-premises gateway failure,op-storage,"Storage, backup and continuity",Customer SOC,1
+On-premises gateway failure,op-storage,"Storage, backup and continuity",Suppliers,1
+On-premises gateway failure,op-core,Core infrastructure services,Service governance,1
+On-premises gateway failure,op-core,Core infrastructure services,Facilities,0
+On-premises gateway failure,op-core,Core infrastructure services,Network operations,1
+On-premises gateway failure,op-core,Core infrastructure services,Compute & platform,1
+On-premises gateway failure,op-core,Core infrastructure services,Application & data,1
+On-premises gateway failure,op-core,Core infrastructure services,Workplace services,1
+On-premises gateway failure,op-core,Core infrastructure services,Customer SOC,1
+On-premises gateway failure,op-core,Core infrastructure services,Suppliers,1
+On-premises gateway failure,op-workplace,End-user and workplace services,Service governance,1
+On-premises gateway failure,op-workplace,End-user and workplace services,Facilities,0
+On-premises gateway failure,op-workplace,End-user and workplace services,Network operations,1
+On-premises gateway failure,op-workplace,End-user and workplace services,Compute & platform,1
+On-premises gateway failure,op-workplace,End-user and workplace services,Application & data,1
+On-premises gateway failure,op-workplace,End-user and workplace services,Workplace services,1
+On-premises gateway failure,op-workplace,End-user and workplace services,Customer SOC,1
+On-premises gateway failure,op-workplace,End-user and workplace services,Suppliers,1
+On-premises gateway failure,op-appdata,"Applications, data and performance",Service governance,1
+On-premises gateway failure,op-appdata,"Applications, data and performance",Facilities,0
+On-premises gateway failure,op-appdata,"Applications, data and performance",Network operations,1
+On-premises gateway failure,op-appdata,"Applications, data and performance",Compute & platform,1
+On-premises gateway failure,op-appdata,"Applications, data and performance",Application & data,1
+On-premises gateway failure,op-appdata,"Applications, data and performance",Workplace services,1
+On-premises gateway failure,op-appdata,"Applications, data and performance",Customer SOC,1
+On-premises gateway failure,op-appdata,"Applications, data and performance",Suppliers,1
+On-premises gateway failure,op-service,"Service, change and financial operations",Service governance,1
+On-premises gateway failure,op-service,"Service, change and financial operations",Facilities,0
+On-premises gateway failure,op-service,"Service, change and financial operations",Network operations,1
+On-premises gateway failure,op-service,"Service, change and financial operations",Compute & platform,1
+On-premises gateway failure,op-service,"Service, change and financial operations",Application & data,1
+On-premises gateway failure,op-service,"Service, change and financial operations",Workplace services,1
+On-premises gateway failure,op-service,"Service, change and financial operations",Customer SOC,1
+On-premises gateway failure,op-service,"Service, change and financial operations",Suppliers,1
+On-premises gateway failure,op-cyber,Cyber operations and exposure,Service governance,1
+On-premises gateway failure,op-cyber,Cyber operations and exposure,Facilities,0
+On-premises gateway failure,op-cyber,Cyber operations and exposure,Network operations,1
+On-premises gateway failure,op-cyber,Cyber operations and exposure,Compute & platform,1
+On-premises gateway failure,op-cyber,Cyber operations and exposure,Application & data,1
+On-premises gateway failure,op-cyber,Cyber operations and exposure,Workplace services,1
+On-premises gateway failure,op-cyber,Cyber operations and exposure,Customer SOC,1
+On-premises gateway failure,op-cyber,Cyber operations and exposure,Suppliers,1

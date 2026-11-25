@@ -1,0 +1,236 @@
+<dashboard version="2" theme="dark">
+  <label>Shared Responsibility Overview</label>
+  <description>Who is accountable and responsible across the 1,191 atomic controls, by party, domain and RASCI code.</description>
+  <definition><![CDATA[
+{
+  "title": "Shared Responsibility Overview",
+  "description": "Who is accountable and responsible across the 1,191 atomic controls, by party, domain and RASCI code.",
+  "inputs": {},
+  "defaults": {
+    "dataSources": {
+      "ds.search": {
+        "options": {
+          "queryParameters": {
+            "earliest": "-24h@h",
+            "latest": "now"
+          }
+        }
+      }
+    }
+  },
+  "visualizations": {
+    "viz_total": {
+      "type": "splunk.singlevalue",
+      "title": "Atomic controls",
+      "dataSources": {
+        "primary": "ds_total"
+      },
+      "options": {}
+    },
+    "viz_direct": {
+      "type": "splunk.singlevalue",
+      "title": "Direct ISM mappings",
+      "dataSources": {
+        "primary": "ds_direct"
+      },
+      "options": {}
+    },
+    "viz_domains": {
+      "type": "splunk.singlevalue",
+      "title": "Control domains",
+      "dataSources": {
+        "primary": "ds_domains"
+      },
+      "options": {}
+    },
+    "viz_evidence": {
+      "type": "splunk.singlevalue",
+      "title": "Evidence checks passing",
+      "dataSources": {
+        "primary": "ds_evidence"
+      },
+      "options": {
+        "unit": "%"
+      }
+    },
+    "viz_accountable": {
+      "type": "splunk.bar",
+      "title": "Accountable party (A or R/A)",
+      "dataSources": {
+        "primary": "ds_accountable"
+      },
+      "options": {
+        "legendDisplay": "off"
+      }
+    },
+    "viz_owner": {
+      "type": "splunk.pie",
+      "title": "Owner assignment",
+      "dataSources": {
+        "primary": "ds_owner"
+      },
+      "options": {}
+    },
+    "viz_codes": {
+      "type": "splunk.column",
+      "title": "RASCI codes by party",
+      "dataSources": {
+        "primary": "ds_codes"
+      },
+      "options": {
+        "stackMode": "stacked"
+      }
+    },
+    "viz_domain_table": {
+      "type": "splunk.table",
+      "title": "Accountability by control domain",
+      "dataSources": {
+        "primary": "ds_domain_table"
+      },
+      "options": {
+        "count": 20
+      }
+    }
+  },
+  "dataSources": {
+    "ds_total": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup srm_controls_lookup | stats count"
+      }
+    },
+    "ds_direct": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup srm_controls_lookup | where ism_mapping_strength=\"Direct\" | stats count"
+      }
+    },
+    "ds_domains": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup srm_controls_lookup | stats dc(domain)"
+      }
+    },
+    "ds_evidence": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup srm_evidence_lookup | sort 0 - checked_at | dedup control_id | stats count(eval(status=\"pass\")) as pass count as total | eval pct=if(total>0,round(pass/total*100),0) | fields pct"
+      }
+    },
+    "ds_accountable": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup srm_rasci_lookup | where rasci=\"A\" OR rasci=\"R/A\" | stats count as controls by party | sort - controls"
+      }
+    },
+    "ds_owner": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup srm_controls_lookup | stats count by owner_assignment | sort - count"
+      }
+    },
+    "ds_codes": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup srm_rasci_lookup | chart count over party by rasci"
+      }
+    },
+    "ds_domain_table": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup srm_controls_lookup | eval accountable=accountable_party | stats count as controls count(eval(accountable=\"Customer governance\")) as customer count(eval(accountable=\"Cloud provider\")) as provider count(eval(accountable=\"Third party\")) as third_party count(eval(rasci_customer_soc=\"R\" OR rasci_customer_soc=\"R/A\")) as soc_responsible count(eval(ism_mapping_strength=\"Direct\")) as ism_direct by domain | sort - controls | rename domain as Domain controls as Controls customer as \"Customer accountable\" provider as \"Provider accountable\" third_party as \"Third party accountable\" soc_responsible as \"SOC responsible\" ism_direct as \"ISM direct\""
+      }
+    }
+  },
+  "layout": {
+    "type": "grid",
+    "options": {
+      "width": 1440
+    },
+    "globalInputs": [],
+    "structure": [
+      {
+        "item": "viz_total",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "w": 360,
+          "h": 130
+        }
+      },
+      {
+        "item": "viz_direct",
+        "type": "block",
+        "position": {
+          "x": 360,
+          "y": 0,
+          "w": 360,
+          "h": 130
+        }
+      },
+      {
+        "item": "viz_domains",
+        "type": "block",
+        "position": {
+          "x": 720,
+          "y": 0,
+          "w": 360,
+          "h": 130
+        }
+      },
+      {
+        "item": "viz_evidence",
+        "type": "block",
+        "position": {
+          "x": 1080,
+          "y": 0,
+          "w": 360,
+          "h": 130
+        }
+      },
+      {
+        "item": "viz_accountable",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 130,
+          "w": 480,
+          "h": 320
+        }
+      },
+      {
+        "item": "viz_owner",
+        "type": "block",
+        "position": {
+          "x": 480,
+          "y": 130,
+          "w": 440,
+          "h": 320
+        }
+      },
+      {
+        "item": "viz_codes",
+        "type": "block",
+        "position": {
+          "x": 920,
+          "y": 130,
+          "w": 520,
+          "h": 320
+        }
+      },
+      {
+        "item": "viz_domain_table",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 450,
+          "w": 1440,
+          "h": 620
+        }
+      }
+    ]
+  }
+}
+  ]]></definition>
+</dashboard>

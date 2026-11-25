@@ -1,0 +1,112 @@
+<dashboard version="2" theme="dark">
+  <label>On-premises Cross-cut</label>
+  <description>On-premises sections against responsibility functions (Primary, Support, Consulted) and the COBIT pillars each function carries.</description>
+  <definition><![CDATA[
+{
+  "title": "On-premises Cross-cut",
+  "description": "On-premises sections against responsibility functions (Primary, Support, Consulted) and the COBIT pillars each function carries.",
+  "inputs": {},
+  "defaults": {
+    "dataSources": {
+      "ds.search": {
+        "options": {
+          "queryParameters": {
+            "earliest": "-24h@h",
+            "latest": "now"
+          }
+        }
+      }
+    }
+  },
+  "visualizations": {
+    "viz_matrix": {
+      "type": "splunk.table",
+      "title": "Section × function roles",
+      "dataSources": {
+        "primary": "ds_matrix"
+      },
+      "options": {
+        "count": 15
+      }
+    },
+    "viz_flow": {
+      "type": "splunk.sankey",
+      "title": "Section → function → COBIT pillar (weight: P=3, S=2, C=1)",
+      "dataSources": {
+        "primary": "ds_flow"
+      },
+      "options": {}
+    },
+    "viz_roles": {
+      "type": "splunk.bar",
+      "title": "Role mix by section",
+      "dataSources": {
+        "primary": "ds_roles"
+      },
+      "options": {
+        "stackMode": "stacked"
+      }
+    }
+  },
+  "dataSources": {
+    "ds_matrix": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup srm_section_roles_lookup | eval cell=role | xyseries section function cell | join type=left section [| inputlookup srm_sections_lookup | fields section section_order] | sort section_order | fields - section_order _* | fillnull value=\"—\""
+      }
+    },
+    "ds_flow": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup srm_section_roles_lookup | rename section as source function as target | eval value=case(role=\"P\",3,role=\"S\",2,true(),1) | table source target value | append [| inputlookup srm_functions_lookup | eval source=function, target=pillar.\" (\".pillar_code.\")\", value=2 | table source target value]"
+      }
+    },
+    "ds_roles": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup srm_section_roles_lookup | chart count over section by role_name"
+      }
+    }
+  },
+  "layout": {
+    "type": "grid",
+    "options": {
+      "width": 1440
+    },
+    "globalInputs": [],
+    "structure": [
+      {
+        "item": "viz_matrix",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "w": 1440,
+          "h": 460
+        }
+      },
+      {
+        "item": "viz_flow",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 460,
+          "w": 920,
+          "h": 760
+        }
+      },
+      {
+        "item": "viz_roles",
+        "type": "block",
+        "position": {
+          "x": 920,
+          "y": 460,
+          "w": 520,
+          "h": 760
+        }
+      }
+    ]
+  }
+}
+  ]]></definition>
+</dashboard>

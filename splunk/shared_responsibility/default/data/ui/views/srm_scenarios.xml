@@ -1,0 +1,165 @@
+<dashboard version="2" theme="dark">
+  <label>Failure Scenarios</label>
+  <description>Which on-premises sections and responsibility functions each failure scenario involves, and the control layers its recovery draws on.</description>
+  <definition><![CDATA[
+{
+  "title": "Failure Scenarios",
+  "description": "Which on-premises sections and responsibility functions each failure scenario involves, and the control layers its recovery draws on.",
+  "inputs": {
+    "input_scenario": {
+      "type": "input.dropdown",
+      "title": "Scenario",
+      "options": {
+        "items": [
+          {
+            "label": "Primary server room flood",
+            "value": "Primary server room flood"
+          },
+          {
+            "label": "Cloud identity outage",
+            "value": "Cloud identity outage"
+          },
+          {
+            "label": "Malware outbreak",
+            "value": "Malware outbreak"
+          },
+          {
+            "label": "On-premises gateway failure",
+            "value": "On-premises gateway failure"
+          }
+        ],
+        "defaultValue": "Primary server room flood",
+        "token": "scenario"
+      }
+    }
+  },
+  "defaults": {
+    "dataSources": {
+      "ds.search": {
+        "options": {
+          "queryParameters": {
+            "earliest": "-24h@h",
+            "latest": "now"
+          }
+        }
+      }
+    }
+  },
+  "visualizations": {
+    "viz_summary": {
+      "type": "splunk.table",
+      "title": "$scenario$",
+      "dataSources": {
+        "primary": "ds_summary"
+      },
+      "options": {}
+    },
+    "viz_matrix": {
+      "type": "splunk.table",
+      "title": "Section × function involvement ($scenario$)",
+      "dataSources": {
+        "primary": "ds_matrix"
+      },
+      "options": {
+        "count": 15
+      }
+    },
+    "viz_compare": {
+      "type": "splunk.column",
+      "title": "Sections involved per function, by scenario",
+      "dataSources": {
+        "primary": "ds_compare"
+      },
+      "options": {}
+    },
+    "viz_layers": {
+      "type": "splunk.table",
+      "title": "Control layers drawn on",
+      "dataSources": {
+        "primary": "ds_layers"
+      },
+      "options": {
+        "count": 25
+      }
+    }
+  },
+  "dataSources": {
+    "ds_summary": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup srm_scenarios_lookup where scenario=\"$scenario$\" | eval phases=replace(phases,\"\\|\",\" → \") | table objective phases | rename objective as Objective phases as \"Recovery phases\""
+      }
+    },
+    "ds_matrix": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup srm_scenario_involvement_lookup where scenario=\"$scenario$\" | eval cell=if(involved=1,\"Involved\",\"—\") | xyseries section function cell | join type=left section [| inputlookup srm_sections_lookup | fields section section_order] | sort section_order | fields - section_order _*"
+      }
+    },
+    "ds_compare": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup srm_scenario_involvement_lookup | stats sum(involved) as involved by scenario function | xyseries function scenario involved"
+      }
+    },
+    "ds_layers": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup srm_scenario_layers_lookup | stats count as scenarios values(scenario) as used_by by layer | sort - scenarios | rename layer as \"Control layer\" scenarios as Scenarios used_by as \"Used by\""
+      }
+    }
+  },
+  "layout": {
+    "type": "grid",
+    "options": {
+      "width": 1440
+    },
+    "globalInputs": [
+      "input_scenario"
+    ],
+    "structure": [
+      {
+        "item": "viz_summary",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "w": 1440,
+          "h": 150
+        }
+      },
+      {
+        "item": "viz_matrix",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 150,
+          "w": 1440,
+          "h": 460
+        }
+      },
+      {
+        "item": "viz_compare",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 610,
+          "w": 760,
+          "h": 520
+        }
+      },
+      {
+        "item": "viz_layers",
+        "type": "block",
+        "position": {
+          "x": 760,
+          "y": 610,
+          "w": 680,
+          "h": 520
+        }
+      }
+    ]
+  }
+}
+  ]]></definition>
+</dashboard>

@@ -1,0 +1,33 @@
+function_order,function,pillar_code,pillar
+1,Service governance,EDM,Govern
+1,Service governance,APO,Plan & Design
+1,Service governance,MEA,Monitor & Assure
+2,Facilities,APO,Plan & Design
+2,Facilities,BAI,Build & Change
+2,Facilities,DSS,Deliver & Operate
+2,Facilities,MEA,Monitor & Assure
+3,Network operations,APO,Plan & Design
+3,Network operations,BAI,Build & Change
+3,Network operations,DSS,Deliver & Operate
+3,Network operations,MEA,Monitor & Assure
+4,Compute & platform,APO,Plan & Design
+4,Compute & platform,BAI,Build & Change
+4,Compute & platform,DSS,Deliver & Operate
+4,Compute & platform,MEA,Monitor & Assure
+5,Application & data,APO,Plan & Design
+5,Application & data,BAI,Build & Change
+5,Application & data,DSS,Deliver & Operate
+5,Application & data,MEA,Monitor & Assure
+6,Workplace services,APO,Plan & Design
+6,Workplace services,BAI,Build & Change
+6,Workplace services,DSS,Deliver & Operate
+6,Workplace services,MEA,Monitor & Assure
+7,Customer SOC,APO,Plan & Design
+7,Customer SOC,BAI,Build & Change
+7,Customer SOC,DSS,Deliver & Operate
+7,Customer SOC,MEA,Monitor & Assure
+8,Suppliers,EDM,Govern
+8,Suppliers,APO,Plan & Design
+8,Suppliers,BAI,Build & Change
+8,Suppliers,DSS,Deliver & Operate
+8,Suppliers,MEA,Monitor & Assure

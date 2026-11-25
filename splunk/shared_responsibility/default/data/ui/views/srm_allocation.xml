@@ -1,0 +1,193 @@
+<dashboard version="2" theme="dark">
+  <label>Responsibility Allocation</label>
+  <description>How each control layer's responsibility splits between customer governance, the customer SOC and the provider under a service model.</description>
+  <definition><![CDATA[
+{
+  "title": "Responsibility Allocation",
+  "description": "How each control layer's responsibility splits between customer governance, the customer SOC and the provider under a service model.",
+  "inputs": {
+    "input_model": {
+      "type": "input.dropdown",
+      "title": "Service model",
+      "options": {
+        "items": [
+          {
+            "label": "On-premises",
+            "value": "On-premises"
+          },
+          {
+            "label": "IaaS",
+            "value": "IaaS"
+          },
+          {
+            "label": "PaaS",
+            "value": "PaaS"
+          },
+          {
+            "label": "SaaS",
+            "value": "SaaS"
+          },
+          {
+            "label": "FaaS",
+            "value": "FaaS"
+          },
+          {
+            "label": "BaaS",
+            "value": "BaaS"
+          },
+          {
+            "label": "SECaaS",
+            "value": "SECaaS"
+          },
+          {
+            "label": "DaaS",
+            "value": "DaaS"
+          },
+          {
+            "label": "DBaaS",
+            "value": "DBaaS"
+          },
+          {
+            "label": "IDaaS",
+            "value": "IDaaS"
+          },
+          {
+            "label": "CaaS",
+            "value": "CaaS"
+          }
+        ],
+        "defaultValue": "SaaS",
+        "token": "model"
+      }
+    }
+  },
+  "defaults": {
+    "dataSources": {
+      "ds.search": {
+        "options": {
+          "queryParameters": {
+            "earliest": "-24h@h",
+            "latest": "now"
+          }
+        }
+      }
+    }
+  },
+  "visualizations": {
+    "viz_flow": {
+      "type": "splunk.sankey",
+      "title": "Party → control layer ($model$, share in percentage points)",
+      "dataSources": {
+        "primary": "ds_flow"
+      },
+      "options": {}
+    },
+    "viz_split": {
+      "type": "splunk.pie",
+      "title": "Average split ($model$)",
+      "dataSources": {
+        "primary": "ds_split"
+      },
+      "options": {}
+    },
+    "viz_models": {
+      "type": "splunk.column",
+      "title": "Average split by service model",
+      "dataSources": {
+        "primary": "ds_models"
+      },
+      "options": {
+        "stackMode": "stacked100"
+      }
+    },
+    "viz_table": {
+      "type": "splunk.table",
+      "title": "Layer shares ($model$)",
+      "dataSources": {
+        "primary": "ds_table"
+      },
+      "options": {
+        "count": 30
+      }
+    }
+  },
+  "dataSources": {
+    "ds_flow": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup srm_layer_shares_lookup where service_model=\"$model$\" | eval pair=mvappend(\"Customer governance=\".customer_pct, \"Customer SOC=\".soc_pct, \"Cloud provider=\".provider_pct) | mvexpand pair | eval source=mvindex(split(pair,\"=\"),0), value=tonumber(mvindex(split(pair,\"=\"),1)), target=layer | where value>0 | table source target value"
+      }
+    },
+    "ds_split": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup srm_layer_shares_lookup where service_model=\"$model$\" | stats avg(customer_pct) as \"Customer governance\" avg(soc_pct) as \"Customer SOC\" avg(provider_pct) as \"Cloud provider\" | transpose column_name=party | rename \"row 1\" as share | eval share=round(share,1)"
+      }
+    },
+    "ds_table": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup srm_layer_shares_lookup where service_model=\"$model$\" | sort - provider_pct | table layer customer_pct soc_pct provider_pct | rename layer as \"Control layer\" customer_pct as \"Customer %\" soc_pct as \"SOC %\" provider_pct as \"Provider %\""
+      }
+    },
+    "ds_models": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup srm_layer_shares_lookup | stats avg(customer_pct) as Customer avg(soc_pct) as SOC avg(provider_pct) as Provider by service_model | foreach Customer SOC Provider [eval <<FIELD>>=round('<<FIELD>>',1)]"
+      }
+    }
+  },
+  "layout": {
+    "type": "grid",
+    "options": {
+      "width": 1440
+    },
+    "globalInputs": [
+      "input_model"
+    ],
+    "structure": [
+      {
+        "item": "viz_flow",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "w": 960,
+          "h": 760
+        }
+      },
+      {
+        "item": "viz_split",
+        "type": "block",
+        "position": {
+          "x": 960,
+          "y": 0,
+          "w": 480,
+          "h": 380
+        }
+      },
+      {
+        "item": "viz_models",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 760,
+          "w": 1440,
+          "h": 340
+        }
+      },
+      {
+        "item": "viz_table",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 1100,
+          "w": 1440,
+          "h": 620
+        }
+      }
+    ]
+  }
+}
+  ]]></definition>
+</dashboard>

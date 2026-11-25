@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<view template="shared_responsibility:/templates/srm_explorer.html" type="html" isDashboard="False">
+    <label>Explorer</label>
+</view>

@@ -1,0 +1,144 @@
+stage_order,stage,function,pillar_code,pillar
+1,1. Initiate and justify,Service governance,EDM,Govern
+1,1. Initiate and justify,Service governance,APO,Plan & Design
+1,1. Initiate and justify,Facilities,APO,Plan & Design
+1,1. Initiate and justify,Network operations,APO,Plan & Design
+1,1. Initiate and justify,Compute & platform,APO,Plan & Design
+1,1. Initiate and justify,Application & data,APO,Plan & Design
+1,1. Initiate and justify,Workplace services,APO,Plan & Design
+1,1. Initiate and justify,Customer SOC,APO,Plan & Design
+1,1. Initiate and justify,Suppliers,EDM,Govern
+1,1. Initiate and justify,Suppliers,APO,Plan & Design
+2,2. Architect and design,Service governance,APO,Plan & Design
+2,2. Architect and design,Facilities,APO,Plan & Design
+2,2. Architect and design,Network operations,APO,Plan & Design
+2,2. Architect and design,Compute & platform,APO,Plan & Design
+2,2. Architect and design,Application & data,APO,Plan & Design
+2,2. Architect and design,Workplace services,APO,Plan & Design
+2,2. Architect and design,Customer SOC,APO,Plan & Design
+2,2. Architect and design,Suppliers,APO,Plan & Design
+3,3. Source and contract,Service governance,EDM,Govern
+3,3. Source and contract,Service governance,APO,Plan & Design
+3,3. Source and contract,Facilities,APO,Plan & Design
+3,3. Source and contract,Facilities,BAI,Build & Change
+3,3. Source and contract,Network operations,APO,Plan & Design
+3,3. Source and contract,Network operations,BAI,Build & Change
+3,3. Source and contract,Compute & platform,APO,Plan & Design
+3,3. Source and contract,Compute & platform,BAI,Build & Change
+3,3. Source and contract,Application & data,APO,Plan & Design
+3,3. Source and contract,Application & data,BAI,Build & Change
+3,3. Source and contract,Workplace services,APO,Plan & Design
+3,3. Source and contract,Workplace services,BAI,Build & Change
+3,3. Source and contract,Customer SOC,APO,Plan & Design
+3,3. Source and contract,Suppliers,EDM,Govern
+3,3. Source and contract,Suppliers,APO,Plan & Design
+3,3. Source and contract,Suppliers,BAI,Build & Change
+4,4. Build and configure,Service governance,APO,Plan & Design
+4,4. Build and configure,Facilities,BAI,Build & Change
+4,4. Build and configure,Network operations,BAI,Build & Change
+4,4. Build and configure,Compute & platform,BAI,Build & Change
+4,4. Build and configure,Application & data,BAI,Build & Change
+4,4. Build and configure,Workplace services,BAI,Build & Change
+4,4. Build and configure,Customer SOC,BAI,Build & Change
+4,4. Build and configure,Suppliers,BAI,Build & Change
+5,5. Integrate and migrate,Service governance,APO,Plan & Design
+5,5. Integrate and migrate,Facilities,BAI,Build & Change
+5,5. Integrate and migrate,Network operations,BAI,Build & Change
+5,5. Integrate and migrate,Compute & platform,BAI,Build & Change
+5,5. Integrate and migrate,Application & data,BAI,Build & Change
+5,5. Integrate and migrate,Workplace services,BAI,Build & Change
+5,5. Integrate and migrate,Customer SOC,BAI,Build & Change
+5,5. Integrate and migrate,Suppliers,BAI,Build & Change
+6,"6. Test, assure and accredit",Service governance,MEA,Monitor & Assure
+6,"6. Test, assure and accredit",Facilities,BAI,Build & Change
+6,"6. Test, assure and accredit",Facilities,MEA,Monitor & Assure
+6,"6. Test, assure and accredit",Network operations,BAI,Build & Change
+6,"6. Test, assure and accredit",Network operations,MEA,Monitor & Assure
+6,"6. Test, assure and accredit",Compute & platform,BAI,Build & Change
+6,"6. Test, assure and accredit",Compute & platform,MEA,Monitor & Assure
+6,"6. Test, assure and accredit",Application & data,BAI,Build & Change
+6,"6. Test, assure and accredit",Application & data,MEA,Monitor & Assure
+6,"6. Test, assure and accredit",Workplace services,BAI,Build & Change
+6,"6. Test, assure and accredit",Workplace services,MEA,Monitor & Assure
+6,"6. Test, assure and accredit",Customer SOC,BAI,Build & Change
+6,"6. Test, assure and accredit",Customer SOC,MEA,Monitor & Assure
+6,"6. Test, assure and accredit",Suppliers,BAI,Build & Change
+6,"6. Test, assure and accredit",Suppliers,MEA,Monitor & Assure
+7,7. Transition and release,Service governance,APO,Plan & Design
+7,7. Transition and release,Service governance,MEA,Monitor & Assure
+7,7. Transition and release,Facilities,DSS,Deliver & Operate
+7,7. Transition and release,Network operations,BAI,Build & Change
+7,7. Transition and release,Network operations,DSS,Deliver & Operate
+7,7. Transition and release,Compute & platform,BAI,Build & Change
+7,7. Transition and release,Compute & platform,DSS,Deliver & Operate
+7,7. Transition and release,Application & data,BAI,Build & Change
+7,7. Transition and release,Application & data,DSS,Deliver & Operate
+7,7. Transition and release,Workplace services,BAI,Build & Change
+7,7. Transition and release,Workplace services,DSS,Deliver & Operate
+7,7. Transition and release,Customer SOC,BAI,Build & Change
+7,7. Transition and release,Customer SOC,DSS,Deliver & Operate
+7,7. Transition and release,Suppliers,BAI,Build & Change
+7,7. Transition and release,Suppliers,DSS,Deliver & Operate
+8,8. Operate and support,Service governance,MEA,Monitor & Assure
+8,8. Operate and support,Facilities,DSS,Deliver & Operate
+8,8. Operate and support,Facilities,MEA,Monitor & Assure
+8,8. Operate and support,Network operations,DSS,Deliver & Operate
+8,8. Operate and support,Network operations,MEA,Monitor & Assure
+8,8. Operate and support,Compute & platform,DSS,Deliver & Operate
+8,8. Operate and support,Compute & platform,MEA,Monitor & Assure
+8,8. Operate and support,Application & data,DSS,Deliver & Operate
+8,8. Operate and support,Application & data,MEA,Monitor & Assure
+8,8. Operate and support,Workplace services,DSS,Deliver & Operate
+8,8. Operate and support,Workplace services,MEA,Monitor & Assure
+8,8. Operate and support,Customer SOC,DSS,Deliver & Operate
+8,8. Operate and support,Customer SOC,MEA,Monitor & Assure
+8,8. Operate and support,Suppliers,DSS,Deliver & Operate
+8,8. Operate and support,Suppliers,MEA,Monitor & Assure
+9,9. Monitor and improve,Service governance,EDM,Govern
+9,9. Monitor and improve,Service governance,MEA,Monitor & Assure
+9,9. Monitor and improve,Facilities,MEA,Monitor & Assure
+9,9. Monitor and improve,Network operations,MEA,Monitor & Assure
+9,9. Monitor and improve,Compute & platform,MEA,Monitor & Assure
+9,9. Monitor and improve,Application & data,MEA,Monitor & Assure
+9,9. Monitor and improve,Workplace services,MEA,Monitor & Assure
+9,9. Monitor and improve,Customer SOC,DSS,Deliver & Operate
+9,9. Monitor and improve,Customer SOC,MEA,Monitor & Assure
+9,9. Monitor and improve,Suppliers,MEA,Monitor & Assure
+10,10. Change and modernise,Service governance,APO,Plan & Design
+10,10. Change and modernise,Service governance,MEA,Monitor & Assure
+10,10. Change and modernise,Facilities,APO,Plan & Design
+10,10. Change and modernise,Facilities,BAI,Build & Change
+10,10. Change and modernise,Network operations,APO,Plan & Design
+10,10. Change and modernise,Network operations,BAI,Build & Change
+10,10. Change and modernise,Compute & platform,APO,Plan & Design
+10,10. Change and modernise,Compute & platform,BAI,Build & Change
+10,10. Change and modernise,Application & data,APO,Plan & Design
+10,10. Change and modernise,Application & data,BAI,Build & Change
+10,10. Change and modernise,Workplace services,APO,Plan & Design
+10,10. Change and modernise,Workplace services,BAI,Build & Change
+10,10. Change and modernise,Customer SOC,APO,Plan & Design
+10,10. Change and modernise,Customer SOC,BAI,Build & Change
+10,10. Change and modernise,Suppliers,APO,Plan & Design
+10,10. Change and modernise,Suppliers,BAI,Build & Change
+11,"11. Retire, archive and dispose",Service governance,EDM,Govern
+11,"11. Retire, archive and dispose",Service governance,APO,Plan & Design
+11,"11. Retire, archive and dispose",Service governance,MEA,Monitor & Assure
+11,"11. Retire, archive and dispose",Facilities,DSS,Deliver & Operate
+11,"11. Retire, archive and dispose",Facilities,MEA,Monitor & Assure
+11,"11. Retire, archive and dispose",Network operations,BAI,Build & Change
+11,"11. Retire, archive and dispose",Network operations,DSS,Deliver & Operate
+11,"11. Retire, archive and dispose",Network operations,MEA,Monitor & Assure
+11,"11. Retire, archive and dispose",Compute & platform,BAI,Build & Change
+11,"11. Retire, archive and dispose",Compute & platform,DSS,Deliver & Operate
+11,"11. Retire, archive and dispose",Compute & platform,MEA,Monitor & Assure
+11,"11. Retire, archive and dispose",Application & data,BAI,Build & Change
+11,"11. Retire, archive and dispose",Application & data,DSS,Deliver & Operate
+11,"11. Retire, archive and dispose",Application & data,MEA,Monitor & Assure
+11,"11. Retire, archive and dispose",Workplace services,BAI,Build & Change
+11,"11. Retire, archive and dispose",Workplace services,DSS,Deliver & Operate
+11,"11. Retire, archive and dispose",Workplace services,MEA,Monitor & Assure
+11,"11. Retire, archive and dispose",Customer SOC,DSS,Deliver & Operate
+11,"11. Retire, archive and dispose",Customer SOC,MEA,Monitor & Assure
+11,"11. Retire, archive and dispose",Suppliers,BAI,Build & Change
+11,"11. Retire, archive and dispose",Suppliers,DSS,Deliver & Operate
+11,"11. Retire, archive and dispose",Suppliers,MEA,Monitor & Assure

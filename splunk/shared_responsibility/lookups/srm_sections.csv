@@ -1,0 +1,12 @@
+section_order,section_id,section,scope,layer_ids
+1,op-governance,"Governance, architecture and assurance","Ownership, design authority, accreditation, risk and commercial governance",governance|architecture|ato|supplier-commercial
+2,op-facilities,Facilities and data centre,"Sites, power, cooling, racks, physical protection and environmental operations",onprem-operations|physical
+3,op-network,Network and carrier,"LAN, WAN, internet, circuits, addressing, segmentation and traffic services",network-carrier|network
+4,op-compute,"Compute, hardware and operating systems","Servers, firmware, operating systems, jobs, patching and compute health",os-compute|host|asset-cmdb
+5,op-platform,Virtualisation and automation platforms,"Hypervisors, clusters, templates, orchestration, configuration and IaC",virtualisation|iac
+6,op-storage,"Storage, backup and continuity","SAN/NAS, replication, backup, recovery, media and continuity",storage-media|continuity
+7,op-core,Core infrastructure services,"Directory, DNS, DHCP, time, PKI, IPAM, file services and identity",core-infra|identity
+8,op-workplace,End-user and workplace services,"Endpoints, builds, software, printing, VDI, rooms and user support",euc|endpoint|ucc
+9,op-appdata,"Applications, data and performance","Application controls, data governance, privacy, records and capacity",application|data-governance|performance
+10,op-service,"Service, change and financial operations","ITSM, incidents, releases, environments, cost and service improvement",service|change-release|finops
+11,op-cyber,Cyber operations and exposure,"Logging, detection, response, forensics, vulnerabilities, hunting and intelligence",operations|vulnerability-exposure|cti

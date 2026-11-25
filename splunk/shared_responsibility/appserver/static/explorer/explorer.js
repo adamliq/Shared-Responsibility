@@ -1,0 +1,994 @@
+const MODELS=["On-premises","IaaS","PaaS","SaaS","FaaS","BaaS","SECaaS","DaaS","DBaaS","IDaaS","CaaS"];
+const MODEL_INFO={
+ "On-premises":"The organisation operates the full technology stack in facilities it controls.",
+ "IaaS":"The provider operates physical infrastructure and virtualisation; the customer manages operating systems, workloads, data and most security configuration.",
+ "PaaS":"The provider operates the infrastructure and application platform; the customer manages applications, identities, data and configuration.",
+ "SaaS":"The provider operates the application and supporting stack; the customer manages use, identities, data, configuration and monitoring integration.",
+ "FaaS":"The provider operates the event-driven runtime and infrastructure; the customer manages function code, identities, data, triggers and configuration.",
+ "BaaS":"Backend as a Service provides managed databases, user authentication, push notifications and other pre-made backend capabilities so developers can focus on the client-side application.",
+ "SECaaS":"Security as a Service integrates capabilities such as anti-malware, authentication and intrusion detection into the customer’s cloud environment.",
+ "DaaS":"Desktop as a Service delivers provider-hosted virtual desktop infrastructure so users can stream a managed desktop environment to supported devices.",
+ "DBaaS":"Database as a Service provides a managed database without requiring the customer to provision physical hardware or install and operate database software.",
+ "IDaaS":"Identity as a Service outsources digital gatekeeping—including authentication, password infrastructure and multi-factor authentication—to an identity provider such as Microsoft Entra ID.",
+ "CaaS":"Containers as a Service provides managed servers and container orchestration, such as Kubernetes; the customer manages containers, images, configuration and application code."
+};
+const LAYERS=[
+ {id:"governance",label:"Data classification and accountability",hint:"Governance, data and compliance",domains:["Governance","Data security and privacy","Compliance and legal","Assurance"],share:[100,100,100,100,100,100,100,100,100,100,100],soc:[10,10,10,10,10,10,20,15,10,15,10]},
+ {id:"endpoint",label:"Client and endpoint protection",hint:"Endpoint and access edge",domains:["Endpoint security","Human resources security","Mobile security"],share:[100,100,100,85,80,80,60,55,80,65,90],soc:[30,30,30,25,25,25,35,30,25,30,30]},
+ {id:"identity",label:"Identity and access management",hint:"Identity, privilege and secrets",domains:["Identity and access management","Key management and cryptography"],share:[100,100,70,65,65,55,45,55,60,35,75],soc:[25,25,20,20,20,20,25,20,20,20,25]},
+ {id:"application",label:"Application-level controls",hint:"Applications, data and workloads",domains:["Application and interface security","Data security and privacy","Change control and configuration management","Vulnerability management"],share:[100,100,60,55,50,45,40,60,45,45,80],soc:[20,20,15,15,15,15,25,20,15,20,20]},
+ {id:"network",label:"Network controls",hint:"Segmentation and traffic protection",domains:["Infrastructure and virtualization security","Network security"],share:[100,70,45,20,15,15,20,20,20,15,55],soc:[30,25,20,10,10,10,15,10,10,10,20]},
+ {id:"host",label:"Host infrastructure",hint:"Compute, platform and resilience",domains:["Infrastructure and virtualization security","Business continuity and operational resilience","Supply chain management"],share:[100,45,10,0,0,0,0,0,0,0,20],soc:[20,15,5,0,0,0,0,0,0,0,10]},
+ {id:"physical",label:"Physical security",hint:"Facilities and hardware",domains:["Physical security"],share:[100,0,0,0,0,0,0,0,0,0,0],soc:[0,0,0,0,0,0,0,0,0,0,0]},
+ {id:"operations",label:"Security operations",hint:"Logging, detection, response and forensics",domains:["Logging and monitoring","Log collection and pipeline assurance","Detection engineering","Threat hunting","Incident response","Digital forensics","Security incident management, e-discovery and cloud forensics"],share:[100,75,70,65,65,55,50,55,55,55,70],soc:[65,55,55,50,50,45,40,45,45,45,55]},
+ {id:"finops",label:"FinOps and cost accountability",hint:"Cost ownership, allocation, forecasting and optimisation",domains:["FinOps and cost accountability"],share:[100,80,75,70,75,70,70,70,70,70,75],soc:[0,5,5,5,5,5,5,5,5,5,5]},
+ {id:"service",label:"Service and operational incidents",hint:"Service ownership, support, restoration and improvement",domains:["Service management and operational incidents"],share:[100,75,65,55,70,60,55,55,55,55,65],soc:[5,10,10,10,10,10,10,10,10,10,10]},
+ {id:"continuity",label:"Availability, backup and continuity",hint:"Availability design, backup, recovery and continuity",domains:["Availability, backup, recovery and continuity"],share:[100,80,70,60,70,65,60,60,60,60,70],soc:[5,10,10,10,10,10,10,10,10,10,10]},
+ {id:"data-governance",label:"Data governance, privacy and records",hint:"Data accountability, privacy operations and records lifecycle",domains:["Data governance, privacy and records management"],share:[100,90,85,80,85,80,80,80,80,80,85],soc:[0,5,5,5,5,5,5,5,5,5,5]},
+ {id:"performance",label:"Performance, capacity and scalability",hint:"Performance objectives, demand, limits and scaling",domains:["Performance, capacity and scalability"],share:[100,75,60,45,65,55,50,50,50,50,65],soc:[0,0,0,0,0,0,0,0,0,0,0]},
+ {id:"architecture",label:"Architecture and technical governance",hint:"Design authority, patterns, interoperability and technical debt",domains:["Architecture and technical governance"],share:[100,90,85,80,85,80,80,80,80,80,85],soc:[0,0,0,0,0,0,0,0,0,0,0]},
+ {id:"change-release",label:"Change, release and environments",hint:"Assessment, approvals, readiness, rollback, windows, promotion and validation",domains:["Change, release and environment management"],share:[100,85,75,60,70,65,65,60,60,60,75],soc:[10,10,10,10,10,10,10,10,10,10,10]},
+ {id:"network-carrier",label:"Network and carrier operations",hint:"Circuits, addressing, capacity, resilience, faults, maintenance and lifecycle",domains:["Network and carrier operations"],share:[100,80,65,45,65,55,50,50,50,45,70],soc:[15,15,10,10,10,10,15,10,10,10,15]},
+ {id:"onprem-operations",label:"On-premises infrastructure and operations",hint:"Facilities, power, cooling, compute, virtualisation, storage and site operations",domains:["On-premises infrastructure and operations"],share:[100,0,0,0,0,0,0,0,0,0,0],soc:[10,0,0,0,0,0,0,0,0,0,0]},
+ {id:"asset-cmdb",label:"Asset, CMDB and lifecycle management",hint:"Ownership, discovery, relationships, entitlements, refresh and disposal",domains:["Asset, CMDB and lifecycle management","Asset management"],share:[100,95,90,85,90,90,90,90,90,90,90],soc:[5,5,5,5,5,5,5,5,5,5,5]},
+ {id:"virtualisation",label:"Virtualisation and platform operations",hint:"Hypervisors, clusters, management planes, templates and platform upgrades",domains:["Virtualisation and platform operations","Provider infrastructure","Runtime and middleware"],share:[100,40,15,0,10,5,5,0,5,0,30],soc:[10,10,5,0,5,5,5,0,5,0,10]},
+ {id:"storage-media",label:"Storage and media operations",hint:"SAN/NAS, capacity, replication, removable media, tape handling and off-site storage",domains:["Storage and media operations"],share:[100,75,55,20,50,45,40,35,40,30,60],soc:[10,10,10,5,10,10,10,5,10,5,10]},
+ {id:"supplier-commercial",label:"Supplier, procurement and commercial",hint:"Purchasing, warranties, support contracts, renewals, service credits and exit",domains:["Supplier, procurement and commercial management","Supply chain","Exit and portability"],share:[100,90,85,80,85,80,80,80,80,80,85],soc:[0,0,0,0,0,0,0,0,0,0,0]},
+ {id:"os-compute",label:"Operating system and compute operations",hint:"Windows/Linux lifecycle, services, jobs, patching, filesystems and compute health",domains:["Operating system and compute operations","Operating system security"],share:[100,80,25,0,10,10,10,20,10,0,45],soc:[15,15,10,0,5,5,5,10,5,0,10]},
+ {id:"ucc",label:"Unified communications and collaboration",hint:"Voice, video, messaging, conferencing, rooms, recording and carrier operations",domains:["Unified communications and collaboration operations"],share:[100,80,70,40,65,60,55,65,55,50,70],soc:[10,10,10,5,10,10,10,10,10,5,10]},
+ {id:"euc",label:"End-user computing and workplace services",hint:"Devices, builds, software, peripherals, printing, VDI and workplace support",domains:["End-user computing and workplace services","Endpoint security"],share:[100,90,80,60,80,75,70,65,70,60,85],soc:[15,15,10,10,10,10,15,10,10,10,15]},
+ {id:"iac",label:"Configuration, automation and infrastructure as code",hint:"Repositories, modules, pipelines, policy, state, drift, deployment and recovery",domains:["Configuration, automation and infrastructure as code","Configuration management"],share:[100,90,80,60,85,75,75,65,70,65,85],soc:[10,10,10,5,10,10,10,5,10,10,10]},
+ {id:"core-infra",label:"Core infrastructure services",hint:"Directory, DNS, DHCP, time, PKI, IPAM, file services and replication",domains:["Core infrastructure services"],share:[100,95,80,70,75,70,75,80,70,75,85],soc:[20,20,15,10,15,15,15,15,15,15,20]},
+ {id:"vulnerability-exposure",label:"Vulnerability and exposure management",hint:"Coverage, assessment, prioritisation, remediation, exceptions and exposure metrics",domains:["Vulnerability and exposure management"],share:[100,90,80,70,80,75,75,75,75,70,85],soc:[35,35,30,25,30,30,30,30,30,25,35]},
+ {id:"cti",label:"Cyber threat intelligence",hint:"Requirements, collection, analysis, indicators, intelligence products and operational integration",domains:["Cyber threat intelligence"],share:[100,85,75,70,80,75,75,75,75,70,80],soc:[70,65,60,55,65,60,60,60,60,55,65]},
+ {id:"ato",label:"Security accreditation, assurance and authority to operate",hint:"Boundary, controls, evidence, assessment, risk acceptance, ATO and continuous authorisation",domains:["Security accreditation, assurance and authority to operate"],share:[100,95,90,85,90,85,85,85,85,85,90],soc:[25,25,20,20,25,20,20,20,20,20,25]}
+];
+const ONPREM_PILLARS=[
+ {label:"Govern",code:"EDM",meaning:"Evaluate, Direct and Monitor",color:"#f59e0b"},
+ {label:"Plan & Design",code:"APO",meaning:"Align, Plan and Organise",color:"#9b6cff"},
+ {label:"Build & Change",code:"BAI",meaning:"Build, Acquire and Implement",color:"#0794d2"},
+ {label:"Deliver & Operate",code:"DSS",meaning:"Deliver, Service and Support",color:"#20c77a"},
+ {label:"Monitor & Assure",code:"MEA",meaning:"Monitor, Evaluate and Assess",color:"#ee6fa8"}
+];
+const ONPREM_RESPONSIBILITIES=[
+ {label:"Service governance",pillars:["EDM","APO","MEA"]},
+ {label:"Facilities",pillars:["APO","BAI","DSS","MEA"]},
+ {label:"Network operations",pillars:["APO","BAI","DSS","MEA"]},
+ {label:"Compute & platform",pillars:["APO","BAI","DSS","MEA"]},
+ {label:"Application & data",pillars:["APO","BAI","DSS","MEA"]},
+ {label:"Workplace services",pillars:["APO","BAI","DSS","MEA"]},
+ {label:"Customer SOC",pillars:["APO","BAI","DSS","MEA"]},
+ {label:"Suppliers",pillars:["EDM","APO","BAI","DSS","MEA"]}
+];
+const ONPREM_SECTIONS=[
+ {id:"op-governance",label:"Governance, architecture and assurance",hint:"Ownership, design authority, accreditation, risk and commercial governance",layers:["governance","architecture","ato","supplier-commercial"],roles:["P","—","—","C","C","C","S","C"]},
+ {id:"op-facilities",label:"Facilities and data centre",hint:"Sites, power, cooling, racks, physical protection and environmental operations",layers:["onprem-operations","physical"],roles:["C","P","S","S","—","—","C","S"]},
+ {id:"op-network",label:"Network and carrier",hint:"LAN, WAN, internet, circuits, addressing, segmentation and traffic services",layers:["network-carrier","network"],roles:["C","C","P","S","C","—","S","S"]},
+ {id:"op-compute",label:"Compute, hardware and operating systems",hint:"Servers, firmware, operating systems, jobs, patching and compute health",layers:["os-compute","host","asset-cmdb"],roles:["C","S","C","P","C","—","S","S"]},
+ {id:"op-platform",label:"Virtualisation and automation platforms",hint:"Hypervisors, clusters, templates, orchestration, configuration and IaC",layers:["virtualisation","iac"],roles:["C","—","C","P","S","—","S","S"]},
+ {id:"op-storage",label:"Storage, backup and continuity",hint:"SAN/NAS, replication, backup, recovery, media and continuity",layers:["storage-media","continuity"],roles:["C","S","C","P","C","—","S","S"]},
+ {id:"op-core",label:"Core infrastructure services",hint:"Directory, DNS, DHCP, time, PKI, IPAM, file services and identity",layers:["core-infra","identity"],roles:["C","—","S","P","S","C","S","S"]},
+ {id:"op-workplace",label:"End-user and workplace services",hint:"Endpoints, builds, software, printing, VDI, rooms and user support",layers:["euc","endpoint","ucc"],roles:["C","—","S","S","C","P","S","S"]},
+ {id:"op-appdata",label:"Applications, data and performance",hint:"Application controls, data governance, privacy, records and capacity",layers:["application","data-governance","performance"],roles:["P","—","C","S","P","C","S","S"]},
+ {id:"op-service",label:"Service, change and financial operations",hint:"ITSM, incidents, releases, environments, cost and service improvement",layers:["service","change-release","finops"],roles:["P","C","C","S","S","S","C","S"]},
+ {id:"op-cyber",label:"Cyber operations and exposure",hint:"Logging, detection, response, forensics, vulnerabilities, hunting and intelligence",layers:["operations","vulnerability-exposure","cti"],roles:["C","—","S","S","S","C","P","S"]}
+];
+const PLATFORM_LIFECYCLE=[
+ {id:"lc-initiate",label:"1. Initiate and justify",hint:"Business need, outcomes, sponsorship, funding, risk appetite and platform mandate",layers:["governance","architecture","finops","ato"],pillars:[["EDM","APO"],["APO"],["APO"],["APO"],["APO"],["APO"],["APO"],["EDM","APO"]]},
+ {id:"lc-design",label:"2. Architect and design",hint:"Reference architecture, service model, security, data, integration and operational design",layers:["architecture","network","host","application","data-governance","physical","core-infra","identity"],pillars:[["APO"],["APO"],["APO"],["APO"],["APO"],["APO"],["APO"],["APO"]]},
+ {id:"lc-source",label:"3. Source and contract",hint:"Market approach, product selection, licensing, support, warranties, obligations and exit terms",layers:["supplier-commercial","asset-cmdb","finops","architecture"],pillars:[["EDM","APO"],["APO","BAI"],["APO","BAI"],["APO","BAI"],["APO","BAI"],["APO","BAI"],["APO"],["EDM","APO","BAI"]]},
+ {id:"lc-build",label:"4. Build and configure",hint:"Facilities readiness, infrastructure deployment, platform configuration, automation and security controls",layers:["onprem-operations","network-carrier","host","virtualisation","os-compute","core-infra","storage-media","iac","application"],pillars:[["APO"],["BAI"],["BAI"],["BAI"],["BAI"],["BAI"],["BAI"],["BAI"]]},
+ {id:"lc-integrate",label:"5. Integrate and migrate",hint:"Connectivity, identity, data migration, application integration, tooling and operational integration",layers:["network","identity","data-governance","application","core-infra","change-release","iac"],pillars:[["APO"],["BAI"],["BAI"],["BAI"],["BAI"],["BAI"],["BAI"],["BAI"]]},
+ {id:"lc-assure",label:"6. Test, assure and accredit",hint:"Functional, resilience, performance and security testing, evidence, assessment and authority to operate",layers:["ato","vulnerability-exposure","operations","performance","continuity","change-release"],pillars:[["MEA"],["BAI","MEA"],["BAI","MEA"],["BAI","MEA"],["BAI","MEA"],["BAI","MEA"],["BAI","MEA"],["BAI","MEA"]]},
+ {id:"lc-transition",label:"7. Transition and release",hint:"Release readiness, service acceptance, documentation, training, cutover, rollback and early-life support",layers:["change-release","service","continuity","asset-cmdb","euc"],pillars:[["APO","MEA"],["DSS"],["BAI","DSS"],["BAI","DSS"],["BAI","DSS"],["BAI","DSS"],["BAI","DSS"],["BAI","DSS"]]},
+ {id:"lc-operate",label:"8. Operate and support",hint:"Routine platform, infrastructure, workplace, service, supplier and security operations",layers:["onprem-operations","service","network-carrier","host","virtualisation","os-compute","core-infra","storage-media","euc","ucc","operations"],pillars:[["MEA"],["DSS","MEA"],["DSS","MEA"],["DSS","MEA"],["DSS","MEA"],["DSS","MEA"],["DSS","MEA"],["DSS","MEA"]]},
+ {id:"lc-monitor",label:"9. Monitor and improve",hint:"Health, capacity, control effectiveness, threat monitoring, service review and continual improvement",layers:["operations","performance","vulnerability-exposure","cti","service","finops"],pillars:[["EDM","MEA"],["MEA"],["MEA"],["MEA"],["MEA"],["MEA"],["DSS","MEA"],["MEA"]]},
+ {id:"lc-change",label:"10. Change and modernise",hint:"Upgrades, patches, enhancements, automation, architecture refresh and technical-debt reduction",layers:["architecture","change-release","iac","vulnerability-exposure","asset-cmdb","virtualisation","os-compute"],pillars:[["APO","MEA"],["APO","BAI"],["APO","BAI"],["APO","BAI"],["APO","BAI"],["APO","BAI"],["APO","BAI"],["APO","BAI"]]},
+ {id:"lc-retire",label:"11. Retire, archive and dispose",hint:"Decommissioning, data retention or destruction, asset disposal, contract closure and residual-risk confirmation",layers:["asset-cmdb","storage-media","data-governance","supplier-commercial","continuity","change-release","ato"],pillars:[["EDM","APO","MEA"],["DSS","MEA"],["BAI","DSS","MEA"],["BAI","DSS","MEA"],["BAI","DSS","MEA"],["BAI","DSS","MEA"],["DSS","MEA"],["BAI","DSS","MEA"]]}
+];
+const FAILURE_SCENARIOS=[
+ {
+  id:"dr-primary-server-room-flood",number:1,title:"Primary server room flood",label:"Scenario 1 · Primary server room flood",
+  summary:"A burst water pipe destroys the primary VMware cluster, SAN and on-site backup NAS. The disaster-recovery team must activate a branch recovery site and restore critical on-premises services from the latest usable off-site copy.",
+  objective:"Restore Tier 1 systems within 4 hours, Tier 2 systems within 8 hours, and limit data loss to 24 hours.",
+  metrics:[{value:"4 h",label:"Tier 1 RTO"},{value:"24 h",label:"Maximum data loss / RPO"}],
+  phases:["Assess and declare","Prepare the recovery site","Restore Tier 1 systems","Restore Tier 2 systems","Return to normal"],
+  layers:["governance","physical","network-carrier","network","host","virtualisation","storage-media","continuity","core-infra","identity","application","data-governance","service","change-release","operations","supplier-commercial","ato"],
+  involved:{
+   "op-governance":[1,1,0,0,1,1,1,1],
+   "op-facilities":[1,1,0,1,0,0,0,1],
+   "op-network":[1,0,1,1,0,1,1,1],
+   "op-compute":[1,1,1,1,1,0,1,1],
+   "op-platform":[0,0,1,1,1,0,1,1],
+   "op-storage":[1,1,1,1,1,0,1,1],
+   "op-core":[1,0,1,1,1,1,1,1],
+   "op-workplace":[1,0,1,1,1,1,1,0],
+   "op-appdata":[1,0,1,1,1,1,1,1],
+   "op-service":[1,1,1,1,1,1,1,1],
+   "op-cyber":[1,0,1,1,1,1,1,1]
+  }
+ },
+ {
+  id:"cloud-identity-outage",number:2,title:"Cloud identity outage",label:"Scenario 2 · Cloud identity outage",
+  summary:"The cloud identity provider stops authenticating users, locking staff and administrators out of cloud services, VPN access and federated on-premises applications while the underlying hardware remains available.",
+  objective:"Regain identity-tenant administration within 30 minutes, restore critical remote access within 2 hours, and make ERP and email usable within 4 hours.",
+  metrics:[{value:"30 min",label:"Admin access target"},{value:"4 h",label:"Business-app target"}],
+  phases:["Confirm scope and provider status","Use break-glass access","Rollback or invoke authentication fallbacks","Communicate out of band","Revert fallbacks and review logs"],
+  layers:["governance","network-carrier","network","host","virtualisation","storage-media","core-infra","identity","endpoint","euc","application","data-governance","service","change-release","operations","vulnerability-exposure","supplier-commercial","ato"],
+  involved:{
+   "op-governance":[1,0,0,1,1,1,1,1],
+   "op-facilities":[0,0,0,0,0,0,0,0],
+   "op-network":[1,0,1,1,1,1,1,1],
+   "op-compute":[1,0,1,1,1,1,1,1],
+   "op-platform":[1,0,1,1,0,0,1,1],
+   "op-storage":[1,0,1,1,0,0,1,1],
+   "op-core":[1,0,1,1,1,1,1,1],
+   "op-workplace":[1,0,1,1,1,1,1,1],
+   "op-appdata":[1,0,1,1,1,1,1,1],
+   "op-service":[1,0,1,1,1,1,1,1],
+   "op-cyber":[1,0,1,1,1,1,1,1]
+  }
+ },
+ {
+  id:"malware-outbreak",number:3,title:"Malware outbreak",label:"Scenario 3 · Malware outbreak",
+  summary:"Ransomware spreads from a phished endpoint into the server network, encrypting file shares, virtual machines and the backup NAS. Containment, evidence preservation and clean identity recovery must precede restoration.",
+  objective:"Contain spread within 1 hour, rebuild or verify clean identity within 24 hours, restore Tier 1 systems within 48 hours, and complete hardened recovery within 2 weeks.",
+  metrics:[{value:"1 h",label:"Containment target"},{value:"48 h",label:"Tier 1 restore target"}],
+  phases:["Contain","Investigate and preserve evidence","Rebuild identity","Restore from clean backups","Reconnect and monitor"],
+  layers:["governance","network-carrier","network","host","virtualisation","storage-media","continuity","core-infra","identity","endpoint","euc","application","data-governance","service","change-release","operations","vulnerability-exposure","cti","supplier-commercial","ato"],
+  involved:{
+   "op-governance":[1,0,1,1,1,1,1,1],
+   "op-facilities":[1,1,0,1,0,0,1,1],
+   "op-network":[1,0,1,1,1,1,1,1],
+   "op-compute":[1,0,1,1,1,1,1,1],
+   "op-platform":[1,0,1,1,1,0,1,1],
+   "op-storage":[1,0,1,1,1,0,1,1],
+   "op-core":[1,0,1,1,1,1,1,1],
+   "op-workplace":[1,0,1,1,1,1,1,1],
+   "op-appdata":[1,0,1,1,1,1,1,1],
+   "op-service":[1,0,1,1,1,1,1,1],
+   "op-cyber":[1,0,1,1,1,1,1,1]
+  }
+ },
+ {
+  id:"onprem-gateway-failure",number:4,title:"On-premises gateway failure",label:"Scenario 4 · On-premises gateway failure",
+  summary:"The edge firewall fails after a firmware update, cutting the office off from internet, cloud, remote users and branch connectivity while internal servers remain operational and no data restore is required.",
+  objective:"Provide temporary internet access for critical staff within 1 hour, restore VPN and site-to-site tunnels within 4 hours, and complete permanent replacement within one business day.",
+  metrics:[{value:"1 h",label:"Temporary access target"},{value:"4 h",label:"VPN and tunnel target"}],
+  phases:["Diagnose gateway versus carrier","Fail over or replace the gateway","Use interim connectivity workarounds","Verify routes, tunnels and dependent services","Review change and resilience controls"],
+  layers:["governance","network-carrier","network","host","virtualisation","storage-media","continuity","core-infra","identity","endpoint","euc","application","service","change-release","operations","supplier-commercial","iac"],
+  involved:{
+   "op-governance":[1,0,1,1,1,1,1,1],
+   "op-facilities":[1,1,1,1,0,0,0,1],
+   "op-network":[1,0,1,1,1,1,1,1],
+   "op-compute":[1,0,1,1,1,0,1,1],
+   "op-platform":[1,0,1,1,1,0,1,1],
+   "op-storage":[1,0,1,1,0,0,1,1],
+   "op-core":[1,0,1,1,1,1,1,1],
+   "op-workplace":[1,0,1,1,1,1,1,1],
+   "op-appdata":[1,0,1,1,1,1,1,1],
+   "op-service":[1,0,1,1,1,1,1,1],
+   "op-cyber":[1,0,1,1,1,1,1,1]
+  }
+ }
+];
+let controls=[],state={layer:null,onpremSection:null,sectionFilter:null,lifecycleStage:null,failureScenario:FAILURE_SCENARIOS[0].id,domain:"All",pillar:"All",model:"All",view:"cards",layerView:"allocation",alDiagram:"matrix",ivDiagram:"matrix",lcDiagram:"matrix",opDiagram:"matrix",fsDiagram:"matrix",graphFocus:null,cyQuery:"",cyResult:null,cyError:null,cyMode:"graph"};
+const $=s=>document.querySelector(s);const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+function rgba(hex,alpha){const n=parseInt(hex.slice(1),16);return `rgba(${n>>16},${n>>8&255},${n&255},${alpha})`}
+function pillarOverlay(codes,alpha=.24){const colours=codes.map(code=>ONPREM_PILLARS.find(p=>p.code===code)?.color).filter(Boolean),step=100/colours.length;return `linear-gradient(135deg,${colours.map((colour,i)=>`${rgba(colour,alpha)} ${i*step}% ${(i+1)*step}%`).join(",")}),#052c3e`}
+function lifecycleSectionCodes(section,stage){return [...new Set(stage.pillars.flatMap((codes,i)=>section.roles[i]!=="—"?codes:[]))]}
+function populateFilters(){
+ $("#sectionFilter").innerHTML='<option value="All">All sections</option>'+ONPREM_SECTIONS.map(x=>`<option value="${x.id}">${x.label}</option>`).join("");
+ $("#lifecycleFilter").innerHTML='<option value="All">All stages</option>'+PLATFORM_LIFECYCLE.map(x=>`<option value="${x.id}">${x.label}</option>`).join("");
+ $("#pillarFilter").innerHTML='<option value="All">All pillars</option>'+ONPREM_PILLARS.map(x=>`<option value="${x.code}">${x.label} · ${x.code}</option>`).join("");
+ $("#failureScenarioFilter").innerHTML=FAILURE_SCENARIOS.map(x=>`<option value="${x.id}">${x.label}</option>`).join("");$("#failureScenarioFilter").value=state.failureScenario;
+}
+function populateDomains(){const current=$("#domainFilter").value||"All",domains=[...new Set(controls.map(c=>c.domain).filter(Boolean))].sort((a,b)=>a.localeCompare(b));$("#domainFilter").innerHTML='<option value="All">All domains</option>'+domains.map(x=>`<option>${esc(x)}</option>`).join("");$("#domainFilter").value=domains.includes(current)?current:"All"}
+function renderFilterState(){const onprem=["onprem","lifecycle","failure"].includes(state.layerView);$("#sectionFilter").disabled=!onprem;$("#lifecycleFilter").disabled=state.layerView!=="lifecycle";$("#pillarFilter").disabled=!["onprem","lifecycle"].includes(state.layerView);$("#failureScenarioFilter").disabled=state.layerView!=="failure";$("#clearFilters").disabled=state.domain==="All"&&!state.sectionFilter&&!state.lifecycleStage&&state.pillar==="All"}
+
+function scopeControls(){const q=$("#search").value.trim().toLowerCase(),role=$("#role").value,ism=$("#ism").value;return controls.filter(c=>{if(state.domain!=="All"&&c.domain!==state.domain)return false;if(!matchesService(c))return false;if(role==="Issues"&&rasciValid(c))return false;if(ism!=="All"){if(["Direct","Contextual"].includes(ism)&&c.ism_mapping_strength!==ism)return false;if(!["Direct","Contextual"].includes(ism)&&!(c.ism_applicability||[]).includes(ism))return false}if(q&&!JSON.stringify(c).toLowerCase().includes(q))return false;return true})}
+function shortLabel(s,n=29){return s.length>n?s.slice(0,n-1).trimEnd()+"…":s}
+function bindNode(el,go,enter,leave){el.onclick=go;el.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}};if(enter){el.onmouseenter=enter;el.onmouseleave=leave}}
+const GR_PALETTE=["#f79767","#57c7e3","#8dcc93","#ffc454","#da7194","#c990c0","#4c8eda","#d9c8ae","#f16667","#569480"];
+const GR_POS={},GR_VIEW={};
+function grWrap(s,max=11,lines=3){const out=[""];String(s).split(/\s+/).forEach(w=>{const cur=out[out.length-1];if((cur+" "+w).trim().length>max&&cur)out.push(w);else out[out.length-1]=(cur+" "+w).trim()});if(out.length>lines){out.length=lines;out[lines-1]=out[lines-1].slice(0,max-1)+"…"}return out.map(x=>x.length>max+2?x.slice(0,max+1)+"…":x)}
+function grLayout(nodes,edges,W,H,iters,t0){
+ const n=nodes.length;if(!n)return;const k=Math.sqrt(W*H/n)*.6,idx=new Map(nodes.map((d,i)=>[d.id,i])),E=edges.map(e=>[idx.get(e.s),idx.get(e.t)]).filter(([a,b])=>a!==undefined&&b!==undefined),deg=new Float64Array(n),dx=new Float64Array(n),dy=new Float64Array(n),R=nodes.map(d=>(d.r||24)+10);
+ E.forEach(([a,b])=>{deg[a]++;deg[b]++});
+ for(let it=0;it<iters;it++){const t=t0*(1-it/iters)+.4;dx.fill(0);dy.fill(0);
+  for(let i=0;i<n;i++)for(let j=i+1;j<n;j++){const a=nodes[i],b=nodes[j];let x=a.x-b.x,y=a.y-b.y,d=Math.hypot(x,y)||.01;const f=k*k/d;x/=d;y/=d;dx[i]+=x*f;dy[i]+=y*f;dx[j]-=x*f;dy[j]-=y*f}
+  E.forEach(([i,j])=>{const a=nodes[i],b=nodes[j];let x=a.x-b.x,y=a.y-b.y;const d=Math.hypot(x,y)||.01,f=d*d/k/Math.sqrt(Math.min(deg[i],deg[j]));x/=d;y/=d;dx[i]-=x*f;dy[i]-=y*f;dx[j]+=x*f;dy[j]+=y*f});
+  for(let i=0;i<n;i++){const a=nodes[i];dx[i]+=(W/2-a.x)*.06;dy[i]+=(H/2-a.y)*.09;const len=Math.hypot(dx[i],dy[i])||1,m=Math.min(len,t);a.x+=dx[i]/len*m;a.y+=dy[i]/len*m}
+  for(let pass=0;pass<2;pass++)for(let i=0;i<n;i++)for(let j=i+1;j<n;j++){const a=nodes[i],b=nodes[j],min=R[i]+R[j]-6;let x=b.x-a.x,y=b.y-a.y;const d=Math.hypot(x,y)||.01;if(d<min){const push=(min-d)/2;x/=d;y/=d;a.x-=x*push;a.y-=y*push;b.x+=x*push;b.y+=y*push}}}
+}
+function grCypherValue(v){return typeof v==="number"?String(v):Array.isArray(v)?`[${v.map(grCypherValue).join(", ")}]`:`'${String(v).replace(/\\/g,"\\\\").replace(/'/g,"\\'")}'`}
+function grCypherProps(o){const e=Object.entries(o||{}).filter(([,v])=>v!==undefined&&v!==null&&v!=="");return e.length?` {${e.map(([k,v])=>`${k.replace(/[^A-Za-z0-9_]/g,"_")}: ${grCypherValue(v)}`).join(", ")}}`:""}
+function grCypher(g){const v=new Map(g.nodes.map((n,i)=>[n.id,"n"+i]));return `// ${g.title}\n// Generated by the Shared Responsibility Explorer\n`+g.nodes.map(n=>`CREATE (${v.get(n.id)}:${n.type}${grCypherProps({name:n.caption,...n.props})})`).join("\n")+"\n"+g.edges.map(e=>`CREATE (${v.get(e.s)})-[:${e.type}${grCypherProps(e.props)}]->(${v.get(e.t)})`).join("\n")+";\n"}
+function grShowCypher(g){
+ const variants=[{id:"visible",label:"This graph as shown",make:()=>grCypher(g),count:()=>`${g.nodes.length} nodes · ${g.edges.length} relationships`},...(g.cypherVariants||[])];let cur=variants[0],text="";
+ $("#modalId").textContent="Cypher export";$("#modalTitle").textContent=g.title;
+ $("#modalBody").innerHTML=`<div class="fact wide"><b>Run in Neo4j Browser or cypher-shell to recreate the graph</b>${variants.length>1?`<div class="cypher-opts">${variants.map((v,i)=>`<label><input type="radio" name="cypherVariant" value="${v.id}"${i?"":" checked"}> ${esc(v.label)}</label>`).join("")}</div>`:""}<p class="cypher-meta"></p><textarea class="cypher-box" readonly spellcheck="false"></textarea><div class="detail-actions"><button class="btn primary" type="button" id="cypherCopy">Copy</button><button class="btn" type="button" id="cypherDownload">Download .cypher</button></div></div>`;
+ const box=$("#modalBody .cypher-box"),meta=$("#modalBody .cypher-meta"),show=()=>{text=cur.make();const lines=text.split("\n"),max=400;box.value=lines.length>max?lines.slice(0,max).join("\n")+`\n\n// … preview truncated: ${lines.length-max} more lines. Copy or download for the full script.`:text;meta.textContent=`${cur.count()} · ${(text.length/1024).toFixed(0)} KB · ${lines.length} lines`;$("#cypherCopy").textContent="Copy"};
+ $("#modalBody").querySelectorAll('input[name="cypherVariant"]').forEach(r=>r.onchange=()=>{cur=variants.find(v=>v.id===r.value);show()});
+ $("#cypherCopy").onclick=async()=>{try{await navigator.clipboard.writeText(text);$("#cypherCopy").textContent="Copied"}catch(e){box.value=text;box.focus();box.select();$("#cypherCopy").textContent="Press Ctrl/⌘+C"}};
+ $("#cypherDownload").onclick=()=>{const url=URL.createObjectURL(new Blob([text],{type:"text/plain"})),a=document.createElement("a");a.href=url;a.download=`shared-responsibility-${g.key}${cur.id==="visible"?"":"-"+cur.id}.cypher`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)};
+ show();$("#modal").showModal()}
+function renderGraph(root,g){
+ const W=1200,H=700,allTypes=[...new Set(g.nodes.map(n=>n.type))],color=Object.fromEntries(allTypes.map((t,i)=>[t,g.colors?.[t]||GR_PALETTE[i%GR_PALETTE.length]])),cache=GR_POS[g.key]||(GR_POS[g.key]=new Map()),hidden=GR_HIDDEN[g.key]||(GR_HIDDEN[g.key]=new Set()),allCount=Object.fromEntries(allTypes.map(t=>[t,g.nodes.filter(n=>n.type===t).length]));
+ if(hidden.size){const keep=new Set(g.nodes.filter(n=>!hidden.has(n.type)).map(n=>n.id));g.nodes=g.nodes.filter(n=>keep.has(n.id));g.edges=g.edges.filter(e=>keep.has(e.s)&&keep.has(e.t))}
+ const types=[...new Set(g.nodes.map(n=>n.type))],sc=Math.max(1,Math.sqrt(g.nodes.length/55)),LW=W*sc,LH=H*sc;
+ const byType={};g.nodes.forEach(n=>(byType[n.type]=byType[n.type]||[]).push(n));let fresh=0;
+ g.nodes.forEach((n,k)=>{const p=cache.get(n.id);if(p){n.x=p.x;n.y=p.y;return}fresh++;const anchor=n.near&&cache.get(n.near);if(anchor){const a=k*2.399,r=55+(k%5)*14;n.x=anchor.x+Math.cos(a)*r;n.y=anchor.y+Math.sin(a)*r;return}const ti=types.indexOf(n.type),list=byType[n.type],i=list.indexOf(n),a=(ti+i/list.length*.85)/types.length*2*Math.PI,r=(150+(i%3)*70)*sc;n.x=LW/2+Math.cos(a)*r*1.4;n.y=LH/2+Math.sin(a)*r});
+ const cx0=g.nodes.reduce((s,n)=>s+n.x,0)/Math.max(1,g.nodes.length),cy0=g.nodes.reduce((s,n)=>s+n.y,0)/Math.max(1,g.nodes.length);
+ if(fresh===g.nodes.length)grLayout(g.nodes,g.edges,LW,LH,420,120*sc);else if(fresh){const shift=[LW/2-cx0,LH/2-cy0];g.nodes.forEach(n=>{n.x+=shift[0];n.y+=shift[1]});grLayout(g.nodes,g.edges,LW,LH,160,30)}
+ g.nodes.forEach(n=>cache.set(n.id,{x:n.x,y:n.y}));
+ const N=new Map(g.nodes.map(n=>[n.id,n])),rad=n=>n.r||24,sel=new Set(g.selected||[]),view=GR_VIEW[g.key]||(GR_VIEW[g.key]={x:0,y:0,s:1});
+ const relTypes={};g.edges.forEach(e=>relTypes[e.type]=(relTypes[e.type]||0)+1);
+ $("#matrixTitle").textContent=g.title;$("#matrixSubtitle").textContent=g.subtitle;$("#matrixLegend").innerHTML=types.map(t=>`<span><i style="background:${color[t]}"></i>${t}</span>`).join("")+'<span>Drag nodes · Ctrl/⌘ + scroll to zoom · drag the background to pan</span>';
+ const edges=g.edges.map((e,i)=>`<g class="gr-edge" data-i="${i}" data-s="${esc(e.s)}" data-t="${esc(e.t)}"><path class="gr-line" marker-end="url(#grArrow)"/><path class="gr-hit"/><text class="gr-elabel" text-anchor="middle" dy="-4">${esc(e.caption||e.type)}</text><title>${esc(e.type)}${Object.entries(e.props||{}).map(([k,v])=>` · ${k}: ${v}`).join("")}</title></g>`).join("");
+ const nodes=g.nodes.map(n=>{const lines=grWrap(n.caption,n.r>26?13:11);return `<g class="gr-node${sel.has(n.id)?" selected":""}" data-id="${esc(n.id)}" tabindex="0" role="button" aria-label="${esc(n.type)}: ${esc(n.caption)}"><circle class="gr-halo" r="${rad(n)+7}"/><circle r="${rad(n)}" fill="${color[n.type]}" stroke="${rgba(color[n.type],1)}"/>${lines.map((l,k)=>`<text text-anchor="middle" y="${((k-(lines.length-1)/2)*10+3).toFixed(1)}">${esc(l)}</text>`).join("")}</g>`}).join("");
+ root.className="relmap gr-wrap";root.innerHTML=`<div class="gr-tools"><button type="button" class="btn" data-gr="fit">Fit</button><button type="button" class="btn" data-gr="in" aria-label="Zoom in">+</button><button type="button" class="btn" data-gr="out" aria-label="Zoom out">−</button><button type="button" class="btn" data-gr="relayout">Re-layout</button><button type="button" class="btn primary" data-gr="cypher">Cypher</button></div><aside class="gr-panel" aria-live="polite"></aside><svg class="gr-svg${g.edges.length<=70?" labels-all":""}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(g.title)}"><defs><marker id="grArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#a5abb6"/></marker></defs><rect class="gr-bg" width="${W}" height="${H}" fill="transparent"/><g class="gr-viewport">${edges}${nodes}</g></svg>`;
+ const svg=root.querySelector("svg"),vp=svg.querySelector(".gr-viewport"),panel=root.querySelector(".gr-panel"),edgeEls=[...svg.querySelectorAll(".gr-edge")],nodeEls=[...svg.querySelectorAll(".gr-node")],nodeEl=new Map(nodeEls.map(el=>[el.dataset.id,el]));
+ const applyView=()=>vp.setAttribute("transform",`translate(${view.x.toFixed(1)} ${view.y.toFixed(1)}) scale(${view.s.toFixed(3)})`);
+ const place=()=>{nodeEls.forEach(el=>{const n=N.get(el.dataset.id);el.setAttribute("transform",`translate(${n.x.toFixed(1)} ${n.y.toFixed(1)})`)});edgeEls.forEach(el=>{const e=g.edges[+el.dataset.i],a=N.get(e.s),b=N.get(e.t);if(!a||!b)return;const dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy)||1,ux=dx/d,uy=dy/d,x1=a.x+ux*rad(a),y1=a.y+uy*rad(a),x2=b.x-ux*(rad(b)+3),y2=b.y-uy*(rad(b)+3),path=`M${x1.toFixed(1)} ${y1.toFixed(1)}L${x2.toFixed(1)} ${y2.toFixed(1)}`;el.querySelector(".gr-line").setAttribute("d",path);el.querySelector(".gr-hit").setAttribute("d",path);let ang=Math.atan2(dy,dx)*180/Math.PI;if(ang>90)ang-=180;if(ang<-90)ang+=180;const t=el.querySelector(".gr-elabel");t.setAttribute("transform",`translate(${((x1+x2)/2).toFixed(1)} ${((y1+y2)/2).toFixed(1)}) rotate(${ang.toFixed(1)})`);t.style.display=d<rad(a)+rad(b)+40?"none":""})};
+ const overview=()=>{panel.innerHTML=`<div class="gr-ph">Overview${g.toggleTypes?" · select to show or hide":""}</div><div class="gr-chips">${allTypes.map(t=>g.toggleTypes?`<button type="button" class="gr-chip gr-toggle${hidden.has(t)?" off":""}" data-type="${t}" aria-pressed="${!hidden.has(t)}" style="background:${color[t]}">${t} (${allCount[t]})</button>`:`<span class="gr-chip" style="background:${color[t]}">${t} (${allCount[t]})</span>`).join("")}</div><div class="gr-ph">Relationship types</div><div class="gr-chips">${Object.entries(relTypes).map(([t,c])=>`<span class="gr-chip rel">${t} (${c})</span>`).join("")}</div><p class="gr-note">${g.nodes.length} nodes · ${g.edges.length} relationships. Hover a node or relationship to inspect its properties; click a node to filter the catalogue.</p>`;panel.querySelectorAll(".gr-toggle").forEach(b=>b.onclick=()=>{hidden.has(b.dataset.type)?hidden.delete(b.dataset.type):hidden.add(b.dataset.type);renderMatrix()})};
+ const props=(head,chip,o)=>{panel.innerHTML=`<div class="gr-chips">${chip}</div><div class="gr-ph">${esc(head)}</div><table class="gr-props">${Object.entries(o).filter(([,v])=>v!==undefined&&v!=="").map(([k,v])=>`<tr><th>${esc(k)}</th><td>${esc(Array.isArray(v)?v.join(", "):v)}</td></tr>`).join("")}</table>`};
+ const showNode=n=>props(n.caption,`<span class="gr-chip" style="background:${color[n.type]}">${n.type}</span>`,{"<id>":n.id,name:n.caption,...n.props,degree:g.edges.filter(e=>e.s===n.id||e.t===n.id).length});
+ const showEdge=e=>props(`${N.get(e.s)?.caption} → ${N.get(e.t)?.caption}`,`<span class="gr-chip rel">${e.type}</span>`,e.props||{});
+ const focus=id=>{const nb=new Set([id]);edgeEls.forEach(el=>{const on=!id||el.dataset.s===id||el.dataset.t===id;el.classList.toggle("dim",!on);el.classList.toggle("hl",Boolean(id)&&on);if(on&&id){nb.add(el.dataset.s);nb.add(el.dataset.t)}});nodeEls.forEach(el=>el.classList.toggle("dim",Boolean(id)&&!nb.has(el.dataset.id)))};
+ const selFirst=N.get(g.primary)||g.nodes.find(n=>sel.has(n.id)),rest=()=>{focus(null);if(!selFirst)return overview();showNode(selFirst);const extra=g.panelExtra&&g.panelExtra(selFirst);panel.insertAdjacentHTML("beforeend",`<div class="gr-panel-actions">${extra||""}<button type="button" class="btn gr-overview">Overview</button></div>`);panel.querySelectorAll("[data-expand]").forEach(b=>b.onclick=()=>g.onExpand(b.dataset.expand));panel.querySelector(".gr-overview").onclick=overview};
+ const toLocal=ev=>{const p=svg.createSVGPoint();p.x=ev.clientX;p.y=ev.clientY;const q=p.matrixTransform(svg.getScreenCTM().inverse());return {x:(q.x-view.x)/view.s,y:(q.y-view.y)/view.s,sx:q.x,sy:q.y}};
+ nodeEls.forEach(el=>{const n=N.get(el.dataset.id);let drag=null;
+  el.addEventListener("pointerdown",ev=>{ev.stopPropagation();const p=toLocal(ev);drag={ox:n.x-p.x,oy:n.y-p.y,sx:ev.clientX,sy:ev.clientY,moved:false};try{el.setPointerCapture(ev.pointerId)}catch(e){}});
+  el.addEventListener("pointermove",ev=>{if(!drag)return;if(Math.hypot(ev.clientX-drag.sx,ev.clientY-drag.sy)>4)drag.moved=true;if(!drag.moved)return;const p=toLocal(ev);n.x=p.x+drag.ox;n.y=p.y+drag.oy;cache.set(n.id,{x:n.x,y:n.y});place()});
+  el.addEventListener("pointerup",()=>{const click=drag&&!drag.moved;drag=null;if(click&&n.select)n.select()});
+  el.onkeydown=ev=>{if((ev.key==="Enter"||ev.key===" ")&&n.select){ev.preventDefault();n.select()}};
+  el.onmouseenter=el.onfocus=()=>{focus(n.id);showNode(n)};el.onmouseleave=el.onblur=rest});
+ edgeEls.forEach(el=>{const e=g.edges[+el.dataset.i];el.onmouseenter=()=>{el.classList.add("hl");showEdge(e)};el.onmouseleave=()=>{el.classList.remove("hl");rest()}});
+ let pan=null;svg.querySelector(".gr-bg").addEventListener("pointerdown",ev=>{pan={x:ev.clientX,y:ev.clientY,vx:view.x,vy:view.y};try{svg.setPointerCapture(ev.pointerId)}catch(e){}});
+ svg.addEventListener("pointermove",ev=>{if(!pan)return;const s=W/svg.getBoundingClientRect().width;view.x=pan.vx+(ev.clientX-pan.x)*s;view.y=pan.vy+(ev.clientY-pan.y)*s;applyView()});svg.addEventListener("pointerup",()=>pan=null);
+ const zoom=(f,cx=W/2,cy=H/2)=>{const s=Math.max(.3,Math.min(4,view.s*f));view.x=cx-(cx-view.x)*s/view.s;view.y=cy-(cy-view.y)*s/view.s;view.s=s;applyView()};
+ svg.addEventListener("wheel",ev=>{if(!ev.ctrlKey&&!ev.metaKey)return;ev.preventDefault();const p=toLocal(ev);zoom(ev.deltaY<0?1.15:1/1.15,p.sx,p.sy)},{passive:false});
+ const fit=()=>{const xs=g.nodes.map(n=>n.x),ys=g.nodes.map(n=>n.y),x0=Math.min(...xs)-40,x1=Math.max(...xs)+40,y0=Math.min(...ys)-40,y1=Math.max(...ys)+40,L=250,s=Math.min(2,(W-L-10)/(x1-x0),(H-10)/(y1-y0));view.s=s;view.x=L+(W-L-(x0+x1)*s)/2;view.y=(H-(y0+y1)*s)/2;applyView()};
+ root.querySelectorAll("[data-gr]").forEach(b=>b.onclick=()=>{const a=b.dataset.gr;if(a==="fit")fit();else if(a==="in")zoom(1.25);else if(a==="out")zoom(1/1.25);else if(a==="cypher")grShowCypher(g);else{g.nodes.forEach((n,i)=>{const ti=types.indexOf(n.type),list=byType[n.type],k=list.indexOf(n),ang=(ti+k/list.length*.85)/types.length*2*Math.PI;n.x=LW/2+Math.cos(ang)*(150+(k%3)*70)*sc*1.4;n.y=LH/2+Math.sin(ang)*(150+(k%3)*70)*sc});grLayout(g.nodes,g.edges,LW,LH,420,120*sc);g.nodes.forEach(n=>cache.set(n.id,{x:n.x,y:n.y}));place();fit()}});
+ place();if(fresh||!GR_VIEW[g.key].fitted){fit();GR_VIEW[g.key].fitted=true}applyView();rest();$("#selectionStatus").textContent=`${g.nodes.length} nodes · ${g.edges.length} relationships`;
+}
+function buildAlGraph(){
+ const inv=alInvolved(),sel=alSel(),nodes=[],edges=[];
+ AL_PARTIES.forEach(p=>nodes.push({id:"party:"+p.key,type:"Party",caption:p.label,r:30,props:{rasci_actor:p.actor},select:()=>alToggleParty(p.key)}));
+ MODELS.forEach((m,i)=>nodes.push({id:"model:"+m,type:"ServiceModel",caption:m,r:22,props:{definition:MODEL_INFO[m]||""},select:()=>alToggleModel(m)}));
+ LAYERS.forEach(l=>{const lead=alLead(l,sel.model);nodes.push({id:"layer:"+l.id,type:"ControlLayer",caption:l.label,r:24,props:{scope:l.hint,lead_party:lead?lead.label:"none"},select:()=>alToggleLayer(l.id)})});
+ MODELS.forEach((m,i)=>AL_PARTIES.forEach(p=>{const v=LAYERS.reduce((s,l)=>s+alVal(l,i,p.key),0);if(!v)return;edges.push(inv?{s:"model:"+m,t:"party:"+p.key,type:"INVOLVES",props:{layers:v},caption:`INVOLVES · ${v}`}:{s:"model:"+m,t:"party:"+p.key,type:"ALLOCATES",props:{avg_share_pct:Math.round(v/LAYERS.length)},caption:`ALLOCATES · ${Math.round(v/LAYERS.length)}%`})}));
+ LAYERS.forEach(l=>AL_PARTIES.forEach(p=>{const v=alAvg(l,p.key,sel.model);if(!v)return;edges.push(inv?{s:"party:"+p.key,t:"layer:"+l.id,type:"INVOLVED_IN",props:{models:Math.round(v*(sel.model?1:MODELS.length)),scope:sel.model||"All models"},caption:"INVOLVED_IN"}:{s:"party:"+p.key,t:"layer:"+l.id,type:"HOLDS_SHARE",props:{share_pct:Math.round(v),scope:sel.model||"Average of all models"},caption:`HOLDS_SHARE · ${Math.round(v)}%`})}));
+ return {key:state.layerView,title:inv?"Involvement property graph":"Allocation property graph",subtitle:`Neo4j-style property graph: service models ${inv?"involve":"allocate to"} parties, and parties ${inv?"are involved in":"hold shares of"} control layers${sel.model?` (party–layer relationships for ${sel.model})`:" (party–layer relationships averaged across models)"}. Use Cypher to export it.`,nodes,edges,selected:[sel.model&&"model:"+sel.model,sel.party&&"party:"+sel.party,sel.layer&&"layer:"+sel.layer].filter(Boolean)};
+}
+function buildOpGraph(){
+ const fns=opFns(),codes=lcPillars().map(p=>p.code),nodes=[],edges=[],types={P:"PRIMARY_FOR",S:"SUPPORTS",C:"CONSULTED_ON"},used=new Set();
+ ONPREM_SECTIONS.forEach(s=>nodes.push({id:"section:"+s.id,type:"Section",caption:s.label,r:28,props:{scope:s.hint},select:()=>opToggleSection(s.id)}));
+ fns.forEach(f=>nodes.push({id:"fn:"+f.i,type:"Function",caption:f.label,r:26,props:{cobit_pillars:f.pillars}}));
+ lcPillars().forEach(p=>nodes.push({id:"pillar:"+p.code,type:"Pillar",caption:`${p.label} ${p.code}`,r:26,props:{code:p.code,meaning:p.meaning},select:()=>lcTogglePillar(p.code)}));
+ ONPREM_SECTIONS.forEach(s=>{fns.forEach(f=>{const r=s.roles[f.i];if(r&&types[r])edges.push({s:"section:"+s.id,t:"fn:"+f.i,type:types[r],props:{role:r},caption:types[r]})});s.layers.forEach(id=>{const l=LAYERS.find(x=>x.id===id);if(!l)return;used.add(l);edges.push({s:"section:"+s.id,t:"layer:"+id,type:"COVERS",caption:"COVERS"})})});
+ fns.forEach(f=>f.codes.forEach(c=>edges.push({s:"fn:"+f.i,t:"pillar:"+c,type:"ALIGNS_TO",caption:"ALIGNS_TO"})));
+ const scope=scopeControls();used.forEach(l=>nodes.push({id:"layer:"+l.id,type:"ControlLayer",caption:l.label,r:22,props:{scope:l.hint,in_scope_controls:scope.filter(c=>l.domains.includes(c.domain)).length},select:()=>opToggleLayer(l.id)}));
+ return {key:"onprem",title:"On-premises property graph",subtitle:"Neo4j-style property graph: sections are PRIMARY_FOR, SUPPORT or are CONSULTED_ON responsibility functions, which ALIGN_TO COBIT pillars; sections COVER control layers. Use Cypher to export it.",nodes,edges,selected:[opSel()&&"section:"+opSel(),state.pillar!=="All"&&"pillar:"+state.pillar,state.layer&&"layer:"+state.layer].filter(Boolean)};
+}
+function buildLcGraph(){
+ const fns=lcFunctions(),pillars=lcPillars(),codes=pillars.map(p=>p.code),layers=lcLayers(),ids=new Set(layers.map(l=>l.id)),nodes=[],edges=[];
+ PLATFORM_LIFECYCLE.forEach((st,i)=>{nodes.push({id:"stage:"+st.id,type:"Stage",caption:st.label,r:28,props:{order:i+1,scope:st.hint},select:()=>lcToggleStage(st.id)});if(i)edges.push({s:"stage:"+PLATFORM_LIFECYCLE[i-1].id,t:"stage:"+st.id,type:"NEXT",caption:"NEXT"})});
+ pillars.forEach(p=>nodes.push({id:"pillar:"+p.code,type:"Pillar",caption:`${p.label} ${p.code}`,r:26,props:{code:p.code,meaning:p.meaning},select:()=>lcTogglePillar(p.code)}));
+ layers.forEach(l=>nodes.push({id:"layer:"+l.id,type:"ControlLayer",caption:l.label,r:22,props:{scope:l.hint,in_scope_controls:l.count,stages:l.stages.length},select:()=>lcToggleLayer(l.id)}));
+ PLATFORM_LIFECYCLE.forEach(st=>{pillars.forEach(p=>{const n=fns.filter(f=>(st.pillars[f.i]||[]).includes(p.code)).length;if(n)edges.push({s:"stage:"+st.id,t:"pillar:"+p.code,type:"EMPHASISES",props:{functions:n},caption:`EMPHASISES · ${n}`})});st.layers.forEach(id=>{if(ids.has(id))edges.push({s:"stage:"+st.id,t:"layer:"+id,type:"ENGAGES",caption:"ENGAGES"})})});
+ return {key:"lifecycle",title:"Lifecycle property graph",subtitle:"Neo4j-style property graph: stages are linked by NEXT, EMPHASISE COBIT pillars (property: functions engaged) and ENGAGE control layers. Use Cypher to export it.",nodes,edges,selected:[state.lifecycleStage&&"stage:"+state.lifecycleStage,state.pillar!=="All"&&"pillar:"+state.pillar,state.layer&&"layer:"+state.layer].filter(Boolean)};
+}
+function buildFsGraph(){
+ const list=fsList(),layers=fsLayers(),nodes=[],edges=[];
+ list.forEach(sc=>nodes.push({id:"scenario:"+sc.id,type:"Scenario",caption:sc.title,r:32,props:{objective:sc.objective,phases:sc.phases,...Object.fromEntries(sc.metrics.map(m=>[m.label.toLowerCase().replace(/[^a-z0-9]+/g,"_"),m.value]))},select:()=>fsSetScenario(sc.id)}));
+ ONPREM_SECTIONS.forEach(s=>nodes.push({id:"section:"+s.id,type:"Section",caption:s.label,r:26,props:{scope:s.hint},select:()=>fsToggleSection(s.id)}));
+ layers.forEach(l=>nodes.push({id:"layer:"+l.id,type:"ControlLayer",caption:l.label,r:22,props:{scope:l.hint,in_scope_controls:l.count,scenarios:l.scenarios.length},select:()=>fsToggleLayer(l.id)}));
+ list.forEach(sc=>{ONPREM_SECTIONS.forEach(s=>{const fn=ONPREM_RESPONSIBILITIES.filter((_,i)=>fsInv(sc,s.id,i));if(fn.length)edges.push({s:"scenario:"+sc.id,t:"section:"+s.id,type:"INVOLVES",props:{functions:fn.length,responsibility_functions:fn.map(r=>r.label)},caption:`INVOLVES · ${fn.length}`})});sc.layers.forEach(id=>{if(layers.some(l=>l.id===id))edges.push({s:"scenario:"+sc.id,t:"layer:"+id,type:"DRAWS_ON",caption:"DRAWS_ON"})})});
+ return {key:"failure",title:"Failure-scenario property graph",subtitle:"Neo4j-style property graph: scenarios INVOLVE on-premises sections (property: functions involved) and DRAW_ON control layers. Use Cypher to export it.",nodes,edges,selected:[state.failureScenario&&"scenario:"+state.failureScenario,state.sectionFilter&&"section:"+state.sectionFilter,state.layer&&"layer:"+state.layer].filter(Boolean)};
+}
+const CG_PARTIES=[
+ {key:"csc",label:"Customer governance",al:"customer"},
+ {key:"customer_soc",label:"Customer SOC",al:"soc"},
+ {key:"csp",label:"Cloud provider",al:"provider"},
+ {key:"third_party",label:"Third party",al:null}
+];
+const GR_HIDDEN={},CG_EXPANDED=new Set();let CG_LAST=null;
+function grMap(o){return `{${Object.entries(o).filter(([,v])=>v!==undefined&&v!==null&&v!=="").map(([k,v])=>`${k.replace(/[^A-Za-z0-9_]/g,"_")}: ${v&&typeof v==="object"&&!Array.isArray(v)?grMap(v):grCypherValue(v)}`).join(", ")}}`}
+function grCypherBatch(title,nodes,edges){
+ const out=[`// ${title}`,"// Generated by the Shared Responsibility Explorer. Creates nodes with UNWIND batches, then relationships matched by id.",""],labels=[...new Set(nodes.map(n=>n.type))],type=new Map(nodes.map(n=>[n.id,n.type])),chunk=(a,n)=>a.reduce((r,x,i)=>(i%n?r[r.length-1].push(x):r.push([x]),r),[]);
+ labels.forEach(l=>out.push(`CREATE CONSTRAINT ${l.toLowerCase()}_id IF NOT EXISTS FOR (n:${l}) REQUIRE n.id IS UNIQUE;`));out.push("");
+ labels.forEach(l=>chunk(nodes.filter(n=>n.type===l),400).forEach(rows=>out.push(`UNWIND [\n${rows.map(n=>"  "+grMap({id:n.id,name:n.caption,...n.props})).join(",\n")}\n] AS row\nCREATE (n:${l}) SET n = row;`,"")));
+ const groups=new Map();edges.forEach(e=>{const k=`${type.get(e.s)}|${e.type}|${type.get(e.t)}`;if(!groups.has(k))groups.set(k,[]);groups.get(k).push(e)});
+ groups.forEach((list,k)=>{const [sl,rt,tl]=k.split("|");chunk(list,500).forEach(rows=>out.push(`UNWIND [\n${rows.map(e=>"  "+grMap({s:e.s,t:e.t,p:e.props&&Object.keys(e.props).length?e.props:{weight:1}})).join(",\n")}\n] AS row\nMATCH (a:${sl} {id: row.s}), (b:${tl} {id: row.t})\nCREATE (a)-[r:${rt}]->(b) SET r += row.p;`,""))});
+ return out.join("\n");
+}
+function cgControlProps(c){const p={control_id:c.control_id,domain:c.domain,service_model:c.service_model,expected_outcome:c.expected_outcome,test:c.test,owner_assignment:c.owner_assignment,ism_mapping_strength:c.ism_mapping_strength,ism_applicability:c.ism_applicability,shared_control_component:c.shared_control_component};Object.entries(c.references||{}).forEach(([k,v])=>p[k]=v);return p}
+function buildCombinedData(allControls){
+ const nodes=[],edges=[],add=(id,type,caption,props,extra={})=>nodes.push({id,type,caption,props,...extra}),link=(s,t,type,props,caption)=>edges.push({s,t,type,props,caption:caption||type});
+ const domains=[...new Set(controls.map(c=>c.domain).filter(Boolean))].sort((a,b)=>a.localeCompare(b)),byDomain=d=>controls.filter(c=>c.domain===d);
+ CG_PARTIES.forEach(p=>add("party:"+p.key,"Party",p.label,{rasci_actor:p.key},{r:32}));
+ MODELS.forEach(m=>add("model:"+m,"ServiceModel",m,{definition:MODEL_INFO[m]||""},{r:22}));
+ LAYERS.forEach(l=>add("layer:"+l.id,"ControlLayer",l.label,{scope:l.hint,domains:l.domains},{r:24}));
+ domains.forEach(d=>{const cs=byDomain(d);add("domain:"+d,"Domain",d,{controls:cs.length,layers:LAYERS.filter(l=>l.domains.includes(d)).map(l=>l.label)},{r:20})});
+ ONPREM_SECTIONS.forEach(s=>add("section:"+s.id,"Section",s.label,{scope:s.hint},{r:26}));
+ ONPREM_RESPONSIBILITIES.forEach((r,i)=>add("fn:"+i,"Function",r.label,{cobit_pillars:r.pillars},{r:24}));
+ ONPREM_PILLARS.forEach(p=>add("pillar:"+p.code,"Pillar",`${p.label} ${p.code}`,{code:p.code,meaning:p.meaning},{r:26}));
+ PLATFORM_LIFECYCLE.forEach((st,i)=>add("stage:"+st.id,"Stage",st.label,{order:i+1,scope:st.hint},{r:24}));
+ FAILURE_SCENARIOS.forEach(sc=>add("scenario:"+sc.id,"Scenario",sc.title,{objective:sc.objective,phases:sc.phases,...Object.fromEntries(sc.metrics.map(m=>[m.label.toLowerCase().replace(/[^a-z0-9]+/g,"_"),m.value]))},{r:28}));
+ MODELS.forEach((m,i)=>CG_PARTIES.forEach(p=>{if(!p.al)return;const v=Math.round(LAYERS.reduce((s,l)=>s+alShares(l,i)[p.al],0)/LAYERS.length);if(v)link("model:"+m,"party:"+p.key,"ALLOCATES",{avg_share_pct:v},`ALLOCATES · ${v}%`)}));
+ LAYERS.forEach(l=>CG_PARTIES.forEach(p=>{if(!p.al)return;const v=Math.round(MODELS.reduce((s,_,i)=>s+alShares(l,i)[p.al],0)/MODELS.length);if(v)link("party:"+p.key,"layer:"+l.id,"HOLDS_SHARE",{avg_share_pct:v},`HOLDS_SHARE · ${v}%`)}));
+ domains.forEach(d=>{LAYERS.filter(l=>l.domains.includes(d)).forEach(l=>link("domain:"+d,"layer:"+l.id,"PART_OF"));CG_PARTIES.forEach(p=>{const n=byDomain(d).filter(c=>["A","R/A"].includes(c.rasci?.[p.key])).length;if(n)link("party:"+p.key,"domain:"+d,"ACCOUNTABLE_FOR",{controls:n},`ACCOUNTABLE_FOR · ${n}`)})});
+ const roleType={P:"PRIMARY_FOR",S:"SUPPORTS",C:"CONSULTED_ON"};
+ ONPREM_SECTIONS.forEach(s=>{ONPREM_RESPONSIBILITIES.forEach((r,i)=>{const role=s.roles[i];if(roleType[role])link("section:"+s.id,"fn:"+i,roleType[role],{role})});s.layers.forEach(id=>LAYERS.some(l=>l.id===id)&&link("section:"+s.id,"layer:"+id,"COVERS"))});
+ ONPREM_RESPONSIBILITIES.forEach((r,i)=>r.pillars.forEach(c=>link("fn:"+i,"pillar:"+c,"ALIGNS_TO")));
+ PLATFORM_LIFECYCLE.forEach((st,i)=>{if(i)link("stage:"+PLATFORM_LIFECYCLE[i-1].id,"stage:"+st.id,"NEXT");ONPREM_PILLARS.forEach(p=>{const n=ONPREM_RESPONSIBILITIES.filter((_,f)=>(st.pillars[f]||[]).includes(p.code)).length;if(n)link("stage:"+st.id,"pillar:"+p.code,"EMPHASISES",{functions:n},`EMPHASISES · ${n}`)});st.layers.forEach(id=>LAYERS.some(l=>l.id===id)&&link("stage:"+st.id,"layer:"+id,"ENGAGES"))});
+ FAILURE_SCENARIOS.forEach(sc=>{ONPREM_SECTIONS.forEach(s=>{const fn=ONPREM_RESPONSIBILITIES.filter((_,i)=>fsInv(sc,s.id,i));if(fn.length)link("scenario:"+sc.id,"section:"+s.id,"INVOLVES",{functions:fn.length,responsibility_functions:fn.map(r=>r.label)},`INVOLVES · ${fn.length}`)});sc.layers.forEach(id=>LAYERS.some(l=>l.id===id)&&link("scenario:"+sc.id,"layer:"+id,"DRAWS_ON"))});
+ const shown=allControls?controls:controls.filter(c=>CG_EXPANDED.has(c.domain));
+ shown.forEach(c=>{add("control:"+c.control_id,"Control",c.control_id,{objective:c.control_objective,...cgControlProps(c)},{r:15,near:"domain:"+c.domain});link("control:"+c.control_id,"domain:"+c.domain,"IN_DOMAIN");CG_PARTIES.forEach(p=>{const code=c.rasci?.[p.key];if(code&&!["—","N/A"].includes(code))link("control:"+c.control_id,"party:"+p.key,"ASSIGNED",{rasci:code},code)})});
+ return {nodes,edges};
+}
+function cgToggleFocus(id){state.graphFocus=state.graphFocus===id?null:id;renderMatrix();renderDetail()}
+function buildCombinedGraph(){
+ const {nodes,edges}=buildCombinedData(false),owner=$("#owner").value;
+ const act={Party:n=>()=>{const k=n.id.slice(6);$("#owner").value=$("#owner").value===k?"All":k;state.graphFocus=n.id;renderControls()},ServiceModel:n=>()=>{state.graphFocus=n.id;alToggleModel(n.caption)},ControlLayer:n=>()=>{state.graphFocus=n.id;state.layer=state.layer===n.id.slice(6)?null:n.id.slice(6);fsRender()},Domain:n=>()=>{const d=n.id.slice(7);state.graphFocus=n.id;state.domain=state.domain===d?"All":d;$("#domainFilter").value=state.domain;fsRender()},Control:n=>()=>openControl(n.caption)};
+ nodes.forEach(n=>n.select=(act[n.type]||(x=>()=>cgToggleFocus(x.id)))(n));
+ const selected=[state.model!=="All"&&"model:"+state.model,owner!=="All"&&"party:"+owner,state.layer&&"layer:"+state.layer,state.domain!=="All"&&"domain:"+state.domain,state.graphFocus].filter(Boolean);
+ const g={colors:CY_COLORS,key:"combined",title:"Combined responsibility graph",subtitle:"One Neo4j-style property graph joining every data set: parties and RASCI actors, service models, control layers and domains, on-premises sections, functions and COBIT pillars, lifecycle stages and failure scenarios. Select a domain to expand its controls; use the type chips to hide labels.",nodes,edges,selected,primary:state.graphFocus&&nodes.some(n=>n.id===state.graphFocus)?state.graphFocus:selected[0],toggleTypes:true,
+  panelExtra:n=>n.type==="Domain"?`<button type="button" class="btn primary gr-expand" data-expand="${esc(n.caption)}">${CG_EXPANDED.has(n.caption)?"Collapse":"Expand"} ${n.props.controls} controls</button>`:"",
+  onExpand:d=>{CG_EXPANDED.has(d)?CG_EXPANDED.delete(d):CG_EXPANDED.add(d);renderMatrix();renderDetail()},
+  cypherVariants:[{id:"full",label:`Full dataset with all ${controls.length} controls`,make:()=>{const f=buildCombinedData(true);return grCypherBatch("Shared responsibility — full combined graph",f.nodes,f.edges)},count:()=>{const f=buildCombinedData(true);return `${f.nodes.length} nodes · ${f.edges.length} relationships`}}]};
+ CG_LAST={nodes:nodes.length,edges:edges.length,controls:nodes.filter(n=>n.type==="Control").length,domains:CG_EXPANDED.size};
+ return g;
+}
+const CY=(()=>{
+ const VARLEN_CAP=15,ROW_CAP=50000,WORK_CAP=3000000,AGG=new Set(["count","collect","sum","avg","min","max"]);
+ const err=(msg,pos)=>{const e=new Error(msg);e.cypher=true;e.pos=pos;return e};
+ function lex(src){const toks=[],sym=["<>","<=",">=","<-","->","..","=~","!=","(",")","[","]","{","}",",",":",".","=","<",">","-","+","*","/","%","|",";"];let i=0;
+  while(i<src.length){const ch=src[i];
+   if(/\s/.test(ch)){i++;continue}
+   if(src.startsWith("//",i)){while(i<src.length&&src[i]!=="\n")i++;continue}
+   if(ch==="'"||ch==='"'){let j=i+1,s="";while(j<src.length&&src[j]!==ch){if(src[j]==="\\"&&j+1<src.length){const n=src[j+1];s+=n==="n"?"\n":n==="t"?"\t":n;j+=2}else s+=src[j++]}if(j>=src.length)throw err("Unterminated string",i);toks.push({t:"str",v:s,p:i,e:j+1});i=j+1;continue}
+   if(ch==="`"){const j=src.indexOf("`",i+1);if(j<0)throw err("Unterminated `identifier`",i);toks.push({t:"id",v:src.slice(i+1,j),p:i,e:j+1,q:true});i=j+1;continue}
+   const rest=src.slice(i),num=/^\d+(\.\d+)?([eE][+-]?\d+)?/.exec(rest);if(num){toks.push({t:"num",v:Number(num[0]),p:i,e:i+num[0].length});i+=num[0].length;continue}
+   const id=/^[A-Za-z_][A-Za-z0-9_]*/.exec(rest);if(id){toks.push({t:"id",v:id[0],p:i,e:i+id[0].length});i+=id[0].length;continue}
+   if(ch==="$")throw err("Parameters ($name) are not supported; write the value inline",i);
+   const s=sym.find(x=>src.startsWith(x,i));if(!s)throw err(`Unexpected character '${ch}'`,i);toks.push({t:"sym",v:s,p:i,e:i+s.length});i+=s.length}
+  toks.push({t:"eof",v:"end of query",p:src.length,e:src.length});return toks}
+ function parse(src){
+  const T=lex(src);let k=0,last=null;
+  const peek=(o=0)=>T[Math.min(k+o,T.length-1)],next=()=>(last=T[k],T[k++]),isKw=w=>peek().t==="id"&&!peek().q&&peek().v.toUpperCase()===w,acceptKw=w=>isKw(w)?(next(),true):false,expectKw=w=>{if(!acceptKw(w))throw err(`Expected ${w} but found '${peek().v}'`,peek().p)},isSym=s=>peek().t==="sym"&&peek().v===s,acceptSym=s=>isSym(s)?(next(),true):false,expectSym=s=>{if(!acceptSym(s))throw err(`Expected '${s}' but found '${peek().v}'`,peek().p)},expectId=()=>{if(peek().t!=="id")throw err(`Expected a name but found '${peek().v}'`,peek().p);return next().v};
+  const READONLY=["CREATE","MERGE","DELETE","DETACH","SET","REMOVE","CALL","LOAD","FOREACH","DROP","UNION","USE"];
+  function parseMap(){expectSym("{");const entries=[];if(!isSym("}"))do{const key=peek().t==="str"?next().v:expectId();expectSym(":");entries.push([key,parseExpr()])}while(acceptSym(","));expectSym("}");return {type:"map",entries}}
+  function parseNode(){expectSym("(");const n={v:null,labels:[],props:null};if(peek().t==="id")n.v=next().v;while(acceptSym(":"))n.labels.push(expectId());if(isSym("{"))n.props=parseMap();expectSym(")");return n}
+  function parseRel(){let left=false;const p=peek().p;if(acceptSym("<-"))left=true;else expectSym("-");const r={v:null,types:[],varLen:null,props:null};
+   if(acceptSym("[")){if(peek().t==="id")r.v=next().v;if(acceptSym(":")){r.types.push(expectId());while(acceptSym("|")){acceptSym(":");r.types.push(expectId())}}
+    if(acceptSym("*")){let min=null,max=null;if(peek().t==="num")min=next().v;if(acceptSym("..")){if(peek().t==="num")max=next().v}else if(min!==null)max=min;min=min??1;max=max??Math.max(min,VARLEN_CAP);if(max>VARLEN_CAP)throw err(`Variable-length paths are limited to ${VARLEN_CAP} hops in this console`,p);r.varLen={min,max}}
+    if(isSym("{"))r.props=parseMap();expectSym("]")}
+   let right=false;if(acceptSym("->"))right=true;else expectSym("-");if(left&&right)throw err("A relationship cannot point both ways",p);r.dir=right?"out":left?"in":"both";return r}
+  function parsePattern(){let pathVar=null;if(peek().t==="id"&&peek(1).t==="sym"&&peek(1).v==="="){pathVar=next().v;next()}const nodes=[parseNode()],rels=[];while(isSym("-")||isSym("<-")){rels.push(parseRel());nodes.push(parseNode())}return {pathVar,nodes,rels}}
+  function parsePatterns(){const l=[parsePattern()];while(acceptSym(","))l.push(parsePattern());return l}
+  function parseExpr(){return parseOr()}
+  function bin(sub,kw,type){return ()=>{let l=sub();while(acceptKw(kw))l={type,a:l,b:sub()};return l}}
+  function parseNot(){if(acceptKw("NOT"))return {type:"not",a:parseNot()};return parseCmp()}
+  const parseAnd=bin(parseNot,"AND","and"),parseXor=bin(parseAnd,"XOR","xor"),parseOr=bin(parseXor,"OR","or");
+  function parseCmp(){let l=parseAdd();for(;;){const t=peek();
+    if(t.t==="sym"&&["=","<>","!=","<","<=",">",">=","=~"].includes(t.v)){next();l={type:"cmp",op:t.v==="!="?"<>":t.v,a:l,b:parseAdd()}}
+    else if(isKw("IN")){next();l={type:"in",a:l,b:parseAdd()}}
+    else if(isKw("CONTAINS")){next();l={type:"str",op:"contains",a:l,b:parseAdd()}}
+    else if(isKw("STARTS")){next();expectKw("WITH");l={type:"str",op:"starts",a:l,b:parseAdd()}}
+    else if(isKw("ENDS")){next();expectKw("WITH");l={type:"str",op:"ends",a:l,b:parseAdd()}}
+    else if(isKw("IS")){next();const neg=acceptKw("NOT");expectKw("NULL");l={type:"isnull",neg,a:l}}
+    else return l}}
+  function parseAdd(){let l=parseMul();while(isSym("+")||isSym("-")){const op=next().v;l={type:"arith",op,a:l,b:parseMul()}}return l}
+  function parseMul(){let l=parseUnary();while(isSym("*")||isSym("/")||isSym("%")){const op=next().v;l={type:"arith",op,a:l,b:parseUnary()}}return l}
+  function parseUnary(){if(acceptSym("-"))return {type:"neg",a:parseUnary()};acceptSym("+");return parsePostfix()}
+  function parsePostfix(){let e=parsePrimary();for(;;){if(acceptSym("."))e={type:"prop",a:e,name:expectId()};else if(isSym("[")){next();let i=null,j=null,slice=false;if(!isSym(".."))i=parseExpr();if(acceptSym("..")){slice=true;if(!isSym("]"))j=parseExpr()}expectSym("]");e=slice?{type:"slice",a:e,i,j}:{type:"index",a:e,i}}else if(e.type==="var"&&isSym(":")&&peek(1).t==="id"){const labels=[];while(acceptSym(":"))labels.push(expectId());e={type:"haslabel",a:e,labels}}else return e}}
+  function parsePrimary(){const t=peek();
+   if(t.t==="num"||t.t==="str"){next();return {type:"lit",v:t.v}}
+   if(t.t==="sym"&&t.v==="("){next();const e=parseExpr();expectSym(")");return e}
+   if(t.t==="sym"&&t.v==="["){next();const items=[];if(!isSym("]"))do items.push(parseExpr());while(acceptSym(","));expectSym("]");return {type:"list",items}}
+   if(t.t==="sym"&&t.v==="{")return parseMap();
+   if(t.t==="id"){const u=t.v.toUpperCase();if(!t.q&&u==="TRUE"){next();return {type:"lit",v:true}}if(!t.q&&u==="FALSE"){next();return {type:"lit",v:false}}if(!t.q&&u==="NULL"){next();return {type:"lit",v:null}}
+    if(!t.q&&u==="CASE")return parseCase();
+    next();if(acceptSym("(")){const name=t.v.toLowerCase();if(name==="count"&&acceptSym("*")){expectSym(")");return {type:"call",name,star:true,args:[]}}const distinct=acceptKw("DISTINCT"),args=[];if(!isSym(")"))do args.push(parseExpr());while(acceptSym(","));expectSym(")");return {type:"call",name,distinct,args,p:t.p}}
+    return {type:"var",name:t.v,p:t.p}}
+   throw err(`Unexpected '${t.v}'`,t.p)}
+  function parseCase(){next();const subject=isKw("WHEN")?null:parseExpr(),whens=[];while(acceptKw("WHEN")){const w=parseExpr();expectKw("THEN");whens.push([w,parseExpr()])}const els=acceptKw("ELSE")?parseExpr():null;expectKw("END");return {type:"case",subject,whens,els}}
+  function parseProjection(){const distinct=acceptKw("DISTINCT"),items=[];let star=false;if(acceptSym("*"))star=true;else do{const start=peek().p,expr=parseExpr(),end=last.e;let alias=null;if(acceptKw("AS"))alias=expectId();items.push({expr,alias,text:src.slice(start,end).trim()})}while(acceptSym(","));
+   const order=[];if(acceptKw("ORDER")){expectKw("BY");do{const start=peek().p,expr=parseExpr(),text=src.slice(start,last.e).trim();let desc=false;if(acceptKw("DESC")||acceptKw("DESCENDING"))desc=true;else acceptKw("ASC")||acceptKw("ASCENDING");order.push({expr,desc,text})}while(acceptSym(","))}
+   const skip=acceptKw("SKIP")?parseExpr():null,limit=acceptKw("LIMIT")?parseExpr():null;return {distinct,items,star,order,skip,limit}}
+  const clauses=[];
+  while(peek().t!=="eof"){if(acceptSym(";"))continue;const t=peek();
+   if(READONLY.some(isKw))throw err(`${t.v.toUpperCase()} is not supported: this console is read-only (MATCH, OPTIONAL MATCH, WHERE, WITH, UNWIND, RETURN)`,t.p);
+   if(clauses.length&&clauses[clauses.length-1].k==="return")throw err("RETURN must be the last clause",t.p);
+   if(acceptKw("OPTIONAL")){expectKw("MATCH");clauses.push({k:"match",optional:true,patterns:parsePatterns(),where:acceptKw("WHERE")?parseExpr():null})}
+   else if(acceptKw("MATCH"))clauses.push({k:"match",optional:false,patterns:parsePatterns(),where:acceptKw("WHERE")?parseExpr():null});
+   else if(acceptKw("UNWIND")){const expr=parseExpr();expectKw("AS");clauses.push({k:"unwind",expr,alias:expectId()})}
+   else if(acceptKw("WITH")){const pr=parseProjection();pr.where=acceptKw("WHERE")?parseExpr():null;clauses.push({k:"with",...pr})}
+   else if(acceptKw("RETURN"))clauses.push({k:"return",...parseProjection()});
+   else throw err(`Unexpected '${t.v}'; expected MATCH, OPTIONAL MATCH, WITH, UNWIND or RETURN`,t.p)}
+  if(!clauses.length||clauses[clauses.length-1].k!=="return")throw err("A query must end with RETURN",src.length);
+  return clauses}
+ const isNode=v=>v&&v._n,isRel=v=>v&&v._r,isPath=v=>v&&v._p;
+ function key(v){if(v==null)return "null";if(isNode(v))return "n:"+v.id;if(isRel(v))return "r:"+v.id;if(isPath(v))return "p:"+v.rels.map(r=>r.id).join(",")+"|"+v.nodes[0].id;if(Array.isArray(v))return "["+v.map(key).join(",")+"]";if(typeof v==="object")return "{"+Object.keys(v).sort().map(k=>k+":"+key(v[k])).join(",")+"}";return typeof v+":"+v}
+ function eqv(a,b){if(a==null||b==null)return null;return key(a)===key(b)}
+ function cmp(a,b){if(a==null&&b==null)return 0;if(a==null)return 1;if(b==null)return -1;if(typeof a==="number"&&typeof b==="number")return a-b;if(typeof a==="boolean"&&typeof b==="boolean")return a===b?0:a?1:-1;return String(isNode(a)?a.props.name:a).localeCompare(String(isNode(b)?b.props.name:b))}
+ const FN={
+  size:v=>v==null?null:Array.isArray(v)||typeof v==="string"?v.length:null,length:v=>v==null?null:isPath(v)?v.rels.length:Array.isArray(v)||typeof v==="string"?v.length:null,
+  labels:n=>isNode(n)?[...n.labels]:null,type:r=>isRel(r)?r.type:null,id:x=>isNode(x)?x.props.id:isRel(x)?x.id:null,elementid:x=>isNode(x)?x.props.id:isRel(x)?String(x.id):null,
+  keys:x=>isNode(x)||isRel(x)?Object.keys(x.props):x&&typeof x==="object"?Object.keys(x):null,properties:x=>isNode(x)||isRel(x)?{...x.props}:null,
+  tolower:s=>s==null?null:String(s).toLowerCase(),toupper:s=>s==null?null:String(s).toUpperCase(),trim:s=>s==null?null:String(s).trim(),tostring:v=>v==null?null:String(v),
+  tointeger:v=>{const n=parseInt(v,10);return Number.isNaN(n)?null:n},tofloat:v=>{const n=parseFloat(v);return Number.isNaN(n)?null:n},coalesce:(...a)=>a.find(v=>v!=null)??null,
+  head:l=>Array.isArray(l)&&l.length?l[0]:null,last:l=>Array.isArray(l)&&l.length?l[l.length-1]:null,tail:l=>Array.isArray(l)?l.slice(1):null,reverse:v=>Array.isArray(v)?[...v].reverse():v==null?null:[...String(v)].reverse().join(""),
+  nodes:p=>isPath(p)?[...p.nodes]:null,relationships:p=>isPath(p)?[...p.rels]:null,startnode:r=>isRel(r)?r.start:null,endnode:r=>isRel(r)?r.end:null,
+  split:(s,d)=>s==null?null:String(s).split(d),substring:(s,a,l)=>s==null?null:l==null?String(s).substr(a):String(s).substr(a,l),replace:(s,a,b)=>s==null?null:String(s).split(a).join(b),
+  abs:Math.abs,round:Math.round,ceil:Math.ceil,floor:Math.floor,sqrt:Math.sqrt,exists:v=>v!=null,range:(a,b,s=1)=>{const o=[];for(let i=a;s>0?i<=b:i>=b;i+=s)o.push(i);return o},isempty:v=>v==null?null:(Array.isArray(v)||typeof v==="string")?v.length===0:Object.keys(v).length===0
+ };
+ function ev(x,row){switch(x.type){
+  case "lit":return x.v;
+  case "var":if(!row.has(x.name))throw err(`Variable '${x.name}' is not defined`,x.p);return row.get(x.name);
+  case "prop":{const o=ev(x.a,row);if(o==null)return null;if(isNode(o)||isRel(o))return o.props[x.name]??null;if(typeof o==="object"&&!Array.isArray(o))return o[x.name]??null;throw err(`Cannot read property '${x.name}' of ${Array.isArray(o)?"a list":typeof o}`)}
+  case "index":{const o=ev(x.a,row),i=ev(x.i,row);if(o==null||i==null)return null;if(typeof i==="string")return isNode(o)||isRel(o)?o.props[i]??null:o[i]??null;const l=Array.isArray(o)?o:String(o);const n=i<0?l.length+i:i;return l[n]??null}
+  case "slice":{const o=ev(x.a,row);if(o==null)return null;const i=x.i?ev(x.i,row):0,j=x.j?ev(x.j,row):undefined;return o.slice(i,j)}
+  case "list":return x.items.map(i=>ev(i,row));
+  case "map":return Object.fromEntries(x.entries.map(([k,e])=>[k,ev(e,row)]));
+  case "not":{const v=ev(x.a,row);return v==null?null:!v}
+  case "and":{const a=ev(x.a,row);if(a===false)return false;const b=ev(x.b,row);if(b===false)return false;return a==null||b==null?null:true}
+  case "or":{const a=ev(x.a,row);if(a===true)return true;const b=ev(x.b,row);if(b===true)return true;return a==null||b==null?null:false}
+  case "xor":{const a=ev(x.a,row),b=ev(x.b,row);return a==null||b==null?null:Boolean(a)!==Boolean(b)}
+  case "cmp":{const a=ev(x.a,row),b=ev(x.b,row);if(a==null||b==null)return null;if(x.op==="=")return eqv(a,b);if(x.op==="<>")return !eqv(a,b);if(x.op==="=~"){try{return new RegExp("^(?:"+b+")$").test(String(a))}catch(e){throw err("Invalid regular expression: "+b)}}if(typeof a!==typeof b)return null;const c=cmp(a,b);return x.op==="<"?c<0:x.op==="<="?c<=0:x.op===">"?c>0:c>=0}
+  case "in":{const a=ev(x.a,row),b=ev(x.b,row);if(b==null)return null;if(!Array.isArray(b))throw err("IN requires a list on the right-hand side");if(a==null)return null;return b.some(v=>eqv(v,a))}
+  case "str":{const a=ev(x.a,row),b=ev(x.b,row);if(a==null||b==null)return null;const s=String(a),t=String(b);return x.op==="contains"?s.includes(t):x.op==="starts"?s.startsWith(t):s.endsWith(t)}
+  case "isnull":{const v=ev(x.a,row);return x.neg?v!=null:v==null}
+  case "haslabel":{const v=ev(x.a,row);return v==null?null:isNode(v)&&x.labels.every(l=>v.labels.includes(l))}
+  case "arith":{const a=ev(x.a,row),b=ev(x.b,row);if(a==null||b==null)return null;if(x.op==="+"){if(Array.isArray(a))return a.concat(b);if(Array.isArray(b))return [a].concat(b);if(typeof a==="string"||typeof b==="string")return String(a)+String(b);return a+b}if(typeof a!=="number"||typeof b!=="number")throw err(`'${x.op}' needs numbers`);return x.op==="-"?a-b:x.op==="*"?a*b:x.op==="/"?(Number.isInteger(a)&&Number.isInteger(b)?Math.trunc(a/b):a/b):a%b}
+  case "neg":{const v=ev(x.a,row);return v==null?null:-v}
+  case "case":{const s=x.subject?ev(x.subject,row):undefined;for(const [w,t] of x.whens){const c=x.subject?eqv(s,ev(w,row)):ev(w,row);if(c===true)return ev(t,row)}return x.els?ev(x.els,row):null}
+  case "call":{if(AGG.has(x.name))throw err(`${x.name}() can only be used in RETURN or WITH`,x.p);const f=FN[x.name];if(!f)throw err(`Unknown function ${x.name}()`,x.p);return f(...x.args.map(a=>ev(a,row)))}
+ }throw err("Unsupported expression")}
+ function hasAgg(x){if(!x||typeof x!=="object")return false;if(x.type==="call"&&AGG.has(x.name))return true;return Object.values(x).some(v=>Array.isArray(v)?v.some(i=>Array.isArray(i)?i.some(hasAgg):hasAgg(i)):v&&typeof v==="object"&&v.type?hasAgg(v):false)}
+ function evAgg(x,rows){if(x.type==="call"&&AGG.has(x.name)){let vals=x.star?rows.map(()=>1):rows.map(r=>ev(x.args[0],r)).filter(v=>v!=null);if(x.distinct){const seen=new Set();vals=vals.filter(v=>{const k=key(v);return seen.has(k)?false:(seen.add(k),true)})}
+   switch(x.name){case "count":return vals.length;case "collect":return vals;case "sum":return vals.reduce((a,b)=>a+b,0);case "avg":return vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:null;case "min":return vals.length?vals.reduce((a,b)=>cmp(a,b)<=0?a:b):null;case "max":return vals.length?vals.reduce((a,b)=>cmp(a,b)>=0?a:b):null}}
+  const clone=JSON.parse(JSON.stringify(x,(k,v)=>v&&v.type==="call"&&AGG.has(v.name)?{type:"lit",v:"__agg__"+JSON.stringify(v)}:v));
+  const fill=o=>{if(!o||typeof o!=="object")return o;if(o.type==="lit"&&typeof o.v==="string"&&o.v.startsWith("__agg__"))return {type:"lit",v:evAgg(JSON.parse(o.v.slice(7)),rows)};for(const k of Object.keys(o))o[k]=Array.isArray(o[k])?o[k].map(i=>Array.isArray(i)?i.map(fill):fill(i)):fill(o[k]);return o};
+  return ev(fill(clone),rows[0]||new Map())}
+ function intOf(x){if(!x)return null;const v=ev(x,new Map());if(!Number.isInteger(v)||v<0)throw err("SKIP and LIMIT need a non-negative integer");return v}
+ function project(c,rows,scope){
+  const items=c.star?scope.map(v=>({expr:{type:"var",name:v},alias:v,text:v})):c.items,cols=items.map(i=>i.alias||(i.expr.type==="var"?i.expr.name:i.text)),agg=items.some(i=>hasAgg(i.expr));
+  if(!items.length)throw err("RETURN * needs at least one variable in scope");
+  let out;
+  if(!agg)out=rows.map(r=>({vals:items.map(i=>ev(i.expr,r)),rows:[r]}));
+  else{const groups=new Map(),plain=items.map(i=>!hasAgg(i.expr));rows.forEach(r=>{const kv=items.map((i,n)=>plain[n]?ev(i.expr,r):null),k=kv.map(key).join("|");if(!groups.has(k))groups.set(k,{kv,rows:[]});groups.get(k).rows.push(r)});if(!rows.length&&!plain.some(Boolean))groups.set("",{kv:[],rows:[]});out=[...groups.values()].map(g=>({vals:items.map((i,n)=>plain[n]?g.kv[n]:evAgg(i.expr,g.rows)),rows:g.rows}))}
+  if(c.distinct){const seen=new Set();out=out.filter(o=>{const k=o.vals.map(key).join("|");return seen.has(k)?false:(seen.add(k),true)})}
+  if(c.order.length){const sortKeys=out.map(o=>{const env=new Map(agg?[]:o.rows[0]||[]);cols.forEach((n,i)=>env.set(n,o.vals[i]));return c.order.map(ord=>{const idx=items.findIndex(i=>i.text===ord.text||i.alias===ord.text);if(idx>=0)return o.vals[idx];return hasAgg(ord.expr)?evAgg(ord.expr,o.rows):ev(ord.expr,env)})});const ix=out.map((_,i)=>i);ix.sort((a,b)=>{for(let j=0;j<c.order.length;j++){const r=cmp(sortKeys[a][j],sortKeys[b][j]);if(r)return c.order[j].desc?-r:r}return a-b});out=ix.map(i=>out[i])}
+  const skip=intOf(c.skip)||0,limit=intOf(c.limit);out=out.slice(skip,limit==null?undefined:skip+limit);
+  return {columns:cols,rows:out.map(o=>o.vals)}}
+ function bindNode(np,node,row){if(np.v&&row.has(np.v)){if(row.get(np.v)!==node)return null}if(!np.labels.every(l=>node.labels.includes(l)))return null;if(np.props&&!np.props.entries.every(([k,e])=>eqv(node.props[k]??null,ev(e,row))===true))return null;if(np.v&&!row.has(np.v)){const r=new Map(row);r.set(np.v,node);return r}return row}
+ function relOk(rp,e,row){if(rp.types.length&&!rp.types.includes(e.type))return false;if(rp.props&&!rp.props.entries.every(([k,x])=>eqv(e.props[k]??null,ev(x,row))===true))return false;return true}
+ function steps(db,node,dir){const out=dir!=="in"?(db.out.get(node.id)||[]).map(e=>[e,e.end]):[],inn=dir!=="out"?(db.in.get(node.id)||[]).map(e=>[e,e.start]):[];return out.concat(inn)}
+ function candidates(db,np,row){if(np.v&&row.has(np.v)){const v=row.get(np.v);return isNode(v)?[v]:[]}if(np.props){const id=np.props.entries.find(([k,e])=>k==="id"&&e.type==="lit");if(id){const n=db.byId.get(id[1].v);return n?[n]:[]}}return np.labels.length?(db.byLabel.get(np.labels[0])||[]):db.nodes}
+ let work=0;const tick=()=>{if(++work>WORK_CAP)throw err("The query explored too many paths. Add labels, relationship types, a hop limit (for example *1..3) or a more specific starting node.")};
+ function matchPattern(db,p,row,emit){
+  const walk=(i,cur,r,used,pn,pr)=>{if(i===p.nodes.length){let o=r;if(p.pathVar){o=new Map(r);o.set(p.pathVar,{_p:true,nodes:pn,rels:pr})}emit(o);return}
+   const rp=p.rels[i-1],np=p.nodes[i];
+   if(!rp.varLen){for(const [e,other] of steps(db,cur,rp.dir)){tick();if(used.includes(e)||!relOk(rp,e,r))continue;let r2=r;if(rp.v){if(r.has(rp.v)){if(r.get(rp.v)!==e)continue}else{r2=new Map(r);r2.set(rp.v,e)}}const r3=bindNode(np,other,r2);if(r3)walk(i+1,other,r3,used.concat(e),pn.concat(other),pr.concat(e))}return}
+   const dfs=(node,trail,nodes)=>{if(trail.length>=rp.varLen.min){let r2=r;if(rp.v){r2=new Map(r);r2.set(rp.v,trail)}const r3=bindNode(np,node,r2);if(r3)walk(i+1,node,r3,used.concat(trail),pn.concat(nodes),pr.concat(trail))}if(trail.length<rp.varLen.max)for(const [e,other] of steps(db,node,rp.dir)){tick();if(used.includes(e)||trail.includes(e)||!relOk(rp,e,r))continue;dfs(other,trail.concat(e),nodes.concat(other))}};dfs(cur,[],[])};
+  for(const start of candidates(db,p.nodes[0],row)){const r=bindNode(p.nodes[0],start,row);if(r)walk(1,start,r,[],[start],[])}}
+ function patternVars(ps){const v=[];ps.forEach(p=>{if(p.pathVar)v.push(p.pathVar);p.nodes.forEach(n=>n.v&&v.push(n.v));p.rels.forEach(r=>r.v&&v.push(r.v))});return [...new Set(v)]}
+ function run(src,db){
+  work=0;const t0=performance.now(),clauses=parse(src);let rows=[new Map()],scope=[],result=null,count=0;
+  const guard=()=>{if(++count>ROW_CAP)throw err(`The query matched more than ${ROW_CAP.toLocaleString()} rows. Narrow it with labels, properties, WHERE or LIMIT.`)};
+  for(const c of clauses){
+   if(c.k==="match"){const next=[];for(const r of rows){let found=0;const go=(ps,i,row)=>{if(i===ps.length){if(!c.where||ev(c.where,row)===true){guard();next.push(row);found++}return}matchPattern(db,ps[i],row,m=>go(ps,i+1,m))};go(c.patterns,0,r);if(c.optional&&!found){const m=new Map(r);patternVars(c.patterns).forEach(v=>{if(!m.has(v))m.set(v,null)});next.push(m)}}rows=next;patternVars(c.patterns).forEach(v=>{if(!scope.includes(v))scope.push(v)})}
+   else if(c.k==="unwind"){const next=[];rows.forEach(r=>{const l=ev(c.expr,r);(Array.isArray(l)?l:l==null?[]:[l]).forEach(v=>{guard();const m=new Map(r);m.set(c.alias,v);next.push(m)})});rows=next;if(!scope.includes(c.alias))scope.push(c.alias)}
+   else if(c.k==="with"){const p=project(c,rows,scope);rows=p.rows.map(vals=>new Map(p.columns.map((col,i)=>[col,vals[i]])));if(c.where)rows=rows.filter(r=>ev(c.where,r)===true);scope=[...p.columns]}
+   else result=project(c,rows,scope)}
+  return {...result,ms:performance.now()-t0}}
+ function db(data){const nodes=data.nodes.map(n=>({_n:true,id:n.id,labels:[n.type],props:{id:n.id,name:n.caption,...n.props}})),byId=new Map(nodes.map(n=>[n.id,n])),byLabel=new Map(),out=new Map(),inn=new Map();nodes.forEach(n=>{if(!byLabel.has(n.labels[0]))byLabel.set(n.labels[0],[]);byLabel.get(n.labels[0]).push(n)});
+  const rels=data.edges.map((e,i)=>({_r:true,id:i,type:e.type,start:byId.get(e.s),end:byId.get(e.t),props:{...(e.props||{})}})).filter(r=>r.start&&r.end);rels.forEach(r=>{if(!out.has(r.start.id))out.set(r.start.id,[]);out.get(r.start.id).push(r);if(!inn.has(r.end.id))inn.set(r.end.id,[]);inn.get(r.end.id).push(r)});
+  return {nodes,rels,byId,byLabel,out,in:inn}}
+ return {run,db,isNode,isRel,isPath}
+})();
+const CY_EXAMPLES=[
+ {label:"Who is accountable for each domain",q:"MATCH (p:Party)-[r:ACCOUNTABLE_FOR]->(d:Domain)\nRETURN p.name AS party, d.name AS domain, r.controls AS controls\nORDER BY controls DESC\nLIMIT 25"},
+ {label:"Controls the customer SOC is responsible for",q:"MATCH (c:Control)-[a:ASSIGNED]->(p:Party {rasci_actor: 'customer_soc'})\nWHERE a.rasci IN ['R', 'R/A']\nRETURN c.control_id AS id, c.objective AS objective, c.domain AS domain\nORDER BY id"},
+ {label:"RASCI codes per party",q:"MATCH (:Control)-[a:ASSIGNED]->(p:Party)\nRETURN p.name AS party, a.rasci AS code, count(*) AS controls\nORDER BY party, controls DESC"},
+ {label:"What the malware outbreak draws on (graph)",q:"MATCH (s:Scenario {name: 'Malware outbreak'})-[r:DRAWS_ON]->(l:ControlLayer)\nOPTIONAL MATCH (d:Domain)-[p:PART_OF]->(l)\nRETURN s, r, l, d, p"},
+ {label:"Layers shared by failure scenarios",q:"MATCH (s:Scenario)-[:DRAWS_ON]->(l:ControlLayer)\nRETURN l.name AS layer, count(s) AS scenarios, collect(s.name) AS used_by\nORDER BY scenarios DESC, layer"},
+ {label:"Lifecycle as a path (graph)",q:"MATCH p = (a:Stage {order: 1})-[:NEXT*]->(b:Stage {order: 11})\nRETURN p"},
+ {label:"Primary sections → functions → pillars (graph)",q:"MATCH (s:Section)-[r:PRIMARY_FOR]->(f:Function)-[a:ALIGNS_TO]->(p:Pillar)\nRETURN s, r, f, a, p"},
+ {label:"Search control objectives",q:"MATCH (c:Control)\nWHERE toLower(c.objective) CONTAINS 'backup'\nRETURN c.control_id AS id, c.objective AS objective, c.domain AS domain, c.owner_assignment AS owner"},
+ {label:"Controls with more than one responsible party",q:"MATCH (c:Control)-[a:ASSIGNED]->(p:Party)\nWHERE a.rasci IN ['R', 'R/A']\nWITH c, collect(p.name) AS responsible\nWHERE size(responsible) > 1\nRETURN c.control_id AS id, c.objective AS objective, responsible\nORDER BY id"},
+ {label:"Lead party for each service model",q:"MATCH (m:ServiceModel)-[r:ALLOCATES]->(p:Party)\nWITH m, p, r ORDER BY r.avg_share_pct DESC\nWITH m, collect(p.name)[0] AS lead, max(r.avg_share_pct) AS share\nRETURN m.name AS model, lead, share\nORDER BY share DESC"}
+];
+const CY_COLORS=Object.fromEntries(["Party","ServiceModel","ControlLayer","Domain","Section","Function","Pillar","Stage","Scenario","Control"].map((t,i)=>[t,GR_PALETTE[i%GR_PALETTE.length]]));
+let CY_DB=null;
+function cyDb(){if(!CY_DB)CY_DB=CY.db(buildCombinedData(true));return CY_DB}
+function cyRun(q){state.cyQuery=q;state.cyError=null;state.cyResult=null;if(!q.trim()){renderMatrix();renderDetail();return}
+ try{state.cyResult=CY.run(q,cyDb());const g=cyGraph(state.cyResult);state.cyMode=g&&state.cyMode!=="table"?"graph":"table"}catch(e){if(!e.cypher)console.error(e);const before=q.slice(0,e.pos??0),line=before.split("\n").length,col=before.length-before.lastIndexOf("\n");state.cyError=e.cypher&&e.pos!=null?`${e.message} (line ${line}, column ${col})`:e.message}
+ renderMatrix();renderDetail()}
+function cyCollect(v,ns,rs){if(v==null)return;if(CY.isNode(v))ns.set(v.id,v);else if(CY.isRel(v)){rs.set(v.id,v);ns.set(v.start.id,v.start);ns.set(v.end.id,v.end)}else if(CY.isPath(v)){v.nodes.forEach(n=>ns.set(n.id,n));v.rels.forEach(r=>rs.set(r.id,r))}else if(Array.isArray(v))v.forEach(x=>cyCollect(x,ns,rs))}
+function cyGraph(res){
+ const ns=new Map(),rs=new Map();res.rows.forEach(r=>r.forEach(v=>cyCollect(v,ns,rs)));if(!ns.size)return null;
+ const CAP=300,list=[...ns.values()].slice(0,CAP),keep=new Set(list.map(n=>n.id)),db=cyDb();
+ if(keep.size<=CAP)db.rels.forEach(r=>{if(keep.has(r.start.id)&&keep.has(r.end.id)&&!rs.has(r.id)&&rs.size<2000)rs.set(r.id,r)});
+ const nodes=list.map(n=>{const {id,name,...props}=n.props;return {id:n.id,type:n.labels[0],caption:name,props,r:n.labels[0]==="Control"?16:n.labels[0]==="Party"?30:24,select:n.labels[0]==="Control"?()=>openControl(props.control_id):null}});
+ const edges=[...rs.values()].filter(r=>keep.has(r.start.id)&&keep.has(r.end.id)).map(r=>({s:r.start.id,t:r.end.id,type:r.type,props:r.props,caption:r.type+(r.props.rasci?` · ${r.props.rasci}`:r.props.avg_share_pct!=null?` · ${r.props.avg_share_pct}%`:r.props.controls!=null?` · ${r.props.controls}`:r.props.functions!=null?` · ${r.props.functions}`:"")}));
+ return {key:"cypher",title:"Cypher query result",subtitle:`${ns.size} node${ns.size===1?"":"s"} and ${edges.length} relationship${edges.length===1?"":"s"} from the query${ns.size>CAP?`, showing the first ${CAP} nodes`:""}. Relationships between returned nodes are included, as in Neo4j Browser.`,nodes,edges,colors:CY_COLORS,selected:[]}}
+function cyFmt(v,html){
+ if(v==null)return html?'<span class="cy-null">null</span>':"null";
+ if(CY.isNode(v))return html?`<span class="cy-node" style="background:${CY_COLORS[v.labels[0]]||"#a5abb6"}">:${esc(v.labels[0])}</span> ${esc(v.props.name)}`:`(:${v.labels[0]} {name: "${v.props.name}"})`;
+ if(CY.isRel(v))return html?`<span class="cy-rel">:${esc(v.type)}</span>${Object.keys(v.props).length?" "+esc(JSON.stringify(v.props)):""}`:`[:${v.type}${Object.keys(v.props).length?" "+JSON.stringify(v.props):""}]`;
+ if(CY.isPath(v)){const parts=[cyFmt(v.nodes[0],html)];v.rels.forEach((r,i)=>{parts.push(html?`→ <span class="cy-rel">:${esc(r.type)}</span> →`:`-[:${r.type}]->`);parts.push(cyFmt(v.nodes[i+1],html))});return parts.join(" ")}
+ if(Array.isArray(v))return "["+v.map(x=>cyFmt(x,html)).join(", ")+"]";
+ if(typeof v==="object")return html?esc(JSON.stringify(v)):JSON.stringify(v);
+ return html?esc(String(v)):String(v)}
+function cyConsole(){
+ const r=state.cyResult,g=r&&cyGraph(r),status=state.cyError?`<div class="cy-status cy-error" role="alert">${esc(state.cyError)}</div>`:r?`<div class="cy-status">${r.rows.length} row${r.rows.length===1?"":"s"} · ${r.ms.toFixed(1)} ms${g?` · ${g.nodes.length} nodes · ${g.edges.length} relationships`:""}</div>`:`<div class="cy-status">Read-only Cypher over the full dataset (${cyDb().nodes.length.toLocaleString()} nodes · ${cyDb().rels.length.toLocaleString()} relationships). Ctrl/⌘ + Enter to run.</div>`;
+ return `<div class="cy-console"><div class="cy-bar"><span class="cy-prompt" aria-hidden="true">$</span><textarea id="cyInput" rows="${Math.min(10,Math.max(2,(state.cyQuery||"").split("\n").length+1))}" spellcheck="false" aria-label="Cypher query" placeholder="MATCH (p:Party)-[r:ACCOUNTABLE_FOR]->(d:Domain) RETURN p, r, d LIMIT 25">${esc(state.cyQuery||"")}</textarea><div class="cy-actions"><button type="button" class="btn primary" id="cyRun">Run</button><button type="button" class="btn" id="cyClear">Clear</button><select id="cyExamples" aria-label="Example queries"><option value="">Examples…</option>${CY_EXAMPLES.map((x,i)=>`<option value="${i}">${esc(x.label)}</option>`).join("")}</select><button type="button" class="btn" id="cyHelp">Syntax</button></div></div>${status}${r?`<div class="cy-modes"><div class="view-toggle" aria-label="Result view">${g?`<button type="button" data-cy-mode="graph" class="${state.cyMode==="graph"?"active":""}">Graph</button>`:""}<button type="button" data-cy-mode="table" class="${state.cyMode!=="graph"||!g?"active":""}">Table</button></div><button type="button" class="btn" id="cyCsv">Download CSV</button></div>`:""}</div>`}
+function cyBind(){
+ const input=$("#cyInput");input.oninput=()=>{state.cyQuery=input.value;input.rows=Math.min(10,Math.max(2,input.value.split("\n").length+1))};input.onkeydown=e=>{if(e.key==="Enter"&&(e.ctrlKey||e.metaKey)){e.preventDefault();cyRun(input.value)}};
+ $("#cyRun").onclick=()=>cyRun(input.value);$("#cyClear").onclick=()=>{state.cyQuery="";cyRun("")};
+ $("#cyExamples").onchange=e=>{const x=CY_EXAMPLES[+e.target.value];if(x){state.cyMode="graph";cyRun(x.q)}};
+ $("#cyHelp").onclick=cyShowHelp;
+ document.querySelectorAll("[data-cy-mode]").forEach(b=>b.onclick=()=>{state.cyMode=b.dataset.cyMode;renderMatrix()});
+ const csv=$("#cyCsv");if(csv)csv.onclick=()=>{const r=state.cyResult,cell=v=>{const s=cyFmt(v,false);return /[",\n]/.test(s)?`"${s.replace(/"/g,'""')}"`:s},text=[r.columns.map(cell).join(","),...r.rows.map(row=>row.map(cell).join(","))].join("\n"),url=URL.createObjectURL(new Blob([text],{type:"text/csv"})),a=document.createElement("a");a.href=url;a.download="cypher-result.csv";document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}}
+function cyTable(root){const r=state.cyResult,MAX=1000;root.className="relmap cy-wrap";root.innerHTML=r.rows.length?`<table class="cy-table"><thead><tr><th>#</th>${r.columns.map(c=>`<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>${r.rows.slice(0,MAX).map((row,i)=>`<tr><td class="cy-n">${i+1}</td>${row.map(v=>`<td>${cyFmt(v,true)}</td>`).join("")}</tr>`).join("")}</tbody></table>${r.rows.length>MAX?`<p class="cy-note">Showing ${MAX} of ${r.rows.length} rows. Download CSV for all of them.</p>`:""}`:'<div class="empty">(no changes, no records)</div>';
+ $("#matrixTitle").textContent="Cypher query result";$("#matrixSubtitle").textContent=`${r.columns.length} column${r.columns.length===1?"":"s"} · ${r.rows.length} row${r.rows.length===1?"":"s"}`;$("#matrixLegend").innerHTML="";$("#selectionStatus").textContent=`${r.rows.length} rows · ${r.ms.toFixed(1)} ms`}
+function cyShowHelp(){$("#modalId").textContent="Cypher console";$("#modalTitle").textContent="Supported Cypher";$("#modalBody").innerHTML=`<div class="fact wide"><b>Clauses</b><p>MATCH, OPTIONAL MATCH, WHERE, WITH (with WHERE, ORDER BY, SKIP, LIMIT), UNWIND … AS, RETURN [DISTINCT] … AS … ORDER BY … [ASC|DESC] SKIP n LIMIT n. The console is read-only: CREATE, MERGE, SET, DELETE and CALL are rejected.</p></div><div class="fact wide"><b>Patterns</b><p><code>(n:Label {key: 'value'})</code>, <code>-[r:TYPE|OTHER]-&gt;</code>, <code>&lt;-[r]-</code>, <code>--</code>, variable length <code>-[:NEXT*1..3]-&gt;</code> (up to 15 hops) and named paths <code>p = (a)-[*]-&gt;(b)</code>.</p></div><div class="fact wide"><b>Expressions</b><p>= &lt;&gt; &lt; &gt; &lt;= &gt;=, =~ regex, AND OR XOR NOT, IN [list], CONTAINS, STARTS WITH, ENDS WITH, IS [NOT] NULL, n:Label, + - * / %, CASE WHEN … THEN … ELSE … END, list indexing and slices.</p></div><div class="fact wide"><b>Functions</b><p>Aggregates: count(*), count([DISTINCT] x), collect, sum, avg, min, max. Others: size, length, labels, type, id, keys, properties, nodes, relationships, startNode, endNode, toLower, toUpper, trim, toString, toInteger, toFloat, split, substring, replace, coalesce, head, last, tail, reverse, range, exists, abs, round, ceil, floor, sqrt.</p></div><div class="fact wide"><b>Graph model</b><p>Labels: ${Object.keys(CY_COLORS).map(l=>`<span class="cy-node" style="background:${CY_COLORS[l]}">:${l}</span>`).join(" ")}. Every node has <code>id</code> and <code>name</code>. Relationship types: ${[...new Set(cyDb().rels.map(r=>r.type))].map(t=>`<span class="cy-rel">:${t}</span>`).join(" ")}.</p></div><div class="fact wide"><b>Control properties</b><p>control_id, objective, domain, service_model, expected_outcome, test, owner_assignment, ism_mapping_strength, ism_applicability, shared_control_component and the standards reference lists (for example csa_ccm_v4_1_control_ids, iso_iec_27017_2026).</p></div>`;$("#modal").showModal()}
+function renderCombinedGraph(){const root=$("#matrix");root.style.gridTemplateColumns="";root.style.minWidth="";$("#diagramTabs").innerHTML=cyConsole();cyBind();if(state.cyResult){const g=cyGraph(state.cyResult);if(g&&state.cyMode==="graph")renderGraph(root,g);else cyTable(root)}else renderGraph(root,buildCombinedGraph())}
+function renderCombinedDetail(){
+ const shares=document.querySelectorAll(".responsibility-copy .share"),f=CG_LAST||{nodes:0,edges:0,controls:0};
+ if(state.cyResult){const g=cyGraph(state.cyResult);$("#detailTitle").textContent="Cypher query result";$("#detailModel").textContent="Read-only";$("#modelDefinition").textContent=state.cyQuery.trim().split("\n")[0];$("#split").style.display="none";$(".responsibility-copy").classList.add("involved");shares.forEach(x=>x.classList.remove("absent"));$("#customerPct").textContent=state.cyResult.rows.length;$("#customerLabel").textContent="Rows";$("#socPct").textContent=g?g.nodes.length:0;$("#socLabel").textContent="Nodes";$("#providerPct").textContent=g?g.edges.length:0;$("#providerLabel").textContent="Relationships";$("#detailNote").textContent="Clear the query to return to the combined graph. Ctrl/⌘ + Enter runs the query.";return}
+ $("#detailTitle").textContent="Combined responsibility graph";$("#detailModel").textContent=state.model==="All"?"All models":state.model;$("#modelDefinition").textContent="Every data set in the explorer as one property graph. Parties, service models, control layers and domains filter the catalogue when selected; other nodes are pinned for inspection.";
+ $("#split").style.display="none";$(".responsibility-copy").classList.add("involved");shares.forEach(x=>x.classList.remove("absent"));
+ $("#customerPct").textContent=f.nodes;$("#customerLabel").textContent="Nodes shown";$("#socPct").textContent=f.edges;$("#socLabel").textContent="Relationships shown";$("#providerPct").textContent=f.controls;$("#providerLabel").textContent="Controls expanded";
+ $("#detailNote").textContent="Use Cypher › Full dataset to export all 1,191 controls with their RASCI assignments, domains and standards references for Neo4j.";
+}
+const AL_PARTIES=[
+ {key:"customer",label:"Customer governance",short:"Customer",color:"#f59e0b",actor:"csc"},
+ {key:"soc",label:"Customer SOC",short:"SOC",color:"#20c77a",actor:"customer_soc"},
+ {key:"provider",label:"Cloud provider",short:"Provider",color:"#0794d2",actor:"csp"}
+];
+const AL_DIAGRAMS=[
+ {id:"matrix",label:"Matrix"},
+ {id:"sankey",label:"Sankey flow"},
+ {id:"network",label:"Party–layer network"},
+ {id:"arcs",label:"Model arcs"},
+ {id:"heatmap",label:"Heatmap"},
+ {id:"graph",label:"Graph"}
+];
+function alKey(){return state.layerView==="involved"?"ivDiagram":"alDiagram"}
+function alInvolved(){return state.layerView==="involved"}
+function alTabs(){const cur=state[alKey()];return `<div class="view-toggle rel-toggle" aria-label="Responsibility diagram">${AL_DIAGRAMS.map(x=>`<button type="button" data-al-diagram="${x.id}" class="${cur===x.id?"active":""}" aria-pressed="${cur===x.id}">${x.label}</button>`).join("")}</div>`}
+function alShares(layer,mi){const share=layer.share[mi],soc=layer.soc[mi];return {customer:Math.max(0,share-soc),soc,provider:100-share}}
+function alVal(layer,mi,party){const v=alShares(layer,mi)[party];return alInvolved()?(v>0?1:0):v}
+function alSel(){return {model:state.model!=="All"?state.model:null,layer:LAYERS.some(l=>l.id===state.layer)?state.layer:null,party:AL_PARTIES.find(p=>p.actor===$("#owner").value)?.key||null}}
+function alLean(l){const m=MODELS.map((_,i)=>alShares(l,i));return m.reduce((s,x)=>s+x.provider-x.customer,0)/m.length}
+function alLayers(){return [...LAYERS].sort((a,b)=>alLean(a)-alLean(b))}
+function alAvg(layer,party,model){const idx=model?[MODELS.indexOf(model)]:MODELS.map((_,i)=>i);return idx.reduce((s,i)=>s+alVal(layer,i,party),0)/idx.length}
+function alLead(layer,model){let best=null,max=-1;AL_PARTIES.forEach(p=>{const v=alAvg(layer,p.key,model);if(v>max){max=v;best=p}});return max>0?best:null}
+function alRender(){renderMatrix();renderDetail();renderControls()}
+function alToggleModel(m){state.model=state.model===m?"All":m;$("#service").value=state.model;alRender()}
+function alToggleLayer(id){state.layer=state.layer===id?null:id;alRender()}
+function alToggleParty(key){const p=AL_PARTIES.find(x=>x.key===key);$("#owner").value=$("#owner").value===p.actor?"All":p.actor;alRender()}
+function alLegend(extra=[]){$("#matrixLegend").innerHTML=AL_PARTIES.map(p=>`<span><i style="background:${p.color}"></i>${p.label}</span>`).join("")+extra.map(x=>`<span>${x}</span>`).join("")}
+function alUnit(){return alInvolved()?"involvement":"percentage points"}
+function renderAllocationDiagram(){
+ const key=alKey();if(!AL_DIAGRAMS.some(x=>x.id===state[key]))state[key]="matrix";
+ const root=$("#matrix");root.style.gridTemplateColumns="";root.style.minWidth="";
+ const d=state[key];if(d==="sankey")renderAlSankey(root);else if(d==="network")renderAlNetwork(root);else if(d==="arcs")renderAlArcs(root);else if(d==="graph")renderGraph(root,buildAlGraph());else renderAlHeatmap(root);
+}
+function renderAlSankey(root){
+ const inv=alInvolved(),sel=alSel(),layers=alLayers(),flows=[];
+ MODELS.forEach((m,mi)=>AL_PARTIES.forEach(p=>layers.forEach(l=>{const v=alVal(l,mi,p.key);if(v)flows.push({m,p:p.key,l:l.id,v})})));
+ $("#matrixTitle").textContent=inv?"Party involvement flow":"Responsibility allocation flow";$("#matrixSubtitle").textContent=inv?"Service model → party → control layer. Each band is one layer in which a party is involved under a service model.":"Service model → party → control layer. Band width is the party's share of each layer, in percentage points, under each service model.";alLegend([`Band width · ${alUnit()}`]);
+ const T=flows.reduce((s,x)=>s+x.v,0),k=540/T,sum=(key,v)=>flows.filter(x=>x[key]===v).reduce((s,x)=>s+x.v,0);
+ const mc=MODELS.map(m=>({key:m,label:m,hint:MODEL_INFO[m],v:sum("m",m)})).filter(x=>x.v),pc=AL_PARTIES.map(p=>({...p,v:sum("p",p.key)})).filter(x=>x.v),lc=layers.map(l=>({key:l.id,label:l.label,hint:l.hint,v:sum("l",l.id)})).filter(x=>x.v);
+ const place=(col,minSlot,pad)=>{const slots=col.map(c=>Math.max(c.v*k,minSlot)),H=slots.reduce((s,x)=>s+x,0)+pad*Math.max(0,col.length-1);let y=-H/2;col.forEach((c,i)=>{c.h=c.v*k;c.y=y+(slots[i]-c.h)/2;c.out=c.y;c.in=c.y;y+=slots[i]+pad});return H};
+ const H=Math.max(place(mc,30,8),place(pc,60,24),place(lc,18,3)),X={m:-330,p:-20,l:320},W=14,M=Object.fromEntries(mc.map(c=>[c.key,c])),P=Object.fromEntries(pc.map(c=>[c.key,c])),L=Object.fromEntries(lc.map(c=>[c.key,c])),col=Object.fromEntries(AL_PARTIES.map(p=>[p.key,p.color])),lab=Object.fromEntries(lc.map(c=>[c.key,c.label]));
+ const band=(x1,y1,x2,y2,h)=>{const mx=(x1+x2)/2;return `d="M${x1} ${y1.toFixed(1)} C${mx} ${y1.toFixed(1)} ${mx} ${y2.toFixed(1)} ${x2} ${y2.toFixed(1)}" stroke-width="${Math.max(h,.6).toFixed(2)}"`};
+ const by=new Map(flows.map(f=>[`${f.m}|${f.p}|${f.l}`,f.v]));let links="";
+ mc.forEach(m=>pc.forEach(p=>lc.forEach(l=>{const v=by.get(`${m.key}|${p.key}|${l.key}`);if(!v)return;const h=v*k,y1=m.out+h/2,y2=p.in+h/2;m.out+=h;p.in+=h;links+=`<path class="rel-link rel-band lc-link" data-model="${m.key}" data-party="${p.key}" data-layer="${l.key}" ${band(X.m+W,y1,X.p,y2,h)} stroke="${col[p.key]}" opacity=".45"><title>${m.key} → ${p.label}: ${inv?"involved in":`${v}% of`} ${esc(lab[l.key])}</title></path>`})));
+ pc.forEach(p=>lc.forEach(l=>mc.forEach(m=>{const v=by.get(`${m.key}|${p.key}|${l.key}`);if(!v)return;const h=v*k,y1=p.out+h/2,y2=l.in+h/2;p.out+=h;l.in+=h;links+=`<path class="rel-link rel-band lc-link" data-model="${m.key}" data-party="${p.key}" data-layer="${l.key}" ${band(X.p+W,y1,X.l,y2,h)} stroke="${col[p.key]}" opacity=".45"><title>${p.label} → ${esc(lab[l.key])} under ${m.key}: ${inv?"involved":`${v}%`}</title></path>`})));
+ const fmt=v=>inv?v:Math.round(v/100*10)/10,node=(kind,c,x,fill,label,anchor,lx,active,count)=>`<g class="lc-node${active?" active":""}" data-kind="${kind}" data-key="${c.key}" tabindex="0" role="button" aria-pressed="${active}" aria-label="${esc(label)}"><title>${esc(c.hint||label)}</title><rect x="${x}" y="${c.y.toFixed(1)}" width="${W}" height="${c.h.toFixed(1)}" rx="3" fill="${fill}" stroke="${active?"#ffc55a":"none"}" stroke-width="2"/><text x="${lx}" y="${(c.y+c.h/2).toFixed(1)}" dy=".34em" text-anchor="${anchor}" class="${kind==="party"?"rel-role-label":"lc-label"}">${esc(label)}${count?`<tspan class="rel-count"> · ${count}</tspan>`:""}</text></g>`;
+ const nodes=mc.map(m=>node("model",m,X.m,"#53c9f6",m.label,"end",X.m-8,sel.model===m.key,inv?`${m.v}`:"")).join("")+pc.map(p=>node("party",p,X.p,p.color,p.label,"start",X.p+W+7,sel.party===p.key,inv?`${p.v} links`:`${Math.round(p.v/T*100)}%`)).join("")+lc.map(l=>{const ld=alLead(LAYERS.find(x=>x.id===l.key),sel.model);return node("layer",l,X.l,ld?ld.color:"#6e8c98",shortLabel(l.label,34),"start",X.l+W+8,sel.layer===l.key,inv?`${l.v}`:"")}).join("");
+ root.className="relmap";root.innerHTML=`<svg viewBox="-610 ${(-H/2-16).toFixed(0)} 1220 ${(H+32).toFixed(0)}" role="img" aria-label="Sankey diagram from service models through parties to control layers">${links}${nodes}</svg>`;
+ const svg=root.querySelector("svg"),restore=()=>lcFocus(svg,{model:sel.model,party:sel.party,layer:sel.layer});
+ svg.querySelectorAll(".lc-node").forEach(g=>{const kind=g.dataset.kind,key=g.dataset.key;bindNode(g,kind==="model"?()=>alToggleModel(key):kind==="party"?()=>alToggleParty(key):()=>alToggleLayer(key),()=>lcFocus(svg,{[kind]:key}),restore)});
+ restore();$("#selectionStatus").textContent=`${mc.length} models · ${pc.length} parties · ${lc.length} layers`;
+}
+function renderAlNetwork(root){
+ const inv=alInvolved(),sel=alSel(),layers=alLayers(),gap=22,H=(layers.length-1)*gap,ly=i=>(i-(layers.length-1)/2)*gap,XP=-250,XL=250,py=i=>(i-1)*170;
+ $("#matrixTitle").textContent=inv?"Party–layer involvement network":"Party–layer allocation network";$("#matrixSubtitle").textContent=`Each party links to the control layers it ${inv?"is involved in":"holds a share of"}. Line weight shows ${inv?"how many service models involve it":"its average share"}${sel.model?` under ${sel.model}`:" across all service models"}; layers lean towards the customer at the top and the provider at the bottom.`;alLegend(["Layer colour · largest party",`Line weight · ${inv?"models involved":"average share"}`]);
+ let links="",count=0;
+ AL_PARTIES.forEach((p,pi)=>layers.forEach((l,li)=>{const v=alAvg(l,p.key,sel.model);if(!v)return;count++;const y1=py(pi),y2=ly(li),m=(XP+XL)/2,label=inv?`${Math.round(v*(sel.model?1:MODELS.length))} of ${sel.model?1:MODELS.length} models`:`${Math.round(v)}% average share`;links+=`<path class="rel-link lc-link" data-party="${p.key}" data-layer="${l.id}" d="M${XP} ${y1} C${m} ${y1} ${m} ${y2.toFixed(1)} ${XL} ${y2.toFixed(1)}" stroke="${p.color}" stroke-width="${(.8+7*(inv?v:v/100)).toFixed(1)}" opacity=".5"><title>${p.label} → ${esc(l.label)}: ${label}</title></path>`}));
+ const pN=AL_PARTIES.map((p,pi)=>{const act=sel.party===p.key,tot=layers.filter(l=>alAvg(l,p.key,sel.model)>0).length;return `<g class="lc-node rel-actor${act?" active":""}" data-kind="party" data-key="${p.key}" tabindex="0" role="button" aria-pressed="${act}" aria-label="${p.label}: ${tot} layers"><rect x="${XP-150}" y="${py(pi)-23}" width="150" height="46" rx="23" fill="#042a3b"/><rect x="${XP-150}" y="${py(pi)-23}" width="150" height="46" rx="23" fill="${rgba(p.color,.22)}" stroke="${act?"#fff":p.color}" stroke-width="${act?3:1.5}"/><text x="${XP-75}" y="${py(pi)-3}" text-anchor="middle" class="rel-actor-name">${p.label}</text><text x="${XP-75}" y="${py(pi)+13}" text-anchor="middle" class="rel-actor-count" fill="${p.color}">${tot} layers</text></g>`}).join("");
+ const lN=layers.map((l,li)=>{const act=sel.layer===l.id,ld=alLead(l,sel.model);return `<g class="lc-node rel-node${act?" active":""}" data-kind="layer" data-key="${l.id}" tabindex="0" role="button" aria-pressed="${act}" aria-label="${esc(l.label)}"><title>${esc(l.label)} — ${esc(l.hint)}</title><circle cx="${XL}" cy="${ly(li)}" r="6" fill="${ld?ld.color:"#31525f"}" stroke="${act?"#fff":"#021821"}" stroke-width="2"/><text x="${XL+14}" y="${ly(li)}" dy=".34em">${esc(shortLabel(l.label,40))}</text></g>`}).join("");
+ root.className="relmap";root.innerHTML=`<svg viewBox="-610 ${(-H/2-24).toFixed(0)} 1220 ${(H+48).toFixed(0)}" role="img" aria-label="Network linking parties to control layers">${links}${pN}${lN}</svg>`;
+ const svg=root.querySelector("svg"),restore=()=>lcFocus(svg,{party:sel.party,layer:sel.layer});
+ svg.querySelectorAll(".lc-node").forEach(g=>bindNode(g,g.dataset.kind==="party"?()=>alToggleParty(g.dataset.key):()=>alToggleLayer(g.dataset.key),()=>lcFocus(svg,{[g.dataset.kind]:g.dataset.key}),restore));
+ restore();$("#selectionStatus").textContent=`${AL_PARTIES.length} parties · ${layers.length} layers · ${count} links${sel.model?` · ${sel.model}`:""}`;
+}
+function renderAlArcs(root){
+ const inv=alInvolved(),sel=alSel(),gap=104,x=i=>(i-(MODELS.length-1)/2)*gap,base=40,TOP=16;
+ const sim=(a,b)=>{let s=0;LAYERS.forEach(l=>{const A=alShares(l,a),B=alShares(l,b);if(inv)AL_PARTIES.forEach(p=>s+=(A[p.key]>0)===(B[p.key]>0)?1:0);else s+=100-AL_PARTIES.reduce((d,p)=>d+Math.abs(A[p.key]-B[p.key]),0)/2});return inv?s/(LAYERS.length*AL_PARTIES.length)*100:s/LAYERS.length};
+ const all=[];MODELS.forEach((a,i)=>MODELS.forEach((b,j)=>{if(j>i)all.push({i,j,s:sim(i,j)})}));all.sort((a,b)=>b.s-a.s);const pairs=all.slice(0,TOP),minS=Math.min(...pairs.map(p=>p.s)),maxS=Math.max(...pairs.map(p=>p.s));
+ $("#matrixTitle").textContent=inv?"Service-model involvement arcs":"Service-model allocation arcs";$("#matrixSubtitle").textContent=`Arcs join the ${TOP} most similar pairs of service models, comparing ${inv?"which parties are involved in each layer":"how each layer's responsibility is split"}. Thicker arcs are more alike. Bars show each model's average party mix.`;alLegend(["Arc weight · similarity"]);
+ const arcs=pairs.slice().reverse().map(p=>{const x1=x(p.i),x2=x(p.j),rx=(x2-x1)/2,ry=Math.min(rx*.5,250),t=maxS===minS?1:(p.s-minS)/(maxS-minS);return `<path class="rel-link lc-link lc-arc" data-stage="${MODELS[p.i]}" data-stage2="${MODELS[p.j]}" d="M${x1} ${base-26} A${rx} ${ry.toFixed(1)} 0 0 1 ${x2} ${base-26}" stroke="${rgba("#53c9f6",.3+.55*t)}" stroke-width="${(1.2+6*t).toFixed(1)}"><title>${MODELS[p.i]} ↔ ${MODELS[p.j]}: ${p.s.toFixed(0)}% similar</title></path>`}).join("");
+ const nodes=MODELS.map((m,i)=>{const act=sel.model===m,mix=AL_PARTIES.map(p=>({p,v:LAYERS.reduce((s,l)=>s+alVal(l,i,p.key),0)})),tot=mix.reduce((s,x)=>s+x.v,0)||1,bw=82;let bx=x(i)-bw/2,bar="";mix.forEach(({p,v})=>{if(!v)return;const w=v/tot*bw;bar+=`<rect x="${bx.toFixed(1)}" y="${base+40}" width="${w.toFixed(1)}" height="9" fill="${p.color}"><title>${p.label}: ${inv?`${v} layers`:`${Math.round(v/LAYERS.length)}% average`}</title></rect>`;bx+=w});const caption=inv?mix.map(({p,v})=>v).join(" · "):mix.map(({v})=>Math.round(v/LAYERS.length)).join(" / ");return `<g class="lc-node${act?" active":""}" data-kind="model" data-key="${m}" tabindex="0" role="button" aria-pressed="${act}" aria-label="${m}"><title>${m} — ${esc(MODEL_INFO[m]||"")}</title><circle cx="${x(i)}" cy="${base}" r="24" fill="#0b6689" stroke="${act?"#ffc55a":"#53c9f6"}" stroke-width="${act?3:1.5}"/><text x="${x(i)}" y="${base}" dy=".35em" text-anchor="middle" class="lc-model">${m==="On-premises"?"On-prem":m}</text>${bar}<text x="${x(i)}" y="${base+64}" text-anchor="middle" class="rel-count lc-small">${caption}</text></g>`}).join("");
+ const top=Math.min(250,((MODELS.length-1)*gap)/2*.5)+40;
+ root.className="relmap";root.innerHTML=`<svg viewBox="-610 ${-top} 1220 ${top+base+84}" role="img" aria-label="Arc diagram of similar service models"><line x1="${x(0)}" x2="${x(MODELS.length-1)}" y1="${base}" y2="${base}" stroke="#3b6575" stroke-width="2"/>${arcs}${nodes}</svg>`;
+ const svg=root.querySelector("svg"),focus=id=>{svg.querySelectorAll(".lc-arc").forEach(a=>a.classList.toggle("rel-dim",Boolean(id)&&a.dataset.stage!==id&&a.dataset.stage2!==id));const lit=new Set([id]);svg.querySelectorAll(".lc-arc:not(.rel-dim)").forEach(a=>{lit.add(a.dataset.stage);lit.add(a.dataset.stage2)});svg.querySelectorAll(".lc-node").forEach(g=>g.classList.toggle("rel-dim",Boolean(id)&&!lit.has(g.dataset.key)))},restore=()=>focus(sel.model);
+ svg.querySelectorAll(".lc-node").forEach(g=>bindNode(g,()=>alToggleModel(g.dataset.key),()=>focus(g.dataset.key),restore));
+ svg.querySelectorAll(".lc-arc").forEach(a=>{a.onmouseenter=()=>{svg.querySelectorAll(".lc-arc").forEach(o=>o.classList.toggle("rel-dim",o!==a));svg.querySelectorAll(".lc-node").forEach(g=>g.classList.toggle("rel-dim",![a.dataset.stage,a.dataset.stage2].includes(g.dataset.key)))};a.onmouseleave=restore});
+ restore();$("#selectionStatus").textContent=`${MODELS.length} service models · top ${TOP} similar pairs`;
+}
+function renderAlHeatmap(root){
+ const inv=alInvolved(),sel=alSel(),layers=alLayers(),focus=AL_PARTIES.find(p=>p.key===sel.party)||null;
+ $("#matrixTitle").textContent=inv?"Involvement heatmap":"Allocation heatmap";$("#matrixSubtitle").textContent=inv?"Control layers × service models. Each cell shows which parties are involved; darker cells involve more parties.":`Control layers × service models. Each cell is split by party share; the number is ${focus?`the ${focus.label.toLowerCase()} share`:"the customer governance / SOC / provider split"}. Select a party to focus on its share.`;alLegend(inv?["Darker · more parties involved"]:["Segment width · share"]);
+ const head=`<tr><th scope="col">Control layer</th>${MODELS.map(m=>`<th scope="col"><button type="button" class="rel-col lc-col${sel.model===m?" active":""}" data-model="${m}" title="${esc(MODEL_INFO[m]||m)}" style="--c:#53c9f6"><b>${m==="On-premises"?"On-prem":m}</b></button></th>`).join("")}<th scope="col">${inv?"Involved":focus?`Avg ${focus.short}`:"Avg split"}</th></tr>`;
+ const body=layers.map(l=>{const cells=MODELS.map((m,i)=>{const sh=alShares(l,i),dim=(sel.model&&sel.model!==m)||(sel.layer&&sel.layer!==l.id),act=sel.model===m&&sel.layer===l.id;if(inv){const on=AL_PARTIES.filter(p=>sh[p.key]>0);return `<td><button type="button" class="rel-cell al-cell${act?" active":""}${dim?" dim":""}" data-model="${m}" data-layer="${l.id}" style="background:${rgba("#cbdde4",.03+.07*on.length)}" aria-label="${esc(l.label)}, ${m}: ${on.map(p=>p.label).join(", ")||"no party"} involved"><span class="al-dots">${AL_PARTIES.map(p=>`<i style="background:${sh[p.key]>0?p.color:"#16323e"}"></i>`).join("")}</span></button></td>`}let acc=0;const grad=AL_PARTIES.map(p=>{const a=acc;acc+=sh[p.key];return `${rgba(p.color,focus&&focus.key!==p.key?.16:.6)} ${a}% ${acc}%`}).join(",");return `<td><button type="button" class="rel-cell al-cell${act?" active":""}${dim?" dim":""}" data-model="${m}" data-layer="${l.id}" style="background:linear-gradient(90deg,${grad})" aria-label="${esc(l.label)}, ${m}: customer ${sh.customer}%, SOC ${sh.soc}%, provider ${sh.provider}%">${focus?`<b>${sh[focus.key]}%</b>`:`<small>${sh.customer}/${sh.soc}/${sh.provider}</small>`}</button></td>`}).join("");
+  const tot=inv?MODELS.reduce((s,_,i)=>s+AL_PARTIES.filter(p=>alShares(l,i)[p.key]>0).length,0):focus?`${Math.round(alAvg(l,focus.key))}%`:AL_PARTIES.map(p=>Math.round(alAvg(l,p.key))).join("/");
+  return `<tr><th scope="row"><button type="button" class="rel-row${sel.layer===l.id?" active":""}" data-layer="${l.id}" title="${esc(l.hint)}">${esc(l.label)}</button></th>${cells}<td class="rel-total">${tot}</td></tr>`}).join("");
+ root.className="relmap rel-heat-wrap";root.innerHTML=`<table class="rel-heat lc-heat al-heat"><thead>${head}</thead><tbody>${body}</tbody></table>`;
+ root.querySelectorAll(".lc-col").forEach(b=>b.onclick=()=>alToggleModel(b.dataset.model));
+ root.querySelectorAll(".rel-row").forEach(b=>b.onclick=()=>alToggleLayer(b.dataset.layer));
+ root.querySelectorAll(".al-cell").forEach(b=>b.onclick=()=>{const both=sel.model===b.dataset.model&&sel.layer===b.dataset.layer;both?select(null,"All"):select(b.dataset.layer,b.dataset.model)});
+ $("#selectionStatus").textContent=`${layers.length} layers × ${MODELS.length} service models`;
+}
+const FS_DIAGRAMS=[
+ {id:"matrix",label:"Matrix"},
+ {id:"sankey",label:"Sankey flow"},
+ {id:"network",label:"Scenario–layer network"},
+ {id:"arcs",label:"Scenario arcs"},
+ {id:"heatmap",label:"Heatmap"},
+ {id:"graph",label:"Graph"}
+];
+const FS_COLORS=["#4cc7fa","#9b6cff","#ee6fa8","#f59e0b","#20c77a","#ff8b8b"];
+function fsTabs(){return `<div class="view-toggle rel-toggle" aria-label="Failure-scenario diagram">${FS_DIAGRAMS.map(x=>`<button type="button" data-fs-diagram="${x.id}" class="${state.fsDiagram===x.id?"active":""}" aria-pressed="${state.fsDiagram===x.id}">${x.label}</button>`).join("")}</div>`}
+function fsList(){return FAILURE_SCENARIOS.map((sc,i)=>({...sc,color:FS_COLORS[i%FS_COLORS.length]}))}
+function fsInv(sc,secId,fi){return (sc.involved[secId]||[])[fi]?1:0}
+function fsCells(sc){return ONPREM_SECTIONS.reduce((n,s)=>n+ONPREM_RESPONSIBILITIES.filter((_,i)=>fsInv(sc,s.id,i)).length,0)}
+function fsRender(){renderMatrix();renderDetail();renderControls()}
+function fsSetScenario(id){state.failureScenario=id;$("#failureScenarioFilter").value=id;fsRender()}
+function fsToggleSection(id){if(state.sectionFilter===id){state.sectionFilter=null;$("#sectionFilter").value="All";fsRender()}else selectFailureSection(id)}
+function fsToggleLayer(id){state.layer=state.layer===id?null:id;fsRender()}
+function fsLegend(extra=[]){$("#matrixLegend").innerHTML=fsList().map(sc=>`<span><i style="background:${sc.color}"></i>${esc(sc.title)}</span>`).join("")+extra.map(x=>`<span>${x}</span>`).join("")}
+function renderFailureDiagram(){
+ if(!FS_DIAGRAMS.some(x=>x.id===state.fsDiagram))state.fsDiagram="matrix";
+ const root=$("#matrix");root.style.gridTemplateColumns="";root.style.minWidth="";
+ if(state.fsDiagram==="sankey")renderFsSankey(root);else if(state.fsDiagram==="network")renderFsNetwork(root);else if(state.fsDiagram==="arcs")renderFsArcs(root);else if(state.fsDiagram==="graph")renderGraph(root,buildFsGraph());else renderFsHeatmap(root);
+}
+function renderFsSankey(root){
+ const list=fsList(),flows=[];
+ list.forEach(sc=>ONPREM_SECTIONS.forEach(s=>ONPREM_RESPONSIBILITIES.forEach((r,i)=>{if(fsInv(sc,s.id,i))flows.push({sc:sc.id,s:s.id,f:"f"+i})})));
+ $("#matrixTitle").textContent="Failure-scenario involvement flow";$("#matrixSubtitle").textContent="Scenario → on-premises section → responsibility function. Each band is one section–function pairing involved in a scenario, coloured by scenario.";fsLegend(["Band width · involved pairings"]);
+ const k=540/flows.length,cnt=(key,v)=>flows.filter(x=>x[key]===v).length;
+ const cc=list.map(sc=>({key:sc.id,label:sc.title,hint:sc.summary,color:sc.color,v:cnt("sc",sc.id)})).filter(x=>x.v),sc2=ONPREM_SECTIONS.map(s=>({key:s.id,label:s.label,hint:s.hint,v:cnt("s",s.id)})).filter(x=>x.v),fc=ONPREM_RESPONSIBILITIES.map((r,i)=>({key:"f"+i,label:r.label,v:cnt("f","f"+i)})).filter(x=>x.v);
+ const place=(col,minSlot,pad)=>{const slots=col.map(c=>Math.max(c.v*k,minSlot)),H=slots.reduce((s,x)=>s+x,0)+pad*Math.max(0,col.length-1);let y=-H/2;col.forEach((c,i)=>{c.h=c.v*k;c.y=y+(slots[i]-c.h)/2;c.out=c.y;c.in=c.y;y+=slots[i]+pad});return H};
+ const H=Math.max(place(cc,60,24),place(sc2,30,8),place(fc,34,12)),X={c:-360,s:-20,f:330},W=14,C=Object.fromEntries(cc.map(c=>[c.key,c])),lab=Object.fromEntries([...cc,...sc2,...fc].map(c=>[c.key,c.label])),set=new Set(flows.map(f=>`${f.sc}|${f.s}|${f.f}`));
+ const band=(x1,y1,x2,y2,h)=>{const m=(x1+x2)/2;return `d="M${x1} ${y1.toFixed(1)} C${m} ${y1.toFixed(1)} ${m} ${y2.toFixed(1)} ${x2} ${y2.toFixed(1)}" stroke-width="${h.toFixed(2)}"`};
+ let links="";
+ cc.forEach(c=>sc2.forEach(s=>fc.forEach(f=>{if(!set.has(`${c.key}|${s.key}|${f.key}`))return;const y1=c.out+k/2,y2=s.in+k/2;c.out+=k;s.in+=k;links+=`<path class="rel-link rel-band lc-link" data-scenario="${c.key}" data-section="${s.key}" data-fn="${f.key}" ${band(X.c+W,y1,X.s,y2,k)} stroke="${c.color}" opacity=".45"><title>${esc(c.label)} → ${esc(s.label)} · ${esc(f.label)}</title></path>`})));
+ sc2.forEach(s=>fc.forEach(f=>cc.forEach(c=>{if(!set.has(`${c.key}|${s.key}|${f.key}`))return;const y1=s.out+k/2,y2=f.in+k/2;s.out+=k;f.in+=k;links+=`<path class="rel-link rel-band lc-link" data-scenario="${c.key}" data-section="${s.key}" data-fn="${f.key}" ${band(X.s+W,y1,X.f,y2,k)} stroke="${c.color}" opacity=".45"><title>${esc(s.label)} → ${esc(f.label)} in ${esc(c.label)}</title></path>`})));
+ const node=(kind,c,x,fill,label,anchor,lx,active,cls)=>`<g class="lc-node${active?" active":""}" data-kind="${kind}" data-key="${c.key}" tabindex="0" role="button" aria-pressed="${active}" aria-label="${esc(label)}: ${c.v} involved pairings"><title>${esc(c.hint||label)}</title><rect x="${x}" y="${c.y.toFixed(1)}" width="${W}" height="${c.h.toFixed(1)}" rx="3" fill="${fill}" stroke="${active?"#fff":"none"}" stroke-width="2"/><text x="${lx}" y="${(c.y+c.h/2).toFixed(1)}" dy=".34em" text-anchor="${anchor}" class="${cls}">${esc(label)}<tspan class="rel-count"> · ${c.v}</tspan></text></g>`;
+ const nodes=cc.map(c=>node("scenario",c,X.c,c.color,c.label,"end",X.c-8,state.failureScenario===c.key,"lc-label")).join("")+sc2.map(s=>node("section",s,X.s,"#cbdde4",shortLabel(s.label,36),"start",X.s+W+7,state.sectionFilter===s.key,"rel-role-label")).join("")+fc.map(f=>node("fn",f,X.f,"#53c9f6",f.label,"start",X.f+W+8,false,"lc-label")).join("");
+ root.className="relmap";root.innerHTML=`<svg viewBox="-610 ${(-H/2-16).toFixed(0)} 1220 ${(H+32).toFixed(0)}" role="img" aria-label="Sankey diagram from failure scenarios through on-premises sections to responsibility functions">${links}${nodes}</svg>`;
+ const svg=root.querySelector("svg"),restore=()=>lcFocus(svg,{scenario:state.failureScenario,section:state.sectionFilter});
+ svg.querySelectorAll(".lc-node").forEach(g=>{const kind=g.dataset.kind,key=g.dataset.key;bindNode(g,kind==="scenario"?()=>fsSetScenario(key):kind==="section"?()=>fsToggleSection(key):()=>{},()=>lcFocus(svg,{[kind]:key}),restore)});
+ svg.querySelectorAll('.lc-node[data-kind="fn"]').forEach(g=>{g.removeAttribute("role");g.removeAttribute("tabindex");g.style.cursor="default"});
+ restore();$("#selectionStatus").textContent=`${cc.length} scenarios · ${flows.length} involved pairings`;
+}
+function fsLayers(){const scope=scopeControls(),list=fsList(),ids=[...new Set(list.flatMap(sc=>sc.layers))];return ids.map(id=>{const l=LAYERS.find(x=>x.id===id);if(!l)return null;const in_=list.filter(sc=>sc.layers.includes(id)).map(sc=>sc.id);return {id,label:l.label,hint:l.hint,scenarios:in_,count:scope.filter(c=>l.domains.includes(c.domain)).length}}).filter(Boolean).sort((a,b)=>b.scenarios.length-a.scenarios.length||list.findIndex(s=>s.id===a.scenarios[0])-list.findIndex(s=>s.id===b.scenarios[0])||a.label.localeCompare(b.label))}
+function renderFsNetwork(root){
+ const list=fsList(),layers=fsLayers(),maxC=Math.max(1,...layers.map(l=>l.count)),gap=22,H=Math.max((layers.length-1)*gap,(list.length-1)*120),ly=i=>(i-(layers.length-1)/2)*gap,cy=i=>(i-(list.length-1)/2)*Math.min(150,H/Math.max(1,list.length-1)),XC=-250,XL=250;
+ $("#matrixTitle").textContent="Scenario–layer network";$("#matrixSubtitle").textContent="Each failure scenario links to the control layers its recovery draws on. Layers at the top are shared by every scenario; line weight shows in-scope on-premises controls.";fsLegend(["Line weight · in-scope controls"]);
+ let links="",count=0;
+ list.forEach((sc,ci)=>layers.forEach((l,li)=>{if(!sc.layers.includes(l.id))return;count++;const y1=cy(ci),y2=ly(li),m=(XC+XL)/2;links+=`<path class="rel-link lc-link" data-scenario="${sc.id}" data-layer="${l.id}" d="M${XC} ${y1.toFixed(1)} C${m} ${y1.toFixed(1)} ${m} ${y2.toFixed(1)} ${XL} ${y2.toFixed(1)}" stroke="${sc.color}" stroke-width="${(1+5*Math.sqrt(l.count/maxC)).toFixed(1)}" opacity=".5"><title>${esc(sc.title)} → ${esc(l.label)}: ${l.count} in-scope controls</title></path>`}));
+ const cN=list.map((sc,ci)=>{const act=state.failureScenario===sc.id,y=cy(ci);return `<g class="lc-node rel-actor${act?" active":""}" data-kind="scenario" data-key="${sc.id}" tabindex="0" role="button" aria-pressed="${act}" aria-label="${esc(sc.label)}: ${sc.layers.length} layers"><title>${esc(sc.summary)}</title><rect x="${XC-200}" y="${y-24}" width="200" height="48" rx="24" fill="#042a3b"/><rect x="${XC-200}" y="${y-24}" width="200" height="48" rx="24" fill="${rgba(sc.color,.22)}" stroke="${act?"#fff":sc.color}" stroke-width="${act?3:1.5}"/><text x="${XC-100}" y="${y-3}" text-anchor="middle" class="rel-actor-name">${esc(shortLabel(sc.title,26))}</text><text x="${XC-100}" y="${y+13}" text-anchor="middle" class="rel-actor-count" fill="${sc.color}">${sc.layers.length} layers · ${esc(sc.metrics[0]?.value||"")} ${esc(sc.metrics[0]?.label||"")}</text></g>`}).join("");
+ const lN=layers.map((l,li)=>{const act=state.layer===l.id;return `<g class="lc-node rel-node${act?" active":""}${l.count?"":" empty"}" data-kind="layer" data-key="${l.id}" tabindex="0" role="button" aria-pressed="${act}" aria-label="${esc(l.label)}: ${l.scenarios.length} scenarios, ${l.count} in-scope controls"><title>${esc(l.label)} — ${esc(l.hint)}</title><circle cx="${XL}" cy="${ly(li)}" r="${3+l.scenarios.length*1.6}" fill="#cbdde4" stroke="${act?"#ffc55a":"#021821"}" stroke-width="2"/><text x="${XL+16}" y="${ly(li)}" dy=".34em">${esc(shortLabel(l.label,36))}<tspan class="rel-count"> · ${l.scenarios.length}/${list.length} · ${l.count}</tspan></text></g>`}).join("");
+ root.className="relmap";root.innerHTML=`<svg viewBox="-610 ${(-H/2-30).toFixed(0)} 1220 ${(H+60).toFixed(0)}" role="img" aria-label="Network linking failure scenarios to control layers">${links}${cN}${lN}</svg>`;
+ const svg=root.querySelector("svg"),restore=()=>lcFocus(svg,{scenario:state.failureScenario,layer:layers.some(l=>l.id===state.layer)?state.layer:null});
+ svg.querySelectorAll(".lc-node").forEach(g=>bindNode(g,g.dataset.kind==="scenario"?()=>fsSetScenario(g.dataset.key):()=>fsToggleLayer(g.dataset.key),()=>lcFocus(svg,{[g.dataset.kind]:g.dataset.key}),restore));
+ restore();$("#selectionStatus").textContent=`${list.length} scenarios · ${layers.length} layers · ${count} links`;
+}
+function renderFsArcs(root){
+ const list=fsList(),n=list.length,gap=Math.min(260,1000/Math.max(1,n-1)),x=i=>(i-(n-1)/2)*gap,base=40,total=ONPREM_SECTIONS.length*ONPREM_RESPONSIBILITIES.length;
+ const keys=sc=>new Set(ONPREM_SECTIONS.flatMap(s=>ONPREM_RESPONSIBILITIES.map((_,i)=>fsInv(sc,s.id,i)?`${s.id}|${i}`:null)).filter(Boolean));
+ const pairs=[];list.forEach((a,i)=>list.forEach((b,j)=>{if(j<=i)return;const A=keys(a),B=keys(b),both=[...A].filter(k=>B.has(k)).length,either=new Set([...A,...B]).size,shared=a.layers.filter(id=>b.layers.includes(id));pairs.push({i,j,overlap:either?both/either:0,shared})}));
+ $("#matrixTitle").textContent="Failure-scenario overlap arcs";$("#matrixSubtitle").textContent="Arcs join scenarios that draw on the same people and controls. Thickness shows how much their section–function involvement overlaps; labels add the number of control layers they share.";fsLegend(["Arc weight · involvement overlap"]);
+ const maxRx=Math.max(1,...pairs.map(p=>(x(p.j)-x(p.i))/2)),arcs=pairs.map(p=>{const x1=x(p.i),x2=x(p.j),rx=(x2-x1)/2,ry=rx/maxRx*230,t=p.overlap,A=list[p.i],B=list[p.j],lx=(x1+x2)/2,ly=base-34-ry;return `<g class="lc-arcg" data-stage="${A.id}" data-stage2="${B.id}"><path class="rel-link lc-link lc-arc" d="M${x1} ${base-34} A${rx} ${ry.toFixed(1)} 0 0 1 ${x2} ${base-34}" stroke="${rgba("#cbdde4",.25+.6*t)}" stroke-width="${(1+9*t*t).toFixed(1)}"><title>${esc(A.title)} ↔ ${esc(B.title)}: ${Math.round(t*100)}% involvement overlap; ${p.shared.length} shared layers — ${esc(p.shared.map(id=>LAYERS.find(l=>l.id===id)?.label||id).join(", "))}</title></path><text x="${lx}" y="${(ly-6).toFixed(1)}" text-anchor="middle" class="lc-label lc-small">${Math.round(t*100)}% · ${p.shared.length} layers</text></g>`}).join("");
+ const words=s=>{const out=[""];s.split(" ").forEach(w=>{const cur=out[out.length-1];if((cur+" "+w).trim().length>22&&cur)out.push(w);else out[out.length-1]=(cur+" "+w).trim()});return out.slice(0,2)};
+ const nodes=list.map((sc,i)=>{const act=state.failureScenario===sc.id,c=fsCells(sc),bw=150;return `<g class="lc-node${act?" active":""}" data-kind="scenario" data-key="${sc.id}" tabindex="0" role="button" aria-pressed="${act}" aria-label="${esc(sc.label)}"><title>${esc(sc.summary)}</title><circle cx="${x(i)}" cy="${base}" r="30" fill="${sc.color}" stroke="${act?"#fff":"#021821"}" stroke-width="${act?3:2}"/><text x="${x(i)}" y="${base}" dy=".35em" text-anchor="middle" class="lc-num" style="font-size:18px">${sc.number||i+1}</text>${words(sc.title).map((w,k)=>`<text x="${x(i)}" y="${base+50+k*15}" text-anchor="middle" class="lc-label">${esc(w)}</text>`).join("")}<rect x="${x(i)-bw/2}" y="${base+82}" width="${bw}" height="9" rx="2" fill="#031f2c" stroke="#3b6575" stroke-width=".6"/><rect x="${x(i)-bw/2}" y="${base+82}" width="${(c/total*bw).toFixed(1)}" height="9" rx="2" fill="${sc.color}"/><text x="${x(i)}" y="${base+106}" text-anchor="middle" class="rel-count lc-small">${c} of ${total} involved · ${sc.layers.length} layers</text>${sc.metrics.map((m,k)=>`<text x="${x(i)}" y="${base+122+k*14}" text-anchor="middle" class="rel-count lc-small">${esc(m.value)} ${esc(m.label)}</text>`).join("")}</g>`}).join("");
+ root.className="relmap";root.innerHTML=`<svg viewBox="-610 -300 1220 ${300+base+158}" role="img" aria-label="Arc diagram of overlapping failure scenarios"><line x1="${x(0)}" x2="${x(n-1)}" y1="${base}" y2="${base}" stroke="#3b6575" stroke-width="2"/>${arcs}${nodes}</svg>`;
+ const svg=root.querySelector("svg"),focus=(id,g)=>{svg.querySelectorAll(".lc-arcg").forEach(a=>a.classList.toggle("rel-dim",g?a!==g:Boolean(id)&&a.dataset.stage!==id&&a.dataset.stage2!==id));const lit=new Set([id]);svg.querySelectorAll(".lc-arcg:not(.rel-dim)").forEach(a=>{lit.add(a.dataset.stage);lit.add(a.dataset.stage2)});svg.querySelectorAll(".lc-node").forEach(nd=>nd.classList.toggle("rel-dim",g?![g.dataset.stage,g.dataset.stage2].includes(nd.dataset.key):false))},restore=()=>focus(null,null);
+ svg.querySelectorAll(".lc-node").forEach(g=>bindNode(g,()=>fsSetScenario(g.dataset.key),()=>focus(g.dataset.key,null),restore));
+ svg.querySelectorAll(".lc-arcg").forEach(a=>{a.onmouseenter=()=>focus(null,a);a.onmouseleave=restore});
+ restore();$("#selectionStatus").textContent=`${n} scenarios · ${pairs.length} overlapping pairs`;
+}
+function renderFsHeatmap(root){
+ const list=fsList(),layers=fsLayers(),S=ONPREM_SECTIONS.length,F=ONPREM_RESPONSIBILITIES.length,cur=state.failureScenario;
+ $("#matrixTitle").textContent="Failure-scenario heatmap";$("#matrixSubtitle").textContent="Scenarios side by side. Functions: how many of the 11 sections involve each responsibility function. Sections: how many of the 8 functions each section is involved in. Layers: which control layers each scenario draws on.";fsLegend(["Darker · more involvement"]);
+ const head=`<tr><th scope="col"></th>${list.map(sc=>`<th scope="col"><button type="button" class="rel-col lc-col${cur===sc.id?" active":""}" data-scenario="${sc.id}" title="${esc(sc.summary)}" style="--c:${sc.color}"><b>${sc.number||""}</b><small>${esc(sc.title)}</small></button></th>`).join("")}<th scope="col">All</th></tr>`;
+ const cell=(sc,n,max,label,attrs="")=>`<td><button type="button" class="rel-cell fs-cell" data-scenario="${sc.id}" ${attrs} style="background:${rgba(sc.color,n?.1+.65*n/max:.03)}" aria-label="${label}">${n?`<b>${n}</b><small>of ${max}</small>`:'<span class="rel-zero">—</span>'}</button></td>`;
+ const sep=t=>`<tr class="lc-sep"><th scope="rowgroup" colspan="${list.length+2}">${t}</th></tr>`;
+ const frows=ONPREM_RESPONSIBILITIES.map((r,i)=>{let tot=0;const cells=list.map(sc=>{const n=ONPREM_SECTIONS.filter(s=>fsInv(sc,s.id,i)).length;tot+=n;return cell(sc,n,S,`${esc(r.label)}, ${esc(sc.title)}: ${n} of ${S} sections`)}).join("");return `<tr><th scope="row"><span class="rel-row fs-static">${esc(r.label)}</span></th>${cells}<td class="rel-total">${tot}</td></tr>`}).join("");
+ const srows=ONPREM_SECTIONS.map(s=>{let tot=0;const cells=list.map(sc=>{const n=ONPREM_RESPONSIBILITIES.filter((_,i)=>fsInv(sc,s.id,i)).length;tot+=n;return cell(sc,n,F,`${esc(s.label)}, ${esc(sc.title)}: ${n} of ${F} functions`,`data-section="${s.id}"`)}).join("");return `<tr><th scope="row"><button type="button" class="rel-row${state.sectionFilter===s.id?" active":""}" data-section="${s.id}" title="${esc(s.hint)}">${esc(s.label)}</button></th>${cells}<td class="rel-total">${tot}</td></tr>`}).join("");
+ const lrows=layers.map(l=>`<tr><th scope="row"><button type="button" class="rel-row${state.layer===l.id?" active":""}" data-layer="${l.id}" title="${esc(l.hint)}">${esc(l.label)}<span class="rel-count"> · ${l.count}</span></button></th>${list.map(sc=>{const on=sc.layers.includes(l.id);return `<td><button type="button" class="rel-cell lc-cell${on?"":" off"}" data-scenario="${sc.id}" data-layer="${l.id}" style="background:${on?rgba(sc.color,.5):"#031f2c66"}" aria-label="${esc(l.label)}, ${esc(sc.title)}: ${on?"used":"not used"}" ${on?"":"disabled"}>${on?"●":""}</button></td>`}).join("")}<td class="rel-total">${l.scenarios.length}</td></tr>`).join("");
+ root.className="relmap rel-heat-wrap";root.innerHTML=`<table class="rel-heat lc-heat fs-heat"><thead>${head}</thead><tbody>${sep("Responsibility functions · sections involved")}${frows}${sep("On-premises sections · functions involved")}${srows}${sep("Control layers used · count = in-scope controls")}${lrows}</tbody></table>`;
+ root.querySelectorAll(".lc-col").forEach(b=>b.onclick=()=>fsSetScenario(b.dataset.scenario));
+ root.querySelectorAll(".rel-row[data-section]").forEach(b=>b.onclick=()=>fsToggleSection(b.dataset.section));
+ root.querySelectorAll(".rel-row[data-layer]").forEach(b=>b.onclick=()=>fsToggleLayer(b.dataset.layer));
+ root.querySelectorAll(".fs-cell").forEach(b=>b.onclick=()=>{if(b.dataset.section&&state.failureScenario===b.dataset.scenario)fsToggleSection(b.dataset.section);else fsSetScenario(b.dataset.scenario)});
+ root.querySelectorAll(".lc-cell:not(.off)").forEach(b=>b.onclick=()=>{state.failureScenario=b.dataset.scenario;$("#failureScenarioFilter").value=b.dataset.scenario;fsToggleLayer(b.dataset.layer)});
+ $("#selectionStatus").textContent=`${list.length} scenarios · ${S} sections · ${F} functions · ${layers.length} layers`;
+}
+const LC_DIAGRAMS=[
+ {id:"matrix",label:"Matrix"},
+ {id:"sankey",label:"Sankey flow"},
+ {id:"network",label:"Stage–layer network"},
+ {id:"arcs",label:"Stage arcs"},
+ {id:"heatmap",label:"Heatmap"},
+ {id:"graph",label:"Graph"}
+];
+function lcTabs(){return `<div class="view-toggle rel-toggle" aria-label="Lifecycle diagram">${LC_DIAGRAMS.map(x=>`<button type="button" data-lc-diagram="${x.id}" class="${state.lcDiagram===x.id?"active":""}" aria-pressed="${state.lcDiagram===x.id}">${x.label}</button>`).join("")}</div>`}
+function lcFunctions(){const s=ONPREM_SECTIONS.find(x=>x.id===state.sectionFilter);return ONPREM_RESPONSIBILITIES.map((r,i)=>({...r,i,key:"f"+i})).filter(r=>!s||s.roles[r.i]!=="—")}
+function lcPillars(){return ONPREM_PILLARS.filter(p=>state.pillar==="All"||p.code===state.pillar)}
+function lcStageCodes(stage,fns,codes){return fns.flatMap(f=>(stage.pillars[f.i]||[]).filter(c=>codes.includes(c)))}
+function lcDominant(stage,fns,codes){const n={};lcStageCodes(stage,fns,codes).forEach(c=>n[c]=(n[c]||0)+1);const best=Object.entries(n).sort((a,b)=>b[1]-a[1])[0];return best?ONPREM_PILLARS.find(p=>p.code===best[0]):null}
+function lcLayers(){const s=ONPREM_SECTIONS.find(x=>x.id===state.sectionFilter),ids=[...new Set(PLATFORM_LIFECYCLE.flatMap(st=>st.layers))].filter(id=>!s||s.layers.includes(id));const scope=scopeControls();return ids.map(id=>{const l=LAYERS.find(x=>x.id===id);if(!l)return null;const stages=PLATFORM_LIFECYCLE.map((st,i)=>st.layers.includes(id)?i:-1).filter(i=>i>=0);return {id,label:l.label,hint:l.hint,stages,bary:stages.reduce((a,b)=>a+b,0)/Math.max(1,stages.length),count:scope.filter(c=>l.domains.includes(c.domain)).length}}).filter(Boolean).sort((a,b)=>a.bary-b.bary||a.stages[0]-b.stages[0]||a.label.localeCompare(b.label))}
+function lcStageName(st){return st.label.replace(/^\d+\.\s*/,"")}
+function lcToggleStage(id){if(state.lifecycleStage===id){state.lifecycleStage=null;$("#lifecycleFilter").value="All";renderMatrix();renderDetail();renderControls()}else selectLifecycle(id)}
+function lcTogglePillar(code){state.pillar=state.pillar===code?"All":code;$("#pillarFilter").value=state.pillar;renderMatrix();renderDetail();renderControls()}
+function lcToggleLayer(id){state.layer=state.layer===id?null:id;const st=PLATFORM_LIFECYCLE.find(x=>x.id===state.lifecycleStage);if(state.layer&&st&&!st.layers.includes(state.layer)){state.lifecycleStage=null;$("#lifecycleFilter").value="All"}renderMatrix();renderDetail();renderControls()}
+function lcFocus(svg,f){
+ const keys=Object.keys(f).filter(k=>f[k]),any=keys.length>0,lit={stage:new Set(),section:new Set(),fn:new Set(),pillar:new Set(),layer:new Set(),model:new Set(),party:new Set(),scenario:new Set()};
+ svg.querySelectorAll(".lc-link").forEach(l=>{const ok=keys.every(k=>l.dataset[k]===undefined?false:l.dataset[k]===f[k]);l.classList.toggle("rel-dim",any&&!ok);if(ok)Object.keys(lit).forEach(k=>{if(l.dataset[k])lit[k].add(l.dataset[k])})});
+ svg.querySelectorAll(".lc-node").forEach(g=>g.classList.toggle("rel-dim",any&&!lit[g.dataset.kind].has(g.dataset.key)&&f[g.dataset.kind]!==g.dataset.key));
+}
+function lcLegend(extra=[]){$("#matrixLegend").innerHTML=lcPillars().map(p=>`<span><i style="background:${p.color}"></i>${p.label} · ${p.code}</span>`).join("")+extra.map(x=>`<span>${x}</span>`).join("")}
+function renderLifecycleDiagram(){
+ if(!LC_DIAGRAMS.some(x=>x.id===state.lcDiagram))state.lcDiagram="matrix";
+ const root=$("#matrix");root.style.gridTemplateColumns="";root.style.minWidth="";
+ if(state.lcDiagram==="sankey")renderLcSankey(root);else if(state.lcDiagram==="network")renderLcNetwork(root);else if(state.lcDiagram==="arcs")renderLcArcs(root);else if(state.lcDiagram==="graph")renderGraph(root,buildLcGraph());else renderLcHeatmap(root);
+}
+function renderLcSankey(root){
+ const fns=lcFunctions(),codes=lcPillars().map(p=>p.code),stages=PLATFORM_LIFECYCLE,flows=[];
+ stages.forEach(st=>fns.forEach(f=>(st.pillars[f.i]||[]).forEach(c=>{if(codes.includes(c))flows.push({s:st.id,f:f.key,p:c})})));
+ $("#matrixTitle").textContent="Lifecycle responsibility flow";$("#matrixSubtitle").textContent="Lifecycle stage → responsibility function → COBIT pillar. Each band is one pillar engaged by a function at a stage, coloured by pillar.";lcLegend(["Band width · pillar associations"]);
+ if(!flows.length){root.className="relmap";root.innerHTML='<div class="empty">No lifecycle associations match the selected filters.</div>';$("#selectionStatus").textContent="0 associations";return}
+ const k=520/flows.length,cnt=(key,v)=>flows.filter(x=>x[key]===v).length;
+ const sc=stages.map(st=>({key:st.id,label:st.label,hint:st.hint,v:cnt("s",st.id)})).filter(x=>x.v),fc=fns.map(f=>({key:f.key,label:f.label,v:cnt("f",f.key)})).filter(x=>x.v),pc=ONPREM_PILLARS.filter(p=>codes.includes(p.code)).map(p=>({...p,key:p.code,v:cnt("p",p.code)})).filter(x=>x.v);
+ const place=(col,minSlot,pad)=>{const slots=col.map(c=>Math.max(c.v*k,minSlot)),H=slots.reduce((s,x)=>s+x,0)+pad*Math.max(0,col.length-1);let y=-H/2;col.forEach((c,i)=>{c.h=c.v*k;c.y=y+(slots[i]-c.h)/2;c.out=c.y;c.in=c.y;y+=slots[i]+pad});return H};
+ const H=Math.max(place(sc,30,8),place(fc,34,12),place(pc,48,16)),X={s:-380,f:-20,p:330},W=14,SM=Object.fromEntries(sc.map(c=>[c.key,c])),FM=Object.fromEntries(fc.map(c=>[c.key,c])),PM=Object.fromEntries(pc.map(c=>[c.key,c])),col=c=>ONPREM_PILLARS.find(p=>p.code===c).color;
+ const band=(x1,y1,x2,y2,h)=>{const m=(x1+x2)/2;return `d="M${x1} ${y1.toFixed(1)} C${m} ${y1.toFixed(1)} ${m} ${y2.toFixed(1)} ${x2} ${y2.toFixed(1)}" stroke-width="${h.toFixed(2)}"`};
+ const fnLabel=Object.fromEntries(fc.map(f=>[f.key,f.label])),stLabel=Object.fromEntries(sc.map(s=>[s.key,s.label]));
+ let links="";
+ sc.forEach(s=>fc.forEach(f=>pc.forEach(p=>{if(!flows.some(x=>x.s===s.key&&x.f===f.key&&x.p===p.key))return;const h=k,y1=s.out+h/2,y2=f.in+h/2;s.out+=h;f.in+=h;links+=`<path class="rel-link rel-band lc-link" data-stage="${s.key}" data-fn="${f.key}" data-pillar="${p.key}" ${band(X.s+W,y1,X.f,y2,h)} stroke="${p.color}" opacity=".5"><title>${esc(stLabel[s.key])} → ${esc(fnLabel[f.key])}: ${p.label} (${p.key})</title></path>`})));
+ fc.forEach(f=>pc.forEach(p=>sc.forEach(s=>{if(!flows.some(x=>x.s===s.key&&x.f===f.key&&x.p===p.key))return;const h=k,y1=f.out+h/2,y2=p.in+h/2;f.out+=h;p.in+=h;links+=`<path class="rel-link rel-band lc-link" data-stage="${s.key}" data-fn="${f.key}" data-pillar="${p.key}" ${band(X.f+W,y1,X.p,y2,h)} stroke="${p.color}" opacity=".5"><title>${esc(fnLabel[f.key])} → ${p.label} (${p.key}) during ${esc(stLabel[s.key])}</title></path>`})));
+ const node=(kind,c,x,fill,label,anchor,lx,cls="")=>`<g class="lc-node${cls}" data-kind="${kind}" data-key="${c.key}" tabindex="0" role="button" aria-label="${esc(label)}: ${c.v} associations"><title>${esc(c.hint||label)}</title><rect x="${x}" y="${c.y.toFixed(1)}" width="${W}" height="${c.h.toFixed(1)}" rx="3" fill="${fill}" stroke="${cls.includes("active")?"#fff":"none"}" stroke-width="2"/><text x="${lx}" y="${(c.y+c.h/2).toFixed(1)}" dy=".34em" text-anchor="${anchor}" class="${kind==="fn"?"rel-role-label":"lc-label"}">${esc(label)}<tspan class="rel-count"> · ${c.v}</tspan></text></g>`;
+ const nodes=sc.map(s=>{const st=stages.find(x=>x.id===s.key),d=lcDominant(st,fns,codes);return node("stage",s,X.s,d?d.color:"#6e8c98",s.label,"end",X.s-8,state.lifecycleStage===s.key?" active":"")}).join("")+fc.map(f=>node("fn",f,X.f,"#cbdde4",f.label,"start",X.f+W+7)).join("")+pc.map(p=>node("pillar",p,X.p,p.color,`${p.label} · ${p.code}`,"start",X.p+W+8,state.pillar===p.code?" active":"")).join("");
+ root.className="relmap";root.innerHTML=`<svg viewBox="-610 ${(-H/2-16).toFixed(0)} 1220 ${(H+32).toFixed(0)}" role="img" aria-label="Sankey diagram from lifecycle stages through responsibility functions to COBIT pillars">${links}${nodes}</svg>`;
+ const svg=root.querySelector("svg"),restore=()=>lcFocus(svg,{stage:state.lifecycleStage});
+ svg.querySelectorAll(".lc-node").forEach(g=>{const kind=g.dataset.kind,key=g.dataset.key;bindNode(g,kind==="stage"?()=>lcToggleStage(key):kind==="pillar"?()=>lcTogglePillar(key):()=>{},()=>lcFocus(svg,{[kind]:key}),restore)});
+ svg.querySelectorAll('.lc-node[data-kind="fn"]').forEach(g=>{g.removeAttribute("role");g.removeAttribute("tabindex");g.style.cursor="default"});
+ restore();$("#selectionStatus").textContent=`${flows.length} associations · ${fc.length} functions · ${pc.length} pillar${pc.length===1?"":"s"}`;
+}
+function renderLcNetwork(root){
+ const fns=lcFunctions(),codes=lcPillars().map(p=>p.code),layers=lcLayers(),stages=PLATFORM_LIFECYCLE.map((st,i)=>({st,i,dom:lcDominant(st,fns,codes)})).filter(x=>x.dom),maxC=Math.max(1,...layers.map(l=>l.count));
+ $("#matrixTitle").textContent="Stage–layer network";$("#matrixSubtitle").textContent="Lifecycle stages (left, in order) link to the control layers they engage (right). Layers are ordered by when they are most active; line weight shows in-scope controls.";lcLegend(["Stage colour · dominant pillar","Line weight · in-scope controls"]);
+ if(!stages.length||!layers.length){root.className="relmap";root.innerHTML='<div class="empty">No lifecycle stages or layers match the selected filters.</div>';$("#selectionStatus").textContent="0 links";return}
+ const gapL=24,H=Math.max(layers.length*gapL,stages.length*44),sy=i=>(i-(stages.length-1)/2)*(H/Math.max(1,stages.length)),ly=i=>(i-(layers.length-1)/2)*gapL,XS=-300,XL=250;
+ let links="",count=0;
+ stages.forEach((s,si)=>layers.forEach((l,li)=>{if(!s.st.layers.includes(l.id))return;count++;const y1=sy(si),y2=ly(li),m=(XS+XL)/2;links+=`<path class="rel-link lc-link" data-stage="${s.st.id}" data-layer="${l.id}" d="M${XS} ${y1.toFixed(1)} C${m} ${y1.toFixed(1)} ${m} ${y2.toFixed(1)} ${XL} ${y2.toFixed(1)}" stroke="${s.dom.color}" stroke-width="${(1+5*Math.sqrt(l.count/maxC)).toFixed(1)}" opacity=".5"><title>${esc(s.st.label)} → ${esc(l.label)}: ${l.count} in-scope controls</title></path>`}));
+ const sNodes=stages.map((s,si)=>{const act=state.lifecycleStage===s.st.id,n=s.st.layers.filter(id=>layers.some(l=>l.id===id)).length;return `<g class="lc-node rel-node${act?" active":""}" data-kind="stage" data-key="${s.st.id}" tabindex="0" role="button" aria-pressed="${act}" aria-label="${esc(s.st.label)}: ${n} layers"><title>${esc(s.st.hint)}</title><circle cx="${XS}" cy="${sy(si).toFixed(1)}" r="${(6+n*.7).toFixed(1)}" fill="${s.dom.color}" stroke="${act?"#fff":"#021821"}" stroke-width="2"/><text x="${XS-18}" y="${sy(si).toFixed(1)}" dy=".34em" text-anchor="end" class="lc-label">${esc(s.st.label)}<tspan class="rel-count"> · ${n}</tspan></text></g>`}).join("");
+ const lNodes=layers.map((l,li)=>{const act=state.layer===l.id;return `<g class="lc-node rel-node${act?" active":""}${l.count?"":" empty"}" data-kind="layer" data-key="${l.id}" tabindex="0" role="button" aria-pressed="${act}" aria-label="${esc(l.label)}: ${l.count} in-scope controls, ${l.stages.length} stages"><title>${esc(l.label)} — ${esc(l.hint)}</title><circle cx="${XL}" cy="${ly(li)}" r="${(3.5+5*Math.sqrt(l.count/maxC)).toFixed(1)}" fill="#cbdde4" stroke="${act?"#ffc55a":"#021821"}" stroke-width="2"/><text x="${XL+14}" y="${ly(li)}" dy=".34em">${esc(shortLabel(l.label,36))}<tspan class="rel-count"> · ${l.count}</tspan></text></g>`}).join("");
+ root.className="relmap";root.innerHTML=`<svg viewBox="-610 ${(-H/2-24).toFixed(0)} 1220 ${(H+48).toFixed(0)}" role="img" aria-label="Network linking lifecycle stages to control layers">${links}${sNodes}${lNodes}</svg>`;
+ const svg=root.querySelector("svg"),restore=()=>lcFocus(svg,{stage:state.lifecycleStage,layer:layers.some(l=>l.id===state.layer)?state.layer:null});
+ svg.querySelectorAll(".lc-node").forEach(g=>bindNode(g,g.dataset.kind==="stage"?()=>lcToggleStage(g.dataset.key):()=>lcToggleLayer(g.dataset.key),()=>lcFocus(svg,{[g.dataset.kind]:g.dataset.key}),restore));
+ restore();$("#selectionStatus").textContent=`${stages.length} stages · ${layers.length} layers · ${count} links`;
+}
+function renderLcArcs(root){
+ const fns=lcFunctions(),pillars=lcPillars(),codes=pillars.map(p=>p.code),layerIds=new Set(lcLayers().map(l=>l.id)),stages=PLATFORM_LIFECYCLE.map(st=>({st,layers:st.layers.filter(id=>layerIds.has(id)),codes:lcStageCodes(st,fns,codes)})),gap=104,x=i=>(i-(stages.length-1)/2)*gap,base=40;
+ $("#matrixTitle").textContent="Lifecycle stage arcs";$("#matrixSubtitle").textContent="Arcs join lifecycle stages that engage the same control layers; thicker arcs share more layers. Bars under each stage show its mix of COBIT pillars.";lcLegend(["Arc weight · shared layers"]);
+ const pairs=[];stages.forEach((a,i)=>stages.forEach((b,j)=>{if(j<=i)return;const shared=a.layers.filter(id=>b.layers.includes(id));if(shared.length)pairs.push({i,j,shared})}));
+ const maxS=Math.max(1,...pairs.map(p=>p.shared.length)),label=id=>LAYERS.find(l=>l.id===id)?.label||id;
+ const arcs=pairs.sort((a,b)=>a.shared.length-b.shared.length).map(p=>{const x1=x(p.i),x2=x(p.j),rx=(x2-x1)/2,ry=Math.min(rx*.5,250),t=p.shared.length/maxS;return `<path class="rel-link lc-link lc-arc" data-stage="${stages[p.i].st.id}" data-stage2="${stages[p.j].st.id}" d="M${x1} ${base-24} A${rx} ${ry.toFixed(1)} 0 0 1 ${x2} ${base-24}" stroke="${rgba("#53c9f6",.25+.6*t)}" stroke-width="${(1+7*t).toFixed(1)}"><title>${esc(stages[p.i].st.label)} ↔ ${esc(stages[p.j].st.label)}: ${p.shared.length} shared layer${p.shared.length===1?"":"s"} — ${esc(p.shared.map(label).join(", "))}</title></path>`}).join("");
+ const words=s=>{const out=[""];s.split(" ").forEach(w=>{const cur=out[out.length-1];if((cur+" "+w).trim().length>15&&cur)out.push(w);else out[out.length-1]=(cur+" "+w).trim()});return out.slice(0,3)};
+ const nodes=stages.map((s,i)=>{const act=state.lifecycleStage===s.st.id,d=lcDominant(s.st,fns,codes),num=s.st.label.match(/^\d+/)?.[0]||i+1,total=s.codes.length,bw=82;let bx=x(i)-bw/2,bar="";pillars.forEach(p=>{const n=s.codes.filter(c=>c===p.code).length;if(!n)return;const w=n/total*bw;bar+=`<rect x="${bx.toFixed(1)}" y="${base+78}" width="${w.toFixed(1)}" height="9" fill="${p.color}"><title>${p.label} · ${p.code}: ${n}</title></rect>`;bx+=w});return `<g class="lc-node${act?" active":""}" data-kind="stage" data-key="${s.st.id}" tabindex="0" role="button" aria-pressed="${act}" aria-label="${esc(s.st.label)}: ${s.layers.length} layers"><title>${esc(s.st.hint)}</title><circle cx="${x(i)}" cy="${base}" r="20" fill="${d?d.color:"#31525f"}" stroke="${act?"#fff":"#021821"}" stroke-width="${act?3:2}"/><text x="${x(i)}" y="${base}" dy=".35em" text-anchor="middle" class="lc-num">${num}</text>${words(lcStageName(s.st)).map((w,k)=>`<text x="${x(i)}" y="${base+36+k*14}" text-anchor="middle" class="lc-label lc-small">${esc(w)}</text>`).join("")}${bar}<text x="${x(i)}" y="${base+102}" text-anchor="middle" class="rel-count lc-small">${s.layers.length} layers</text></g>`}).join("");
+ const top=Math.min(250,((stages.length-1)*gap)/2*.5)+40;
+ root.className="relmap";root.innerHTML=`<svg viewBox="-610 ${-top} 1220 ${top+base+120}" role="img" aria-label="Arc diagram of lifecycle stages sharing control layers"><line x1="${x(0)}" x2="${x(stages.length-1)}" y1="${base}" y2="${base}" stroke="#3b6575" stroke-width="2"/>${arcs}${nodes}</svg>`;
+ const svg=root.querySelector("svg"),focus=id=>{svg.querySelectorAll(".lc-arc").forEach(a=>a.classList.toggle("rel-dim",Boolean(id)&&a.dataset.stage!==id&&a.dataset.stage2!==id));const lit=new Set([id]);svg.querySelectorAll(".lc-arc:not(.rel-dim)").forEach(a=>{lit.add(a.dataset.stage);lit.add(a.dataset.stage2)});svg.querySelectorAll(".lc-node").forEach(g=>g.classList.toggle("rel-dim",Boolean(id)&&!lit.has(g.dataset.key)))},restore=()=>focus(state.lifecycleStage);
+ svg.querySelectorAll(".lc-node").forEach(g=>bindNode(g,()=>lcToggleStage(g.dataset.key),()=>focus(g.dataset.key),restore));
+ svg.querySelectorAll(".lc-arc").forEach(a=>{a.onmouseenter=()=>{svg.querySelectorAll(".lc-arc").forEach(o=>o.classList.toggle("rel-dim",o!==a));svg.querySelectorAll(".lc-node").forEach(g=>g.classList.toggle("rel-dim",![a.dataset.stage,a.dataset.stage2].includes(g.dataset.key)))};a.onmouseleave=restore});
+ restore();$("#selectionStatus").textContent=`${stages.length} stages · ${pairs.length} stage pairs share layers`;
+}
+function renderLcHeatmap(root){
+ const fns=lcFunctions(),pillars=lcPillars(),layers=lcLayers(),stages=PLATFORM_LIFECYCLE,F=Math.max(1,fns.length),selS=state.lifecycleStage;
+ $("#matrixTitle").textContent="Lifecycle heatmap";$("#matrixSubtitle").textContent=`Top: how many of the ${fns.length} responsibility functions engage each COBIT pillar at each stage. Bottom: which control layers each stage engages, ordered by when they are most active.`;lcLegend(["Darker · more functions engaged"]);
+ const head=`<tr><th scope="col"></th>${stages.map(st=>`<th scope="col"><button type="button" class="rel-col lc-col${selS===st.id?" active":""}" data-stage="${st.id}" title="${esc(st.label)} — ${esc(st.hint)}" style="--c:#53c9f6"><b>${st.label.match(/^\d+/)[0]}</b><small>${esc(lcStageName(st).split(/[ ,]/)[0])}</small></button></th>`).join("")}<th scope="col">Total</th></tr>`;
+ const prow=pillars.map(p=>{let tot=0;const cells=stages.map(st=>{const n=fns.filter(f=>(st.pillars[f.i]||[]).includes(p.code)).length;tot+=n;return `<td><button type="button" class="rel-cell${selS&&selS!==st.id?" dim":""}" data-stage="${st.id}" style="background:${rgba(p.color,n?.12+.7*n/F:.03)}" aria-label="${p.label}, ${esc(st.label)}: ${n} of ${fns.length} functions">${n?`<b>${n}</b>`:'<span class="rel-zero">—</span>'}</button></td>`}).join("");return `<tr><th scope="row"><button type="button" class="rel-row${state.pillar===p.code?" active":""}" data-pillar="${p.code}" title="${p.meaning}"><i class="lc-dot" style="background:${p.color}"></i>${p.label} · ${p.code}</button></th>${cells}<td class="rel-total">${tot}</td></tr>`}).join("");
+ const lrow=layers.map(l=>{const cells=stages.map((st,i)=>{const on=l.stages.includes(i),d=on?lcDominant(st,fns,pillars.map(p=>p.code)):null,act=selS===st.id&&state.layer===l.id;return `<td><button type="button" class="rel-cell lc-cell${on?"":" off"}${act?" active":""}${selS&&selS!==st.id?" dim":""}" data-stage="${st.id}" data-layer="${l.id}" style="background:${on?rgba(d?d.color:"#53c9f6",.55):"#031f2c66"}" aria-label="${esc(l.label)}, ${esc(st.label)}: ${on?"engaged":"not engaged"}" ${on?"":"disabled"}>${on?"●":""}</button></td>`}).join("");return `<tr><th scope="row"><button type="button" class="rel-row${state.layer===l.id?" active":""}" data-layer="${l.id}" title="${esc(l.hint)}">${esc(l.label)}<span class="rel-count"> · ${l.count}</span></button></th>${cells}<td class="rel-total">${l.stages.length}</td></tr>`}).join("");
+ root.className="relmap rel-heat-wrap";root.innerHTML=`<table class="rel-heat lc-heat"><thead>${head}</thead><tbody>${prow}<tr class="lc-sep"><th scope="rowgroup" colspan="${stages.length+2}">Control layers engaged by stage · cell colour = stage's dominant pillar · count = in-scope controls</th></tr>${lrow}</tbody></table>`;
+ root.querySelectorAll(".lc-col").forEach(b=>b.onclick=()=>lcToggleStage(b.dataset.stage));
+ root.querySelectorAll(".rel-row[data-pillar]").forEach(b=>b.onclick=()=>lcTogglePillar(b.dataset.pillar));
+ root.querySelectorAll(".rel-row[data-layer]").forEach(b=>b.onclick=()=>lcToggleLayer(b.dataset.layer));
+ root.querySelectorAll(".rel-cell:not([data-layer])").forEach(b=>b.onclick=()=>lcToggleStage(b.dataset.stage));
+ root.querySelectorAll(".lc-cell:not(.off)").forEach(b=>b.onclick=()=>{const both=selS===b.dataset.stage&&state.layer===b.dataset.layer;state.lifecycleStage=both?null:b.dataset.stage;state.layer=both?null:b.dataset.layer;$("#lifecycleFilter").value=state.lifecycleStage||"All";renderMatrix();renderDetail();renderControls()});
+ $("#selectionStatus").textContent=`${stages.length} stages · ${pillars.length} pillar${pillars.length===1?"":"s"} · ${layers.length} layers`;
+}
+const OP_DIAGRAMS=[
+ {id:"matrix",label:"Matrix"},
+ {id:"sankey",label:"Sankey flow"},
+ {id:"network",label:"Section–function network"},
+ {id:"arcs",label:"Section arcs"},
+ {id:"heatmap",label:"Heatmap"},
+ {id:"graph",label:"Graph"}
+];
+const OP_ROLES=[{code:"P",label:"Primary",color:"#f8fafc",w:6},{code:"S",label:"Support",color:"#aeb8c5",w:3.5},{code:"C",label:"Consulted",color:"#7d8998",w:1.6}];
+function opTabs(){return `<div class="view-toggle rel-toggle" aria-label="On-premises diagram">${OP_DIAGRAMS.map(x=>`<button type="button" data-op-diagram="${x.id}" class="${state.opDiagram===x.id?"active":""}" aria-pressed="${state.opDiagram===x.id}">${x.label}</button>`).join("")}</div>`}
+function opFns(){const codes=lcPillars().map(p=>p.code);return ONPREM_RESPONSIBILITIES.map((r,i)=>({...r,i,key:"f"+i,codes:r.pillars.filter(c=>codes.includes(c))})).filter(f=>f.codes.length)}
+function opShort(s){return s.label.split(/[ ,]/)[0]}
+function opSel(){return state.sectionFilter||state.onpremSection||null}
+function opToggleSection(id){if(opSel()===id){state.sectionFilter=null;state.onpremSection=null;$("#sectionFilter").value="All";renderMatrix();renderDetail();renderControls()}else selectOnprem(id)}
+function opToggleLayer(id){state.layer=state.layer===id?null:id;const s=ONPREM_SECTIONS.find(x=>x.id===opSel());if(state.layer&&s&&!s.layers.includes(state.layer)){state.sectionFilter=null;state.onpremSection=null;$("#sectionFilter").value="All"}renderMatrix();renderDetail();renderControls()}
+function opLayers(){const scope=scopeControls(),ids=[...new Set(ONPREM_SECTIONS.flatMap(s=>s.layers))];return ids.map(id=>{const l=LAYERS.find(x=>x.id===id);if(!l)return null;const secs=ONPREM_SECTIONS.map((s,i)=>s.layers.includes(id)?i:-1).filter(i=>i>=0);return {id,label:l.label,hint:l.hint,secs,count:scope.filter(c=>l.domains.includes(c.domain)).length}}).filter(Boolean).sort((a,b)=>a.secs[0]-b.secs[0]||a.label.localeCompare(b.label))}
+function opRoleLegend(extra=[]){$("#matrixLegend").innerHTML=lcPillars().map(p=>`<span><i style="background:${p.color}"></i>${p.label} · ${p.code}</span>`).join("")+'<span class="role-key"><b class="primary">P</b>Primary <b class="support">S</b>Support <b class="consulted">C</b>Consulted</span>'+extra.map(x=>`<span>${x}</span>`).join("")}
+function renderOnpremDiagram(){
+ if(!OP_DIAGRAMS.some(x=>x.id===state.opDiagram))state.opDiagram="matrix";
+ const root=$("#matrix");root.style.gridTemplateColumns="";root.style.minWidth="";
+ if(state.opDiagram==="sankey")renderOpSankey(root);else if(state.opDiagram==="network")renderOpNetwork(root);else if(state.opDiagram==="arcs")renderOpArcs(root);else if(state.opDiagram==="graph")renderGraph(root,buildOpGraph());else renderOpHeatmap(root);
+}
+function renderOpSankey(root){
+ const fns=opFns(),secs=ONPREM_SECTIONS,flows=[];
+ secs.forEach(s=>fns.forEach(f=>{const role=s.roles[f.i];if(role&&role!=="—")f.codes.forEach(c=>flows.push({s:s.id,f:f.key,p:c,r:role}))}));
+ $("#matrixTitle").textContent="On-premises responsibility flow";$("#matrixSubtitle").textContent="Section → responsibility function → COBIT pillar. Left bands are coloured by the section's role (P/S/C); right bands by the pillar the function carries.";opRoleLegend(["Band width · pillar associations"]);
+ if(!flows.length){root.className="relmap";root.innerHTML='<div class="empty">No associations match the selected filters.</div>';$("#selectionStatus").textContent="0 associations";return}
+ const k=520/flows.length,cnt=(key,v)=>flows.filter(x=>x[key]===v).length,has=(s,f,p)=>flows.find(x=>x.s===s&&x.f===f&&x.p===p);
+ const sc=secs.map(s=>({key:s.id,label:s.label,hint:s.hint,v:cnt("s",s.id)})).filter(x=>x.v),fc=fns.map(f=>({key:f.key,label:f.label,v:cnt("f",f.key)})).filter(x=>x.v),pc=lcPillars().map(p=>({...p,key:p.code,v:cnt("p",p.code)})).filter(x=>x.v);
+ const place=(col,minSlot,pad)=>{const slots=col.map(c=>Math.max(c.v*k,minSlot)),H=slots.reduce((s,x)=>s+x,0)+pad*Math.max(0,col.length-1);let y=-H/2;col.forEach((c,i)=>{c.h=c.v*k;c.y=y+(slots[i]-c.h)/2;c.out=c.y;c.in=c.y;y+=slots[i]+pad});return H};
+ const H=Math.max(place(sc,30,8),place(fc,34,12),place(pc,48,16)),X={s:-290,f:-10,p:330},W=14,lab=Object.fromEntries([...sc,...fc].map(c=>[c.key,c.label])),roleOf=Object.fromEntries(OP_ROLES.map(r=>[r.code,r]));
+ const band=(x1,y1,x2,y2,h)=>{const m=(x1+x2)/2;return `d="M${x1} ${y1.toFixed(1)} C${m} ${y1.toFixed(1)} ${m} ${y2.toFixed(1)} ${x2} ${y2.toFixed(1)}" stroke-width="${h.toFixed(2)}"`};
+ let links="";
+ sc.forEach(s=>fc.forEach(f=>pc.forEach(p=>{const x=has(s.key,f.key,p.key);if(!x)return;const r=roleOf[x.r],y1=s.out+k/2,y2=f.in+k/2;s.out+=k;f.in+=k;links+=`<path class="rel-link rel-band lc-link" data-section="${s.key}" data-fn="${f.key}" data-pillar="${p.key}" ${band(X.s+W,y1,X.f,y2,k)} stroke="${r.color}" opacity=".42"><title>${esc(lab[s.key])} → ${esc(lab[f.key])}: ${r.label} (${p.key})</title></path>`})));
+ fc.forEach(f=>pc.forEach(p=>sc.forEach(s=>{const x=has(s.key,f.key,p.key);if(!x)return;const y1=f.out+k/2,y2=p.in+k/2;f.out+=k;p.in+=k;links+=`<path class="rel-link rel-band lc-link" data-section="${s.key}" data-fn="${f.key}" data-pillar="${p.key}" ${band(X.f+W,y1,X.p,y2,k)} stroke="${p.color}" opacity=".5"><title>${esc(lab[f.key])} → ${p.label} (${p.key}) for ${esc(lab[s.key])} · ${x.r}</title></path>`})));
+ const sel=opSel(),node=(kind,c,x,fill,label,anchor,lx,cls="")=>`<g class="lc-node${cls}" data-kind="${kind}" data-key="${c.key}" tabindex="0" role="button" aria-label="${esc(label)}: ${c.v} associations"><title>${esc(c.hint||label)}</title><rect x="${x}" y="${c.y.toFixed(1)}" width="${W}" height="${c.h.toFixed(1)}" rx="3" fill="${fill}" stroke="${cls.includes("active")?"#ffc55a":"none"}" stroke-width="2"/><text x="${lx}" y="${(c.y+c.h/2).toFixed(1)}" dy=".34em" text-anchor="${anchor}" class="${kind==="fn"?"rel-role-label":"lc-label"}">${esc(label)}<tspan class="rel-count"> · ${c.v}</tspan></text></g>`;
+ const nodes=sc.map(s=>node("section",s,X.s,"#53c9f6",shortLabel(s.label,34),"end",X.s-8,sel===s.key?" active":"")).join("")+fc.map(f=>node("fn",f,X.f,"#cbdde4",f.label,"start",X.f+W+7)).join("")+pc.map(p=>node("pillar",p,X.p,p.color,`${p.label} · ${p.code}`,"start",X.p+W+8,state.pillar===p.code?" active":"")).join("");
+ root.className="relmap";root.innerHTML=`<svg viewBox="-610 ${(-H/2-16).toFixed(0)} 1220 ${(H+32).toFixed(0)}" role="img" aria-label="Sankey diagram from on-premises sections through responsibility functions to COBIT pillars">${links}${nodes}</svg>`;
+ const svg=root.querySelector("svg"),restore=()=>lcFocus(svg,{section:sel});
+ svg.querySelectorAll(".lc-node").forEach(g=>{const kind=g.dataset.kind,key=g.dataset.key;bindNode(g,kind==="section"?()=>opToggleSection(key):kind==="pillar"?()=>lcTogglePillar(key):()=>{},()=>lcFocus(svg,{[kind]:key}),restore)});
+ svg.querySelectorAll('.lc-node[data-kind="fn"]').forEach(g=>{g.removeAttribute("role");g.removeAttribute("tabindex");g.style.cursor="default"});
+ restore();$("#selectionStatus").textContent=`${flows.length} associations · ${sc.length} sections · ${fc.length} functions`;
+}
+function renderOpNetwork(root){
+ const fns=opFns(),secs=ONPREM_SECTIONS,sel=opSel(),roleOf=Object.fromEntries(OP_ROLES.map(r=>[r.code,r]));
+ $("#matrixTitle").textContent="Section–function network";$("#matrixSubtitle").textContent="On-premises sections (left) link to the responsibility functions (right) they hold a role in. Line weight and shade show the role: primary, support or consulted.";opRoleLegend(["Dashed · consulted"]);
+ if(!fns.length){root.className="relmap";root.innerHTML='<div class="empty">No responsibility functions match the selected pillar.</div>';$("#selectionStatus").textContent="0 links";return}
+ const gs=46,gf=Math.max(52,(secs.length-1)*gs/Math.max(1,fns.length-1)),H=Math.max((secs.length-1)*gs,(fns.length-1)*gf),sy=i=>(i-(secs.length-1)/2)*gs,fy=i=>(i-(fns.length-1)/2)*gf,XS=-250,XF=230;
+ let links="",count=0;const order={C:0,S:1,P:2};
+ const pairs=[];secs.forEach((s,si)=>fns.forEach((f,fi)=>{const r=s.roles[f.i];if(r&&r!=="—")pairs.push({s,si,f,fi,r})}));
+ pairs.sort((a,b)=>order[a.r]-order[b.r]).forEach(({s,si,f,fi,r})=>{count++;const ro=roleOf[r],y1=sy(si),y2=fy(fi),m=(XS+XF)/2;links+=`<path class="rel-link lc-link" data-section="${s.id}" data-fn="${f.key}" d="M${XS} ${y1} C${m} ${y1} ${m} ${y2} ${XF} ${y2}" stroke="${ro.color}" stroke-width="${ro.w}" opacity="${r==="C"?.45:.6}"${r==="C"?' stroke-dasharray="5 4"':""}><title>${esc(s.label)} → ${esc(f.label)}: ${ro.label}</title></path>`});
+ const sN=secs.map((s,si)=>{const act=sel===s.id,p=fns.filter(f=>s.roles[f.i]==="P").length;return `<g class="lc-node rel-node${act?" active":""}" data-kind="section" data-key="${s.id}" tabindex="0" role="button" aria-pressed="${act}" aria-label="${esc(s.label)}: primary for ${p} functions"><title>${esc(s.hint)}</title><circle cx="${XS}" cy="${sy(si)}" r="${7+p*2.5}" fill="#53c9f6" stroke="${act?"#ffc55a":"#021821"}" stroke-width="2"/><text x="${XS-20}" y="${sy(si)}" dy=".34em" text-anchor="end" class="lc-label">${esc(s.label)}<tspan class="rel-count"> · ${p}P</tspan></text></g>`}).join("");
+ const fN=fns.map((f,fi)=>{const n=pairs.filter(x=>x.f===f),tag=OP_ROLES.map(r=>`${n.filter(x=>x.r===r.code).length}${r.code}`).join(" ");return `<g class="lc-node rel-node" data-kind="fn" data-key="${f.key}"><title>${esc(f.label)}: ${f.pillars.join(", ")}</title><circle cx="${XF}" cy="${fy(fi)}" r="9" fill="#cbdde4" stroke="#021821" stroke-width="2"/><text x="${XF+18}" y="${fy(fi)-4}" class="lc-label">${esc(f.label)}<tspan class="rel-count"> · ${tag}</tspan></text>${f.codes.map((c,k)=>{const p=ONPREM_PILLARS.find(x=>x.code===c);return `<rect x="${XF+18+k*38}" y="${fy(fi)+5}" width="34" height="13" rx="3" fill="${rgba(p.color,.3)}" stroke="${p.color}"/><text x="${XF+35+k*38}" y="${fy(fi)+15}" text-anchor="middle" class="lc-chip">${c}</text>`}).join("")}</g>`}).join("");
+ root.className="relmap";root.innerHTML=`<svg viewBox="-610 ${(-H/2-30).toFixed(0)} 1220 ${(H+60).toFixed(0)}" role="img" aria-label="Network linking on-premises sections to responsibility functions by role">${links}${sN}${fN}</svg>`;
+ const svg=root.querySelector("svg"),restore=()=>lcFocus(svg,{section:sel});
+ svg.querySelectorAll('.lc-node[data-kind="section"]').forEach(g=>bindNode(g,()=>opToggleSection(g.dataset.key),()=>lcFocus(svg,{section:g.dataset.key}),restore));
+ svg.querySelectorAll('.lc-node[data-kind="fn"]').forEach(g=>{g.style.cursor="default";g.onmouseenter=()=>lcFocus(svg,{fn:g.dataset.key});g.onmouseleave=restore});
+ restore();$("#selectionStatus").textContent=`${secs.length} sections · ${fns.length} functions · ${count} role links`;
+}
+function renderOpArcs(root){
+ const fns=opFns(),secs=ONPREM_SECTIONS,sel=opSel(),gap=104,x=i=>(i-(secs.length-1)/2)*gap,base=40,active=r=>r==="P"||r==="S";
+ $("#matrixTitle").textContent="On-premises section arcs";$("#matrixSubtitle").textContent="Arcs join sections that both hold a primary or support role in the same responsibility function; thicker arcs collaborate on more functions. Bars show each section's mix of roles.";opRoleLegend(["Arc weight · shared P/S functions"]);
+ const pairs=[];secs.forEach((a,i)=>secs.forEach((b,j)=>{if(j<=i)return;const shared=fns.filter(f=>active(a.roles[f.i])&&active(b.roles[f.i]));if(shared.length)pairs.push({i,j,shared})}));
+ const maxS=Math.max(1,...pairs.map(p=>p.shared.length));
+ const arcs=pairs.sort((a,b)=>a.shared.length-b.shared.length).map(p=>{const x1=x(p.i),x2=x(p.j),rx=(x2-x1)/2,ry=Math.min(rx*.5,250),t=p.shared.length/maxS,A=secs[p.i],B=secs[p.j];return `<path class="rel-link lc-link lc-arc" data-stage="${A.id}" data-stage2="${B.id}" d="M${x1} ${base-24} A${rx} ${ry.toFixed(1)} 0 0 1 ${x2} ${base-24}" stroke="${rgba("#53c9f6",.25+.6*t)}" stroke-width="${(1+7*t).toFixed(1)}"><title>${esc(A.label)} ↔ ${esc(B.label)}: ${p.shared.length} shared function${p.shared.length===1?"":"s"} — ${esc(p.shared.map(f=>`${f.label} (${A.roles[f.i]}/${B.roles[f.i]})`).join(", "))}</title></path>`}).join("");
+ const words=s=>{const out=[""];s.split(" ").forEach(w=>{const cur=out[out.length-1];if((cur+" "+w).trim().length>15&&cur)out.push(w);else out[out.length-1]=(cur+" "+w).trim()});return out.slice(0,3)};
+ const nodes=secs.map((s,i)=>{const act=sel===s.id,roles=fns.map(f=>s.roles[f.i]).filter(r=>r&&r!=="—"),bw=82;let bx=x(i)-bw/2,bar="";OP_ROLES.forEach(r=>{const n=roles.filter(c=>c===r.code).length;if(!n)return;const w=n/Math.max(1,fns.length)*bw;bar+=`<rect x="${bx.toFixed(1)}" y="${base+78}" width="${w.toFixed(1)}" height="9" fill="${r.color}"><title>${r.label}: ${n}</title></rect>`;bx+=w});const pc=roles.filter(r=>r==="P").length;return `<g class="lc-node${act?" active":""}" data-kind="section" data-key="${s.id}" tabindex="0" role="button" aria-pressed="${act}" aria-label="${esc(s.label)}"><title>${esc(s.label)} — ${esc(s.hint)}</title><circle cx="${x(i)}" cy="${base}" r="20" fill="${pc?"#f8fafc":"#53c9f6"}" stroke="${act?"#ffc55a":"#021821"}" stroke-width="${act?3:2}"/><text x="${x(i)}" y="${base}" dy=".35em" text-anchor="middle" class="lc-num">${i+1}</text>${words(s.label).map((w,k)=>`<text x="${x(i)}" y="${base+36+k*14}" text-anchor="middle" class="lc-label lc-small">${esc(w)}</text>`).join("")}<rect x="${x(i)-bw/2}" y="${base+78}" width="${bw}" height="9" fill="#031f2c" stroke="#3b6575" stroke-width=".6"/>${bar}<text x="${x(i)}" y="${base+102}" text-anchor="middle" class="rel-count lc-small">${OP_ROLES.map(r=>`${roles.filter(c=>c===r.code).length}${r.code}`).join(" · ")}</text></g>`}).join("");
+ const top=Math.min(250,((secs.length-1)*gap)/2*.5)+40;
+ root.className="relmap";root.innerHTML=`<svg viewBox="-610 ${-top} 1220 ${top+base+120}" role="img" aria-label="Arc diagram of on-premises sections that collaborate on responsibility functions"><line x1="${x(0)}" x2="${x(secs.length-1)}" y1="${base}" y2="${base}" stroke="#3b6575" stroke-width="2"/>${arcs}${nodes}</svg>`;
+ const svg=root.querySelector("svg"),focus=id=>{svg.querySelectorAll(".lc-arc").forEach(a=>a.classList.toggle("rel-dim",Boolean(id)&&a.dataset.stage!==id&&a.dataset.stage2!==id));const lit=new Set([id]);svg.querySelectorAll(".lc-arc:not(.rel-dim)").forEach(a=>{lit.add(a.dataset.stage);lit.add(a.dataset.stage2)});svg.querySelectorAll(".lc-node").forEach(g=>g.classList.toggle("rel-dim",Boolean(id)&&!lit.has(g.dataset.key)))},restore=()=>focus(sel);
+ svg.querySelectorAll(".lc-node").forEach(g=>bindNode(g,()=>opToggleSection(g.dataset.key),()=>focus(g.dataset.key),restore));
+ svg.querySelectorAll(".lc-arc").forEach(a=>{a.onmouseenter=()=>{svg.querySelectorAll(".lc-arc").forEach(o=>o.classList.toggle("rel-dim",o!==a));svg.querySelectorAll(".lc-node").forEach(g=>g.classList.toggle("rel-dim",![a.dataset.stage,a.dataset.stage2].includes(g.dataset.key)))};a.onmouseleave=restore});
+ restore();$("#selectionStatus").textContent=`${secs.length} sections · ${pairs.length} section pairs collaborate`;
+}
+function renderOpHeatmap(root){
+ const fns=opFns(),pillars=lcPillars(),layers=opLayers(),secs=ONPREM_SECTIONS,sel=opSel(),F=Math.max(1,fns.length);
+ $("#matrixTitle").textContent="On-premises heatmap";$("#matrixSubtitle").textContent="Top: for each section, how many responsibility functions carrying each COBIT pillar it holds a role in, split into primary, support and consulted. Bottom: which control layers each section covers.";opRoleLegend(["Darker · more functions engaged"]);
+ const head=`<tr><th scope="col"></th>${secs.map((s,i)=>`<th scope="col"><button type="button" class="rel-col lc-col${sel===s.id?" active":""}" data-section="${s.id}" title="${esc(s.label)} — ${esc(s.hint)}" style="--c:#53c9f6"><b>${i+1}</b><small>${esc(opShort(s))}</small></button></th>`).join("")}<th scope="col">Total</th></tr>`;
+ const prow=pillars.map(p=>{let tot=0;const cells=secs.map(s=>{const hit=fns.filter(f=>f.codes.includes(p.code)&&s.roles[f.i]&&s.roles[f.i]!=="—"),n=hit.length,split=OP_ROLES.map(r=>[r.code,hit.filter(f=>s.roles[f.i]===r.code).length]).filter(x=>x[1]).map(x=>x[1]+x[0]).join(" ");tot+=n;return `<td><button type="button" class="rel-cell${sel&&sel!==s.id?" dim":""}" data-section="${s.id}" style="background:${rgba(p.color,n?.12+.7*n/F:.03)}" aria-label="${p.label}, ${esc(s.label)}: ${n} functions (${split||"none"})">${n?`<b>${n}</b><small>${split}</small>`:'<span class="rel-zero">—</span>'}</button></td>`}).join("");return `<tr><th scope="row"><button type="button" class="rel-row${state.pillar===p.code?" active":""}" data-pillar="${p.code}" title="${p.meaning}"><i class="lc-dot" style="background:${p.color}"></i>${p.label} · ${p.code}</button></th>${cells}<td class="rel-total">${tot}</td></tr>`}).join("");
+ const lrow=layers.map(l=>`<tr><th scope="row"><button type="button" class="rel-row${state.layer===l.id?" active":""}" data-layer="${l.id}" title="${esc(l.hint)}">${esc(l.label)}<span class="rel-count"> · ${l.count}</span></button></th>${secs.map((s,i)=>{const on=l.secs.includes(i),act=sel===s.id&&state.layer===l.id;return `<td><button type="button" class="rel-cell lc-cell${on?"":" off"}${act?" active":""}${sel&&sel!==s.id?" dim":""}" data-section="${s.id}" data-layer="${l.id}" style="background:${on?rgba("#53c9f6",.5):"#031f2c66"}" aria-label="${esc(l.label)}, ${esc(s.label)}: ${on?"covered":"not covered"}" ${on?"":"disabled"}>${on?"●":""}</button></td>`}).join("")}<td class="rel-total">${l.secs.length}</td></tr>`).join("");
+ root.className="relmap rel-heat-wrap";root.innerHTML=`<table class="rel-heat lc-heat"><thead>${head}</thead><tbody>${prow}<tr class="lc-sep"><th scope="rowgroup" colspan="${secs.length+2}">Control layers covered by each section · count = in-scope controls</th></tr>${lrow}</tbody></table>`;
+ root.querySelectorAll(".lc-col").forEach(b=>b.onclick=()=>opToggleSection(b.dataset.section));
+ root.querySelectorAll(".rel-row[data-pillar]").forEach(b=>b.onclick=()=>lcTogglePillar(b.dataset.pillar));
+ root.querySelectorAll(".rel-row[data-layer]").forEach(b=>b.onclick=()=>opToggleLayer(b.dataset.layer));
+ root.querySelectorAll(".rel-cell:not([data-layer])").forEach(b=>b.onclick=()=>opToggleSection(b.dataset.section));
+ root.querySelectorAll(".lc-cell:not(.off)").forEach(b=>b.onclick=()=>{const both=sel===b.dataset.section&&state.layer===b.dataset.layer;state.layer=both?null:b.dataset.layer;if(both){state.sectionFilter=null;state.onpremSection=null;$("#sectionFilter").value="All";renderMatrix();renderDetail();renderControls()}else selectOnprem(b.dataset.section)});
+ $("#selectionStatus").textContent=`${secs.length} sections · ${pillars.length} pillar${pillars.length===1?"":"s"} · ${layers.length} layers`;
+}
+function renderMatrix(){
+ const root=$("#matrix");root.style.gridTemplateColumns="";root.style.minWidth="";document.querySelectorAll("[data-layer-view]").forEach(b=>b.classList.toggle("active",b.dataset.layerView===state.layerView));renderFilterState();$("#diagramTabs").innerHTML="";
+ if(state.layerView==="graph"){renderCombinedGraph();return}
+ if(state.layerView==="lifecycle"){
+  $("#diagramTabs").innerHTML=lcTabs();$("#diagramTabs").querySelectorAll("[data-lc-diagram]").forEach(b=>b.onclick=()=>{state.lcDiagram=b.dataset.lcDiagram;renderMatrix();renderDetail()});
+  if(state.lcDiagram!=="matrix"){renderLifecycleDiagram();return}
+  const stages=state.lifecycleStage?PLATFORM_LIFECYCLE.filter(x=>x.id===state.lifecycleStage):PLATFORM_LIFECYCLE,sections=state.sectionFilter?ONPREM_SECTIONS.filter(x=>x.id===state.sectionFilter):ONPREM_SECTIONS;root.style.gridTemplateColumns=`minmax(270px,1fr) repeat(${stages.length},86px)`;root.style.minWidth=Math.max(420,270+stages.length*86)+"px";
+  $("#matrixTitle").textContent="New on-premises platform lifecycle";$("#matrixSubtitle").textContent="The same on-premises sections are crossed with lifecycle stages. Cells show only the COBIT pillars engaged at each intersection—there are no P/S/C assignments in this view.";$("#matrixLegend").innerHTML=ONPREM_PILLARS.map(p=>`<span><i style="background:${p.color}"></i>${p.label} · ${p.code}</span>`).join("")+'<span>Blank · not ordinarily engaged</span>';
+  root.className="matrix";root.innerHTML=`<div class="cell headcell" style="justify-content:flex-start;color:#f59e0b">Notional on-premises section</div>${stages.map(stage=>`<div class="cell headcell" title="${stage.hint}">${stage.label}</div>`).join("")}`;
+  sections.forEach(section=>{const label=document.createElement("div");label.className="cell rowlabel axis-label";label.innerHTML=`<span>${section.label}<small>${section.hint}</small></span>`;root.append(label);stages.forEach(stage=>{const selected=state.lifecycleStage===stage.id,codes=lifecycleSectionCodes(section,stage).filter(code=>state.pillar==="All"||code===state.pillar),ps=codes.map(code=>ONPREM_PILLARS.find(p=>p.code===code)).filter(Boolean),b=document.createElement("button");b.className="cell marker-cell lifecycle-cell"+(selected?" active":"");b.setAttribute("aria-label",`${section.label}, ${stage.label}: ${ps.length?ps.map(p=>p.label).join(", "):"not associated with the selected pillar"}`);b.innerHTML=ps.length?`<span class="lifecycle-pillars">${ps.map(p=>`<i style="--pillar:${p.color};--pillar-bg:${rgba(p.color,.24)}" title="${p.label}: ${p.meaning}">${p.code}</i>`).join("")}</span>`:'<span class="lifecycle-empty">—</span>';b.onclick=()=>selectLifecycle(stage.id);root.append(b)});});
+  $("#selectionStatus").textContent=`${sections.length} section${sections.length===1?"":"s"} · ${stages.length} stage${stages.length===1?"":"s"}${state.pillar!=="All"?` · ${state.pillar}`:""}`;return;
+ }
+ if(state.layerView==="failure"){
+  $("#diagramTabs").innerHTML=fsTabs();$("#diagramTabs").querySelectorAll("[data-fs-diagram]").forEach(b=>b.onclick=()=>{state.fsDiagram=b.dataset.fsDiagram;renderMatrix();renderDetail()});
+  if(state.fsDiagram!=="matrix"){renderFailureDiagram();return}
+  const scenario=FAILURE_SCENARIOS.find(x=>x.id===state.failureScenario)||FAILURE_SCENARIOS[0],sections=state.sectionFilter?ONPREM_SECTIONS.filter(x=>x.id===state.sectionFilter):ONPREM_SECTIONS;root.style.gridTemplateColumns=`minmax(300px,1.35fr) repeat(${ONPREM_RESPONSIBILITIES.length},104px)`;root.style.minWidth="1140px";
+  $("#matrixTitle").textContent="On-premises failure-scenario involvement";$("#matrixSubtitle").textContent=`${scenario.label}: ${scenario.summary}`;$("#matrixLegend").innerHTML='<span><i style="background:#087fb6"></i>Involved</span><span><i style="background:#02070a;box-shadow:0 0 0 1px #45616d"></i>Not involved</span>';
+  root.className="matrix onprem-matrix";root.innerHTML=`<div class="cell headcell" style="justify-content:flex-start;color:#f59e0b">Notional on-premises section</div>${ONPREM_RESPONSIBILITIES.map(r=>`<div class="cell headcell">${r.label}</div>`).join("")}`;
+  sections.forEach(section=>{const selected=state.sectionFilter===section.id,row=scenario.involved[section.id]||[];const label=document.createElement("button");label.className="cell rowlabel"+(selected?" active":"");label.innerHTML=`<span>${section.label}<small>${section.hint}</small></span>`;label.onclick=()=>selectFailureSection(section.id);root.append(label);ONPREM_RESPONSIBILITIES.forEach((responsibility,i)=>{const involved=Boolean(row[i]),b=document.createElement("button");b.className=`cell marker-cell failure-cell ${involved?"involved":"not-involved"}`+(selected?" active":"");b.setAttribute("aria-label",`${scenario.label}, ${section.label}, ${responsibility.label}: ${involved?"involved":"not involved"}`);b.textContent=involved?"Involved":"Not involved";b.onclick=()=>selectFailureSection(section.id);root.append(b)});});
+  const involvedCount=sections.reduce((n,section)=>n+(scenario.involved[section.id]||[]).filter(Boolean).length,0);$("#selectionStatus").textContent=`${scenario.label} · ${involvedCount} of ${sections.length*ONPREM_RESPONSIBILITIES.length} intersections involved`;return;
+ }
+ if(state.layerView==="onprem"){
+  $("#diagramTabs").innerHTML=opTabs();$("#diagramTabs").querySelectorAll("[data-op-diagram]").forEach(b=>b.onclick=()=>{state.opDiagram=b.dataset.opDiagram;renderMatrix();renderDetail()});
+  if(state.opDiagram!=="matrix"){renderOnpremDiagram();return}
+  const responsibilities=ONPREM_RESPONSIBILITIES.map((item,index)=>({item,index})).filter(x=>state.pillar==="All"||x.item.pillars.includes(state.pillar)),sections=state.sectionFilter?ONPREM_SECTIONS.filter(x=>x.id===state.sectionFilter):ONPREM_SECTIONS;root.style.gridTemplateColumns=`minmax(300px,1.35fr) repeat(${responsibilities.length},104px)`;root.style.minWidth=Math.max(520,300+responsibilities.length*104)+"px";
+  $("#matrixTitle").textContent="On-premises responsibility cross-cut";$("#matrixSubtitle").textContent="Notional service sections crossed with responsibility functions. Each segmented band shows every associated COBIT 2019 pillar; role badges use a separate neutral palette.";$("#matrixLegend").innerHTML=ONPREM_PILLARS.map(p=>`<span><i style="background:${p.color}"></i>${p.label} · ${p.code}</span>`).join("")+'<span class="role-key"><b class="primary">P</b>Primary <b class="support">S</b>Support <b class="consulted">C</b>Consulted</span>';
+  root.className="matrix onprem-matrix";root.innerHTML=`<div class="cell headcell" style="justify-content:flex-start;color:#f59e0b">Notional on-premises section</div>${responsibilities.map(({item:r})=>{const ps=r.pillars.filter(code=>state.pillar==="All"||code===state.pillar).map(code=>ONPREM_PILLARS.find(x=>x.code===code));return `<div class="cell headcell pillar-head" style="background:${pillarOverlay(ps.map(p=>p.code),.16)}" title="${ps.map(p=>`${p.label}: ${p.meaning}`).join("; ")}"><span>${r.label}</span><span class="pillar-codes">${ps.map(p=>`<b class="pillar-code" style="--pillar:${p.color}" title="${p.label}: ${p.meaning}">${p.code}</b>`).join("")}</span></div>`}).join("")}`;
+  const names={P:"Primary",S:"Support",C:"Consulted","—":"Not normally involved"};
+  sections.forEach(section=>{const selected=state.onpremSection===section.id;const label=document.createElement("button");label.className="cell rowlabel"+(selected?" active":"");label.innerHTML=`<span>${section.label}<small>${section.hint}</small></span>`;label.onclick=()=>selectOnprem(section.id);root.append(label);responsibilities.forEach(({item:responsibility,index:i})=>{const role=section.roles[i],cls=role==="P"?"primary":role==="S"?"support":role==="C"?"consulted":"none",ps=responsibility.pillars.filter(code=>state.pillar==="All"||code===state.pillar).map(code=>ONPREM_PILLARS.find(p=>p.code===code));const b=document.createElement("button");b.className=`cell marker-cell pillar-cell role-${cls}`+(selected?" active":"");b.setAttribute("aria-label",`${section.label}, ${responsibility.label}: ${names[role]}; pillars ${ps.map(p=>p.code).join(", ")}`);b.innerHTML=`<span class="onprem-role ${cls}">${role}</span><span class="pillar-track" aria-hidden="true">${ps.map(p=>`<i style="background:${p.color}"></i>`).join("")}</span>`;b.onclick=()=>selectOnprem(section.id);root.append(b)});});
+  $("#selectionStatus").textContent=`${sections.length} section${sections.length===1?"":"s"} · ${responsibilities.length} responsibilit${responsibilities.length===1?"y":"ies"}${state.pillar!=="All"?` · ${state.pillar}`:""}`;return;
+ }
+ $("#diagramTabs").innerHTML=alTabs();$("#diagramTabs").querySelectorAll("[data-al-diagram]").forEach(b=>b.onclick=()=>{state[alKey()]=b.dataset.alDiagram;renderMatrix();renderDetail()});
+ if(state[alKey()]!=="matrix"){renderAllocationDiagram();return}
+ $("#matrixTitle").textContent="Responsibility by control layer";$("#matrixSubtitle").textContent="Select a marker to focus the underlying controls.";$("#matrixLegend").innerHTML='<span><i class="a"></i>Cloud customer</span><span><i class="s"></i>Customer SOC</span><span><i class="b"></i>Cloud provider</span>';
+ root.className="matrix";root.innerHTML=`<div class="cell headcell" style="justify-content:flex-start;color:#f59e0b">Responsibility</div>${MODELS.map(m=>`<div class="cell headcell">${m}</div>`).join("")}`;
+ LAYERS.forEach(layer=>{
+  const label=document.createElement("button");label.className="cell rowlabel"+(state.layer===layer.id?" active":"");label.innerHTML=`<span>${layer.label}<small>${layer.hint}</small></span>`;label.onclick=()=>select(layer.id,state.model);root.append(label);
+  MODELS.forEach((model,i)=>{const customerSide=layer.share[i],soc=layer.soc[i],customer=customerSide-soc,provider=100-customerSide;const b=document.createElement("button");b.className="cell marker-cell"+(state.layer===layer.id&&state.model===model?" active":"");b.setAttribute("aria-label",`${layer.label}, ${model}: customer governance ${customer>0?"involved":"not involved"}, customer SOC ${soc>0?"involved":"not involved"}, provider ${provider>0?"involved":"not involved"}`);const parties=`${customer>0?'<span class="customer"></span>':""}${soc>0?'<span class="soc"></span>':""}${provider>0?'<span class="provider"></span>':""}`;b.innerHTML=state.layerView==="involved"?`<span class="party-strip">${parties}</span>`:`<span class="orb" style="--customer:${customer};--soc-end:${customer+soc}"></span><span class="pct">${customer}/${soc}/${provider}</span>`;b.onclick=()=>select(layer.id,model);root.append(b)})
+ });
+}
+function select(layer,model){state.layer=layer;state.onpremSection=null;state.lifecycleStage=null;state.model=model||"All";$("#service").value=state.model;$("#lifecycleFilter").value="All";renderMatrix();renderDetail();renderControls()}
+function selectOnprem(id){state.onpremSection=id;state.sectionFilter=id;state.lifecycleStage=null;state.layer=null;state.model="On-premises";$("#service").value="On-premises";$("#sectionFilter").value=id;$("#lifecycleFilter").value="All";renderMatrix();renderDetail();renderControls()}
+function selectLifecycle(id){state.lifecycleStage=id;state.onpremSection=null;state.layer=null;state.model="On-premises";$("#service").value="On-premises";$("#lifecycleFilter").value=id;renderMatrix();renderDetail();renderControls()}
+function selectFailureSection(id){state.sectionFilter=id;state.onpremSection=null;state.lifecycleStage=null;state.layer=null;state.model="On-premises";$("#service").value="On-premises";$("#sectionFilter").value=id;renderMatrix();renderDetail();renderControls()}
+function renderDetail(){
+ const l=LAYERS.find(x=>x.id===state.layer),shares=document.querySelectorAll(".responsibility-copy .share");
+ if(state.layerView==="graph"){renderCombinedDetail();return}
+ if(state.layerView==="failure"){
+  const scenario=FAILURE_SCENARIOS.find(x=>x.id===state.failureScenario)||FAILURE_SCENARIOS[0],section=ONPREM_SECTIONS.find(x=>x.id===state.sectionFilter),rows=section?[section]:ONPREM_SECTIONS,involved=rows.reduce((n,item)=>n+(scenario.involved[item.id]||[]).filter(Boolean).length,0);
+  $("#detailTitle").textContent=section?section.label:scenario.label;$("#detailModel").textContent="On-premises";$("#modelDefinition").textContent=scenario.objective;$("#split").style.display="none";$(".responsibility-copy").classList.add("involved");
+  const [metricOne,metricTwo]=scenario.metrics;$("#customerPct").textContent=involved;$("#customerLabel").textContent=section?"Responsibilities involved":"Involved intersections";$("#socPct").textContent=metricOne.value;$("#socLabel").textContent=metricOne.label;$("#providerPct").textContent=metricTwo.value;$("#providerLabel").textContent=metricTwo.label;
+  shares.forEach(x=>x.classList.remove("absent"));$("#detailNote").textContent=`Recovery phases: ${scenario.phases.join(" → ")}. Blue means involved in this scenario; black means not involved. This overlay is intentionally binary and does not assign RASCI roles.`;return;
+ }
+ if(state.layerView==="lifecycle"){
+  const stage=PLATFORM_LIFECYCLE.find(x=>x.id===state.lifecycleStage),codesFor=section=>stage?lifecycleSectionCodes(section,stage).filter(code=>state.pillar==="All"||code===state.pillar):[],engaged=stage?ONPREM_SECTIONS.filter(section=>codesFor(section).length).length:ONPREM_SECTIONS.length,associations=stage?ONPREM_SECTIONS.reduce((n,section)=>n+codesFor(section).length,0):state.pillar==="All"?ONPREM_PILLARS.length:1;
+  $("#detailTitle").textContent=stage?stage.label:"Complete platform lifecycle";$("#detailModel").textContent="On-premises";$("#modelDefinition").textContent=stage?stage.hint:"Select a lifecycle stage to inspect its section-to-pillar associations and relevant controls.";$("#split").style.display="none";$(".responsibility-copy").classList.add("involved");
+  $("#customerPct").textContent=stage?engaged:"11";$("#customerLabel").textContent=stage?"Sections engaged":"On-premises sections";$("#socPct").textContent=stage?associations:"5";$("#socLabel").textContent=stage?"Pillar associations":"COBIT pillars";$("#providerPct").textContent="No";$("#providerLabel").textContent="P/S/C assignments";
+  shares.forEach(x=>x.classList.remove("absent"));$("#detailNote").textContent=stage?"Each coloured code is a COBIT pillar associated with that on-premises section during the selected lifecycle stage. The view deliberately does not imply primary, supporting or consulted status.":"The lifecycle view crosses the same 11 on-premises sections with initiation, architecture, sourcing, build, integration, assurance, transition, operation, improvement, change and retirement.";return;
+ }
+ if(state.layerView==="onprem"){
+  const s=ONPREM_SECTIONS.find(x=>x.id===state.onpremSection),roles=s?s.roles:[];
+  const primary=roles.filter(x=>x==="P").length,support=roles.filter(x=>x==="S").length,consulted=roles.filter(x=>x==="C").length;
+  $("#detailTitle").textContent=s?s.label:"All on-premises sections";$("#detailModel").textContent="On-premises";$("#modelDefinition").textContent=s?s.hint:"Select a notional section to inspect its COBIT-aligned pillar overlay and controls.";$("#split").style.display="none";$(".responsibility-copy").classList.add("involved");
+  $("#customerPct").textContent=s?primary:"8";$("#customerLabel").textContent="Primary responsibilities";$("#socPct").textContent=s?support:"—";$("#socLabel").textContent="Supporting responsibilities";$("#providerPct").textContent=s?consulted:"—";$("#providerLabel").textContent="Consulted responsibilities";
+  shares[0].classList.toggle("absent",s&&primary===0);shares[1].classList.toggle("absent",s&&support===0);shares[2].classList.toggle("absent",s&&consulted===0);
+  $("#detailNote").textContent=s?"P, S and C use a neutral badge palette and show the relationship between the selected section and each responsibility. The separate segmented band lists every COBIT pillar associated with that responsibility; atomic control ownership and RASCI remain authoritative.":"The matrix crosses eight responsibility functions with the section names. Segmented bands and header codes make the many-to-many EDM, APO, BAI, DSS and MEA mappings explicit.";return;
+ }
+ let total=60,soc=25;if(l&&state.model!=="All"){const i=MODELS.indexOf(state.model);total=l.share[i];soc=l.soc[i]}else if(l){total=Math.round(l.share.reduce((a,b)=>a+b,0)/l.share.length);soc=Math.round(l.soc.reduce((a,b)=>a+b,0)/l.soc.length)}const customer=Math.max(0,total-soc),provider=100-total,involved=state.layerView==="involved";
+ $("#detailTitle").textContent=l?l.label:"All control layers";$("#detailModel").textContent=state.model==="All"?"All models":state.model;$("#modelDefinition").textContent=state.model==="All"?"Select a service model to see its scope and responsibility boundary.":MODEL_INFO[state.model];$("#split").style.display=involved?"none":"flex";$("#split").style.setProperty("--customer",customer+"%");$("#split").style.setProperty("--soc-share",soc+"%");$(".responsibility-copy").classList.toggle("involved",involved);$("#customerLabel").textContent="Customer governance";$("#socLabel").textContent="Customer SOC operation";$("#providerLabel").textContent="Provider platform";shares[0].classList.toggle("absent",involved&&customer===0);shares[1].classList.toggle("absent",involved&&soc===0);shares[2].classList.toggle("absent",involved&&provider===0);$("#customerPct").textContent=involved?(customer>0?"Involved":"Not involved"):customer+"%";$("#socPct").textContent=involved?(soc>0?"Involved":"Not involved"):soc+"%";$("#providerPct").textContent=involved?(provider>0?"Involved":"Not involved"):provider+"%";$("#detailNote").textContent=l?(involved?`${l.hint}. Colours indicate whether each party participates; they do not represent proportion or effort.`:`${l.hint}. Customer SOC is shown as the operational security function within the customer boundary; atomic owner and RASCI assignments remain authoritative.`):"Select a marker to focus a service model and control layer.";if(state[alKey()]==="matrix")$("#selectionStatus").textContent=`${l?l.label:"All layers"} · ${state.model}`;
+}
+function matchesService(c){if(state.model==="All")return true;const s=(c.service_model||"").toLowerCase();if(s.includes("all models"))return true;if(s.includes("all cloud"))return state.model!=="On-premises";return s.includes(state.model.toLowerCase())}
+function roleContains(code,role){if(role==="R/A")return code==="R/A";return String(code||"").split("/").includes(role)}
+function rasciValid(c){const values=Object.values(c.rasci||{});return values.filter(v=>roleContains(v,"A")).length===1&&values.some(v=>roleContains(v,"R"))}
+function filtered(){const q=$("#search").value.trim().toLowerCase(),actor=$("#owner").value,role=$("#role").value,ism=$("#ism").value,l=LAYERS.find(x=>x.id===state.layer),section=["onprem","lifecycle","failure"].includes(state.layerView)?ONPREM_SECTIONS.find(x=>x.id===(state.sectionFilter||state.onpremSection)):null,lifecycle=state.layerView==="lifecycle"?PLATFORM_LIFECYCLE.find(x=>x.id===state.lifecycleStage):null,scenario=state.layerView==="failure"?(FAILURE_SCENARIOS.find(x=>x.id===state.failureScenario)||FAILURE_SCENARIOS[0]):null,sectionDomains=section?[...new Set(section.layers.flatMap(id=>LAYERS.find(x=>x.id===id)?.domains||[]))]:null,lifecycleDomains=lifecycle?[...new Set(lifecycle.layers.flatMap(id=>LAYERS.find(x=>x.id===id)?.domains||[]))]:null,scenarioDomains=scenario?[...new Set(scenario.layers.flatMap(id=>LAYERS.find(x=>x.id===id)?.domains||[]))]:null;return controls.filter(c=>{if(state.domain!=="All"&&c.domain!==state.domain)return false;if(l&&!l.domains.includes(c.domain))return false;if(sectionDomains&&!sectionDomains.includes(c.domain))return false;if(lifecycleDomains&&!lifecycleDomains.includes(c.domain))return false;if(scenarioDomains&&!scenarioDomains.includes(c.domain))return false;if(!matchesService(c))return false;if(role==="Issues"&&!rasciValid(c)){}else if(role==="Issues")return false;else if(actor!=="All"){const code=c.rasci?.[actor]||"—";if(role==="All"&&["—","N/A"].includes(code))return false;if(role!=="All"&&!roleContains(code,role))return false}else if(role!=="All"&&!Object.values(c.rasci||{}).some(code=>roleContains(code,role)))return false;if(ism!=="All"){if(["Direct","Contextual"].includes(ism)&&c.ism_mapping_strength!==ism)return false;if(!["Direct","Contextual"].includes(ism)&&!(c.ism_applicability||[]).includes(ism))return false}if(q&&!JSON.stringify(c).toLowerCase().includes(q))return false;return true})}
+function rasciClass(code){return {"A":"a","R":"r","R/A":"ra","S":"s","C":"c","I":"i"}[code]||"none"}
+function rasciBadge(code){return `<span class="rasci-pill rasci-${rasciClass(code)}">${esc(code||"—")}</span>`}
+function renderControls(){if(["allocation","involved"].includes(state.layerView)&&state[alKey()]!=="matrix")renderAllocationDiagram();else if(state.layerView==="lifecycle"&&state.lcDiagram!=="matrix")renderLifecycleDiagram();else if(state.layerView==="onprem"&&state.opDiagram!=="matrix")renderOnpremDiagram();else if(state.layerView==="failure"&&state.fsDiagram!=="matrix")renderFailureDiagram();else if(state.layerView==="graph")renderCombinedGraph();const root=$("#controlList"),items=filtered(),l=LAYERS.find(x=>x.id===state.layer),section=ONPREM_SECTIONS.find(x=>x.id===(state.sectionFilter||state.onpremSection)),lifecycle=PLATFORM_LIFECYCLE.find(x=>x.id===state.lifecycleStage),scenario=state.layerView==="failure"?(FAILURE_SCENARIOS.find(x=>x.id===state.failureScenario)||FAILURE_SCENARIOS[0]):null,shown=items.slice(0,120);$("#controlsTitle").textContent=section?section.label:lifecycle?lifecycle.label:scenario?scenario.label:l?l.label:state.domain!=="All"?state.domain:state.layerView==="onprem"?"All on-premises controls":state.layerView==="lifecycle"?"All platform lifecycle controls":"All controls";$("#count").textContent=`${items.length} of ${controls.length}`;document.querySelectorAll("[data-view]").forEach(b=>b.classList.toggle("active",b.dataset.view===state.view));if(!items.length){root.className="control-list";root.innerHTML='<div class="empty">No controls match the selected filters.</div>';return}if(state.view==="rasci"){root.className="rasci-wrap";root.innerHTML=`<table class="rasci-table"><thead><tr><th>Atomic control</th><th>Cloud provider</th><th>Customer governance</th><th>Customer SOC</th><th>Third party</th><th>Validation</th></tr></thead><tbody>${shown.map(c=>`<tr class="rasci-row" data-id="${esc(c.control_id)}"><td><span class="rasci-control">${esc(c.control_id)} · ${esc(c.control_objective)}<small>${esc(c.domain)}</small></span></td><td>${rasciBadge(c.rasci.csp)}</td><td>${rasciBadge(c.rasci.csc)}</td><td>${rasciBadge(c.rasci.customer_soc)}</td><td>${rasciBadge(c.rasci.third_party)}</td><td><span class="${rasciValid(c)?"valid":"invalid"}">${rasciValid(c)?"✓ Valid":"⚠ Review"}</span></td></tr>`).join("")}</tbody></table>`}else{root.className="control-list";root.innerHTML=shown.map(c=>`<button class="control" data-id="${esc(c.control_id)}"><div class="control-id">${esc(c.control_id)}</div><h3>${esc(c.control_objective)}</h3><div class="control-meta"><span class="chip">${esc(c.domain)}</span><span class="chip">Owner ${esc(c.owner_assignment)}</span><span class="chip">SOC ${esc(c.rasci.customer_soc)}</span><span class="chip">ISM ${esc(c.ism_mapping_strength)}</span></div></button>`).join("")}root.querySelectorAll("[data-id]").forEach(b=>b.onclick=()=>openControl(b.dataset.id));if(items.length>120)root.insertAdjacentHTML("beforeend",`<div class="empty">Showing the first 120 of ${items.length} matching controls. Refine the filters to narrow the view.</div>`)}
+function fact(label,value,wide=false){return `<div class="fact${wide?" wide":""}"><b>${esc(label)}</b><p>${value}</p></div>`}
+function tags(items){return `<div class="refs">${(items||[]).map(x=>`<span>${esc(x)}</span>`).join("")||"—"}</div>`}
+function openControl(id){const c=controls.find(x=>x.control_id===id);if(!c)return;$("#modalId").textContent=c.control_id+" · "+c.domain;$("#modalTitle").textContent=c.control_objective;$("#modalBody").innerHTML=fact("Expected outcome",esc(c.expected_outcome),true)+fact("Test",esc(c.test),true)+fact("Owner assignment",esc(c.owner_assignment))+fact("Service model",esc(c.service_model))+fact("Shared components",tags(c.shared_control_component))+fact("RASCI",`Provider ${rasciBadge(c.rasci.csp)} &nbsp; Customer governance ${rasciBadge(c.rasci.csc)} &nbsp; Customer SOC ${rasciBadge(c.rasci.customer_soc)} &nbsp; Third party ${rasciBadge(c.rasci.third_party)}`,true)+fact("RASCI validation",rasciValid(c)?'<span class="valid">✓ One accountable and at least one responsible actor</span>':'<span class="invalid">⚠ Assignment requires review</span>',true)+fact("CSA CCM",tags(c.references.csa_ccm_v4_1_control_ids))+fact("ISO/IEC 27017",tags(c.references.iso_iec_27017_2026))+fact("ISM",tags(c.references.ism_v2026_09_4))+fact("FinOps Framework",tags(c.references.finops_framework_capabilities))+fact("Service management",tags(c.references.service_management_frameworks))+fact("Operational / governance",tags(c.references.operational_frameworks))+fact("ISM applicability",tags(c.ism_applicability))+fact("ISM mapping strength",esc(c.ism_mapping_strength))+fact("Accreditation / assurance",tags(c.references.accreditation_assurance_frameworks))+fact("Provider contractual reference",esc(c.references.provider_contractual_reference),true);$("#modal").showModal()}
+function clearContextFilters(){state.domain="All";state.sectionFilter=null;state.onpremSection=null;state.lifecycleStage=null;state.pillar="All";$("#domainFilter").value="All";$("#sectionFilter").value="All";$("#lifecycleFilter").value="All";$("#pillarFilter").value="All";renderMatrix();renderDetail();renderControls()}
+function reset(){state={layer:null,onpremSection:null,sectionFilter:null,lifecycleStage:null,failureScenario:FAILURE_SCENARIOS[0].id,domain:"All",pillar:"All",model:"All",view:"cards",layerView:"allocation",alDiagram:"matrix",ivDiagram:"matrix",lcDiagram:"matrix",opDiagram:"matrix",fsDiagram:"matrix",graphFocus:null,cyQuery:"",cyResult:null,cyError:null,cyMode:"graph"};$("#search").value="";$("#service").value="All";$("#owner").value="All";$("#role").value="All";$("#ism").value="All";$("#domainFilter").value="All";$("#sectionFilter").value="All";$("#lifecycleFilter").value="All";$("#pillarFilter").value="All";$("#failureScenarioFilter").value=state.failureScenario;renderMatrix();renderDetail();renderControls()}
+$("#search").addEventListener("input",renderControls);$("#service").addEventListener("change",e=>{state.model=e.target.value;if(["onprem","lifecycle","failure"].includes(state.layerView)&&state.model!=="On-premises"){state.layerView="allocation";state.onpremSection=null;state.sectionFilter=null;state.lifecycleStage=null;state.pillar="All";$("#sectionFilter").value="All";$("#lifecycleFilter").value="All";$("#pillarFilter").value="All"}renderMatrix();renderDetail();renderControls()});$("#owner").addEventListener("change",renderControls);$("#role").addEventListener("change",renderControls);$("#ism").addEventListener("change",renderControls);$("#domainFilter").addEventListener("change",e=>{state.domain=e.target.value;renderFilterState();renderControls()});$("#sectionFilter").addEventListener("change",e=>{state.sectionFilter=e.target.value==="All"?null:e.target.value;state.onpremSection=state.layerView==="onprem"?state.sectionFilter:null;renderMatrix();renderDetail();renderControls()});$("#lifecycleFilter").addEventListener("change",e=>{state.lifecycleStage=e.target.value==="All"?null:e.target.value;renderMatrix();renderDetail();renderControls()});$("#pillarFilter").addEventListener("change",e=>{state.pillar=e.target.value;renderMatrix();renderDetail();renderControls()});$("#failureScenarioFilter").addEventListener("change",e=>{state.failureScenario=e.target.value;renderMatrix();renderDetail();renderControls()});$("#clearFilters").onclick=clearContextFilters;document.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>{state.view=b.dataset.view;renderControls()});document.querySelectorAll("[data-layer-view]").forEach(b=>b.onclick=()=>{state.layerView=b.dataset.layerView;state.onpremSection=null;state.lifecycleStage=null;$("#lifecycleFilter").value="All";if(["onprem","lifecycle","failure"].includes(state.layerView)){state.layer=null;state.model="On-premises";$("#service").value="On-premises";if(state.layerView==="onprem")state.onpremSection=state.sectionFilter;if(state.layerView==="failure"){state.pillar="All";$("#pillarFilter").value="All"}}else{state.sectionFilter=null;state.pillar="All";$("#sectionFilter").value="All";$("#pillarFilter").value="All"}renderMatrix();renderDetail();renderControls()});$("#reset").onclick=reset;$("#showControls").onclick=()=>$("#controlsSection").scrollIntoView({behavior:"smooth"});$(".close").onclick=()=>$("#modal").close();$("#modal").addEventListener("click",e=>{if(e.target===$("#modal"))$("#modal").close()});
+populateFilters();renderFilterState();fetch("matrix.json").then(r=>{if(!r.ok)throw Error("load");return r.json()}).then(d=>{controls=d.controls||[];CY_DB=null;populateDomains();renderMatrix();renderDetail();renderControls()}).catch(()=>{$("#count").textContent="Unavailable";$("#controlList").innerHTML='<div class="empty">The control catalogue could not be loaded.</div>';renderMatrix();renderDetail()});
