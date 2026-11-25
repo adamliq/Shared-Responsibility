@@ -1,0 +1,56 @@
+layer_id,layer,domain
+governance,Data classification and accountability,Governance
+governance,Data classification and accountability,Data security and privacy
+governance,Data classification and accountability,Compliance and legal
+governance,Data classification and accountability,Assurance
+endpoint,Client and endpoint protection,Endpoint security
+endpoint,Client and endpoint protection,Human resources security
+endpoint,Client and endpoint protection,Mobile security
+identity,Identity and access management,Identity and access management
+identity,Identity and access management,Key management and cryptography
+application,Application-level controls,Application and interface security
+application,Application-level controls,Data security and privacy
+application,Application-level controls,Change control and configuration management
+application,Application-level controls,Vulnerability management
+network,Network controls,Infrastructure and virtualization security
+network,Network controls,Network security
+host,Host infrastructure,Infrastructure and virtualization security
+host,Host infrastructure,Business continuity and operational resilience
+host,Host infrastructure,Supply chain management
+physical,Physical security,Physical security
+operations,Security operations,Logging and monitoring
+operations,Security operations,Log collection and pipeline assurance
+operations,Security operations,Detection engineering
+operations,Security operations,Threat hunting
+operations,Security operations,Incident response
+operations,Security operations,Digital forensics
+operations,Security operations,"Security incident management, e-discovery and cloud forensics"
+finops,FinOps and cost accountability,FinOps and cost accountability
+service,Service and operational incidents,Service management and operational incidents
+continuity,"Availability, backup and continuity","Availability, backup, recovery and continuity"
+data-governance,"Data governance, privacy and records","Data governance, privacy and records management"
+performance,"Performance, capacity and scalability","Performance, capacity and scalability"
+architecture,Architecture and technical governance,Architecture and technical governance
+change-release,"Change, release and environments","Change, release and environment management"
+network-carrier,Network and carrier operations,Network and carrier operations
+onprem-operations,On-premises infrastructure and operations,On-premises infrastructure and operations
+asset-cmdb,"Asset, CMDB and lifecycle management","Asset, CMDB and lifecycle management"
+asset-cmdb,"Asset, CMDB and lifecycle management",Asset management
+virtualisation,Virtualisation and platform operations,Virtualisation and platform operations
+virtualisation,Virtualisation and platform operations,Provider infrastructure
+virtualisation,Virtualisation and platform operations,Runtime and middleware
+storage-media,Storage and media operations,Storage and media operations
+supplier-commercial,"Supplier, procurement and commercial","Supplier, procurement and commercial management"
+supplier-commercial,"Supplier, procurement and commercial",Supply chain
+supplier-commercial,"Supplier, procurement and commercial",Exit and portability
+os-compute,Operating system and compute operations,Operating system and compute operations
+os-compute,Operating system and compute operations,Operating system security
+ucc,Unified communications and collaboration,Unified communications and collaboration operations
+euc,End-user computing and workplace services,End-user computing and workplace services
+euc,End-user computing and workplace services,Endpoint security
+iac,"Configuration, automation and infrastructure as code","Configuration, automation and infrastructure as code"
+iac,"Configuration, automation and infrastructure as code",Configuration management
+core-infra,Core infrastructure services,Core infrastructure services
+vulnerability-exposure,Vulnerability and exposure management,Vulnerability and exposure management
+cti,Cyber threat intelligence,Cyber threat intelligence
+ato,"Security accreditation, assurance and authority to operate","Security accreditation, assurance and authority to operate"

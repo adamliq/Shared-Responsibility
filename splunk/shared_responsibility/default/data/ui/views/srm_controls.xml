@@ -1,0 +1,164 @@
+<dashboard version="2" theme="dark">
+  <label>Control Catalogue</label>
+  <description>Search and filter the atomic controls with their tests, owners, RASCI assignments and standards references.</description>
+  <definition><![CDATA[
+{
+  "title": "Control Catalogue",
+  "description": "Search and filter the atomic controls with their tests, owners, RASCI assignments and standards references.",
+  "inputs": {
+    "input_text": {
+      "type": "input.text",
+      "title": "Search",
+      "options": {
+        "defaultValue": "*",
+        "token": "q"
+      }
+    },
+    "input_owner": {
+      "type": "input.dropdown",
+      "title": "Owner assignment",
+      "options": {
+        "items": [
+          {
+            "label": "*",
+            "value": "*"
+          },
+          {
+            "label": "CSC",
+            "value": "CSC"
+          },
+          {
+            "label": "CSP",
+            "value": "CSP"
+          },
+          {
+            "label": "3PTY",
+            "value": "3PTY"
+          },
+          {
+            "label": "SH-D",
+            "value": "SH-D"
+          },
+          {
+            "label": "SH-S",
+            "value": "SH-S"
+          },
+          {
+            "label": "INH",
+            "value": "INH"
+          }
+        ],
+        "defaultValue": "*",
+        "token": "owner"
+      }
+    },
+    "input_ism": {
+      "type": "input.dropdown",
+      "title": "ISM mapping",
+      "options": {
+        "items": [
+          {
+            "label": "*",
+            "value": "*"
+          },
+          {
+            "label": "Direct",
+            "value": "Direct"
+          },
+          {
+            "label": "Contextual",
+            "value": "Contextual"
+          },
+          {
+            "label": "Not applicable",
+            "value": "Not applicable"
+          }
+        ],
+        "defaultValue": "*",
+        "token": "ism"
+      }
+    }
+  },
+  "defaults": {
+    "dataSources": {
+      "ds.search": {
+        "options": {
+          "queryParameters": {
+            "earliest": "-24h@h",
+            "latest": "now"
+          }
+        }
+      }
+    }
+  },
+  "visualizations": {
+    "viz_count": {
+      "type": "splunk.singlevalue",
+      "title": "Matching controls",
+      "dataSources": {
+        "primary": "ds_count"
+      },
+      "options": {}
+    },
+    "viz_controls": {
+      "type": "splunk.table",
+      "title": "Controls",
+      "dataSources": {
+        "primary": "ds_controls"
+      },
+      "options": {
+        "count": 25,
+        "showInternalFields": false
+      }
+    }
+  },
+  "dataSources": {
+    "ds_count": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup srm_controls_lookup | search owner_assignment=\"$owner$\" ism_mapping_strength=\"$ism$\" | search control_id=\"*$q$*\" OR objective=\"*$q$*\" OR domain=\"*$q$*\" OR test=\"*$q$*\" | stats count"
+      }
+    },
+    "ds_controls": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup srm_controls_lookup | search owner_assignment=\"$owner$\" ism_mapping_strength=\"$ism$\" | search control_id=\"*$q$*\" OR objective=\"*$q$*\" OR domain=\"*$q$*\" OR test=\"*$q$*\" | eval csa_ccm_v4_1_control_ids=replace(csa_ccm_v4_1_control_ids,\"\\|\",\", \") | table control_id domain objective test owner_assignment accountable_party rasci_csc rasci_customer_soc rasci_csp rasci_third_party ism_mapping_strength csa_ccm_v4_1_control_ids | rename control_id as ID domain as Domain objective as Objective test as Test owner_assignment as Owner accountable_party as Accountable rasci_csc as \"Customer gov.\" rasci_customer_soc as SOC rasci_csp as Provider rasci_third_party as \"Third party\" ism_mapping_strength as ISM csa_ccm_v4_1_control_ids as \"CSA CCM\""
+      }
+    }
+  },
+  "layout": {
+    "type": "grid",
+    "options": {
+      "width": 1440
+    },
+    "globalInputs": [
+      "input_text",
+      "input_owner",
+      "input_ism"
+    ],
+    "structure": [
+      {
+        "item": "viz_count",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "w": 300,
+          "h": 120
+        }
+      },
+      {
+        "item": "viz_controls",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 120,
+          "w": 1440,
+          "h": 900
+        }
+      }
+    ]
+  }
+}
+  ]]></definition>
+</dashboard>

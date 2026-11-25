@@ -1,0 +1,12 @@
+service_model,definition
+On-premises,The organisation operates the full technology stack in facilities it controls.
+IaaS,"The provider operates physical infrastructure and virtualisation; the customer manages operating systems, workloads, data and most security configuration."
+PaaS,"The provider operates the infrastructure and application platform; the customer manages applications, identities, data and configuration."
+SaaS,"The provider operates the application and supporting stack; the customer manages use, identities, data, configuration and monitoring integration."
+FaaS,"The provider operates the event-driven runtime and infrastructure; the customer manages function code, identities, data, triggers and configuration."
+BaaS,"Backend as a Service provides managed databases, user authentication, push notifications and other pre-made backend capabilities so developers can focus on the client-side application."
+SECaaS,"Security as a Service integrates capabilities such as anti-malware, authentication and intrusion detection into the customer’s cloud environment."
+DaaS,Desktop as a Service delivers provider-hosted virtual desktop infrastructure so users can stream a managed desktop environment to supported devices.
+DBaaS,Database as a Service provides a managed database without requiring the customer to provision physical hardware or install and operate database software.
+IDaaS,"Identity as a Service outsources digital gatekeeping—including authentication, password infrastructure and multi-factor authentication—to an identity provider such as Microsoft Entra ID."
+CaaS,"Containers as a Service provides managed servers and container orchestration, such as Kubernetes; the customer manages containers, images, configuration and application code."

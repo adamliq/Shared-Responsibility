@@ -1,0 +1,9 @@
+[]
+access = read : [ * ], write : [ admin, sc_admin ]
+export = none
+
+[collections/srm_evidence]
+access = read : [ * ], write : [ admin, sc_admin ]
+
+[savedsearches]
+owner = nobody

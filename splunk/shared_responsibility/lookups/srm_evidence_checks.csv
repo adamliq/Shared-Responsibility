@@ -1,0 +1,8 @@
+control_id,check,saved_search,method
+LOG-004,Monitored indexes are receiving events,SRM Evidence - LOG-004,tstats event counts across `srm_monitored_indexes` in the last 24 hours
+COL-016,End-to-end collection latency within 5 minutes (p95),SRM Evidence - COL-016,95th percentile of _indextime - _time for recent events
+COL-006,Source event time preserved (skew under 1%),SRM Evidence - COL-006,Share of events whose index time is before event time or more than a day after it
+LOG-010,Monitored indexes retain events for 12 months,SRM Evidence - LOG-010,frozenTimePeriodInSecs of each enabled non-internal index
+LOG-012,Access attempts to the logging platform are audited,SRM Evidence - LOG-012,Login attempts recorded in the _audit index over seven days
+LOG-013,No user can delete indexed events,SRM Evidence - LOG-013,Users holding the can_delete role
+LOG-009,Security monitoring alerts are scheduled,SRM Evidence - LOG-009,Enabled scheduled searches with an alert action or triggered-alert tracking

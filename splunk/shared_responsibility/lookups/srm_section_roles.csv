@@ -1,0 +1,76 @@
+section_id,section,function_order,function,role,role_name
+op-governance,"Governance, architecture and assurance",1,Service governance,P,Primary
+op-governance,"Governance, architecture and assurance",4,Compute & platform,C,Consulted
+op-governance,"Governance, architecture and assurance",5,Application & data,C,Consulted
+op-governance,"Governance, architecture and assurance",6,Workplace services,C,Consulted
+op-governance,"Governance, architecture and assurance",7,Customer SOC,S,Support
+op-governance,"Governance, architecture and assurance",8,Suppliers,C,Consulted
+op-facilities,Facilities and data centre,1,Service governance,C,Consulted
+op-facilities,Facilities and data centre,2,Facilities,P,Primary
+op-facilities,Facilities and data centre,3,Network operations,S,Support
+op-facilities,Facilities and data centre,4,Compute & platform,S,Support
+op-facilities,Facilities and data centre,7,Customer SOC,C,Consulted
+op-facilities,Facilities and data centre,8,Suppliers,S,Support
+op-network,Network and carrier,1,Service governance,C,Consulted
+op-network,Network and carrier,2,Facilities,C,Consulted
+op-network,Network and carrier,3,Network operations,P,Primary
+op-network,Network and carrier,4,Compute & platform,S,Support
+op-network,Network and carrier,5,Application & data,C,Consulted
+op-network,Network and carrier,7,Customer SOC,S,Support
+op-network,Network and carrier,8,Suppliers,S,Support
+op-compute,"Compute, hardware and operating systems",1,Service governance,C,Consulted
+op-compute,"Compute, hardware and operating systems",2,Facilities,S,Support
+op-compute,"Compute, hardware and operating systems",3,Network operations,C,Consulted
+op-compute,"Compute, hardware and operating systems",4,Compute & platform,P,Primary
+op-compute,"Compute, hardware and operating systems",5,Application & data,C,Consulted
+op-compute,"Compute, hardware and operating systems",7,Customer SOC,S,Support
+op-compute,"Compute, hardware and operating systems",8,Suppliers,S,Support
+op-platform,Virtualisation and automation platforms,1,Service governance,C,Consulted
+op-platform,Virtualisation and automation platforms,3,Network operations,C,Consulted
+op-platform,Virtualisation and automation platforms,4,Compute & platform,P,Primary
+op-platform,Virtualisation and automation platforms,5,Application & data,S,Support
+op-platform,Virtualisation and automation platforms,7,Customer SOC,S,Support
+op-platform,Virtualisation and automation platforms,8,Suppliers,S,Support
+op-storage,"Storage, backup and continuity",1,Service governance,C,Consulted
+op-storage,"Storage, backup and continuity",2,Facilities,S,Support
+op-storage,"Storage, backup and continuity",3,Network operations,C,Consulted
+op-storage,"Storage, backup and continuity",4,Compute & platform,P,Primary
+op-storage,"Storage, backup and continuity",5,Application & data,C,Consulted
+op-storage,"Storage, backup and continuity",7,Customer SOC,S,Support
+op-storage,"Storage, backup and continuity",8,Suppliers,S,Support
+op-core,Core infrastructure services,1,Service governance,C,Consulted
+op-core,Core infrastructure services,3,Network operations,S,Support
+op-core,Core infrastructure services,4,Compute & platform,P,Primary
+op-core,Core infrastructure services,5,Application & data,S,Support
+op-core,Core infrastructure services,6,Workplace services,C,Consulted
+op-core,Core infrastructure services,7,Customer SOC,S,Support
+op-core,Core infrastructure services,8,Suppliers,S,Support
+op-workplace,End-user and workplace services,1,Service governance,C,Consulted
+op-workplace,End-user and workplace services,3,Network operations,S,Support
+op-workplace,End-user and workplace services,4,Compute & platform,S,Support
+op-workplace,End-user and workplace services,5,Application & data,C,Consulted
+op-workplace,End-user and workplace services,6,Workplace services,P,Primary
+op-workplace,End-user and workplace services,7,Customer SOC,S,Support
+op-workplace,End-user and workplace services,8,Suppliers,S,Support
+op-appdata,"Applications, data and performance",1,Service governance,P,Primary
+op-appdata,"Applications, data and performance",3,Network operations,C,Consulted
+op-appdata,"Applications, data and performance",4,Compute & platform,S,Support
+op-appdata,"Applications, data and performance",5,Application & data,P,Primary
+op-appdata,"Applications, data and performance",6,Workplace services,C,Consulted
+op-appdata,"Applications, data and performance",7,Customer SOC,S,Support
+op-appdata,"Applications, data and performance",8,Suppliers,S,Support
+op-service,"Service, change and financial operations",1,Service governance,P,Primary
+op-service,"Service, change and financial operations",2,Facilities,C,Consulted
+op-service,"Service, change and financial operations",3,Network operations,C,Consulted
+op-service,"Service, change and financial operations",4,Compute & platform,S,Support
+op-service,"Service, change and financial operations",5,Application & data,S,Support
+op-service,"Service, change and financial operations",6,Workplace services,S,Support
+op-service,"Service, change and financial operations",7,Customer SOC,C,Consulted
+op-service,"Service, change and financial operations",8,Suppliers,S,Support
+op-cyber,Cyber operations and exposure,1,Service governance,C,Consulted
+op-cyber,Cyber operations and exposure,3,Network operations,S,Support
+op-cyber,Cyber operations and exposure,4,Compute & platform,S,Support
+op-cyber,Cyber operations and exposure,5,Application & data,S,Support
+op-cyber,Cyber operations and exposure,6,Workplace services,C,Consulted
+op-cyber,Cyber operations and exposure,7,Customer SOC,P,Primary
+op-cyber,Cyber operations and exposure,8,Suppliers,S,Support

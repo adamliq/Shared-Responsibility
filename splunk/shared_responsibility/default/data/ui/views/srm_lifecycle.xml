@@ -1,0 +1,112 @@
+<dashboard version="2" theme="dark">
+  <label>Platform Lifecycle</label>
+  <description>Lifecycle stages against the COBIT pillars engaged by each responsibility function, and the control layers each stage engages.</description>
+  <definition><![CDATA[
+{
+  "title": "Platform Lifecycle",
+  "description": "Lifecycle stages against the COBIT pillars engaged by each responsibility function, and the control layers each stage engages.",
+  "inputs": {},
+  "defaults": {
+    "dataSources": {
+      "ds.search": {
+        "options": {
+          "queryParameters": {
+            "earliest": "-24h@h",
+            "latest": "now"
+          }
+        }
+      }
+    }
+  },
+  "visualizations": {
+    "viz_heat": {
+      "type": "splunk.column",
+      "title": "Function–pillar engagements per stage",
+      "dataSources": {
+        "primary": "ds_heat"
+      },
+      "options": {
+        "stackMode": "stacked"
+      }
+    },
+    "viz_flow": {
+      "type": "splunk.sankey",
+      "title": "Stage → COBIT pillar",
+      "dataSources": {
+        "primary": "ds_flow"
+      },
+      "options": {}
+    },
+    "viz_layers": {
+      "type": "splunk.table",
+      "title": "Control layers across the lifecycle",
+      "dataSources": {
+        "primary": "ds_layers"
+      },
+      "options": {
+        "count": 30
+      }
+    }
+  },
+  "dataSources": {
+    "ds_heat": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup srm_lifecycle_pillars_lookup | eval stage=printf(\"%02d \", stage_order).replace(stage,\"^\\d+\\.\\s*\",\"\") | chart count over stage by pillar"
+      }
+    },
+    "ds_flow": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup srm_lifecycle_pillars_lookup | stats count as value by stage pillar | rename stage as source pillar as target | table source target value"
+      }
+    },
+    "ds_layers": {
+      "type": "ds.search",
+      "options": {
+        "query": "| inputlookup srm_lifecycle_layers_lookup | stats count as stages values(stage) as engaged_by by layer | sort - stages | rename layer as \"Control layer\" stages as Stages engaged_by as \"Engaged by\""
+      }
+    }
+  },
+  "layout": {
+    "type": "grid",
+    "options": {
+      "width": 1440
+    },
+    "globalInputs": [],
+    "structure": [
+      {
+        "item": "viz_heat",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "w": 1440,
+          "h": 360
+        }
+      },
+      {
+        "item": "viz_flow",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 360,
+          "w": 760,
+          "h": 700
+        }
+      },
+      {
+        "item": "viz_layers",
+        "type": "block",
+        "position": {
+          "x": 760,
+          "y": 360,
+          "w": 680,
+          "h": 700
+        }
+      }
+    ]
+  }
+}
+  ]]></definition>
+</dashboard>

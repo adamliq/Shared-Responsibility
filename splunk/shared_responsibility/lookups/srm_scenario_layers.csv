@@ -1,0 +1,73 @@
+scenario,layer_id,layer
+Primary server room flood,governance,Data classification and accountability
+Primary server room flood,physical,Physical security
+Primary server room flood,network-carrier,Network and carrier operations
+Primary server room flood,network,Network controls
+Primary server room flood,host,Host infrastructure
+Primary server room flood,virtualisation,Virtualisation and platform operations
+Primary server room flood,storage-media,Storage and media operations
+Primary server room flood,continuity,"Availability, backup and continuity"
+Primary server room flood,core-infra,Core infrastructure services
+Primary server room flood,identity,Identity and access management
+Primary server room flood,application,Application-level controls
+Primary server room flood,data-governance,"Data governance, privacy and records"
+Primary server room flood,service,Service and operational incidents
+Primary server room flood,change-release,"Change, release and environments"
+Primary server room flood,operations,Security operations
+Primary server room flood,supplier-commercial,"Supplier, procurement and commercial"
+Primary server room flood,ato,"Security accreditation, assurance and authority to operate"
+Cloud identity outage,governance,Data classification and accountability
+Cloud identity outage,network-carrier,Network and carrier operations
+Cloud identity outage,network,Network controls
+Cloud identity outage,host,Host infrastructure
+Cloud identity outage,virtualisation,Virtualisation and platform operations
+Cloud identity outage,storage-media,Storage and media operations
+Cloud identity outage,core-infra,Core infrastructure services
+Cloud identity outage,identity,Identity and access management
+Cloud identity outage,endpoint,Client and endpoint protection
+Cloud identity outage,euc,End-user computing and workplace services
+Cloud identity outage,application,Application-level controls
+Cloud identity outage,data-governance,"Data governance, privacy and records"
+Cloud identity outage,service,Service and operational incidents
+Cloud identity outage,change-release,"Change, release and environments"
+Cloud identity outage,operations,Security operations
+Cloud identity outage,vulnerability-exposure,Vulnerability and exposure management
+Cloud identity outage,supplier-commercial,"Supplier, procurement and commercial"
+Cloud identity outage,ato,"Security accreditation, assurance and authority to operate"
+Malware outbreak,governance,Data classification and accountability
+Malware outbreak,network-carrier,Network and carrier operations
+Malware outbreak,network,Network controls
+Malware outbreak,host,Host infrastructure
+Malware outbreak,virtualisation,Virtualisation and platform operations
+Malware outbreak,storage-media,Storage and media operations
+Malware outbreak,continuity,"Availability, backup and continuity"
+Malware outbreak,core-infra,Core infrastructure services
+Malware outbreak,identity,Identity and access management
+Malware outbreak,endpoint,Client and endpoint protection
+Malware outbreak,euc,End-user computing and workplace services
+Malware outbreak,application,Application-level controls
+Malware outbreak,data-governance,"Data governance, privacy and records"
+Malware outbreak,service,Service and operational incidents
+Malware outbreak,change-release,"Change, release and environments"
+Malware outbreak,operations,Security operations
+Malware outbreak,vulnerability-exposure,Vulnerability and exposure management
+Malware outbreak,cti,Cyber threat intelligence
+Malware outbreak,supplier-commercial,"Supplier, procurement and commercial"
+Malware outbreak,ato,"Security accreditation, assurance and authority to operate"
+On-premises gateway failure,governance,Data classification and accountability
+On-premises gateway failure,network-carrier,Network and carrier operations
+On-premises gateway failure,network,Network controls
+On-premises gateway failure,host,Host infrastructure
+On-premises gateway failure,virtualisation,Virtualisation and platform operations
+On-premises gateway failure,storage-media,Storage and media operations
+On-premises gateway failure,continuity,"Availability, backup and continuity"
+On-premises gateway failure,core-infra,Core infrastructure services
+On-premises gateway failure,identity,Identity and access management
+On-premises gateway failure,endpoint,Client and endpoint protection
+On-premises gateway failure,euc,End-user computing and workplace services
+On-premises gateway failure,application,Application-level controls
+On-premises gateway failure,service,Service and operational incidents
+On-premises gateway failure,change-release,"Change, release and environments"
+On-premises gateway failure,operations,Security operations
+On-premises gateway failure,supplier-commercial,"Supplier, procurement and commercial"
+On-premises gateway failure,iac,"Configuration, automation and infrastructure as code"

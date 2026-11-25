@@ -75,3 +75,7 @@ The Combined graph view includes a **Cypher console** for running read-only quer
 - **Results:** nodes, relationships and paths appear as a graph, which also includes relationships between returned nodes, as in Neo4j Browser. Every result can be viewed as a table and downloaded as CSV.
 - **Help:** an Examples menu offers ready-made queries, and the Syntax button lists everything supported.
 - **Limits:** writes (`CREATE`, `MERGE`, `SET`, `DELETE`, `CALL`) are rejected. Runaway queries stop at 50,000 rows or after too many explored paths.
+
+## Splunk app (proof of concept)
+
+`splunk/` holds a Splunk app built from the same data: lookups for every data set, Dashboard Studio dashboards, scheduled control-evidence searches and the bundled explorer. To build it, run `python3 splunk/build.py --package`. [splunk/README.md](splunk/README.md) covers installation and what the app contains.
