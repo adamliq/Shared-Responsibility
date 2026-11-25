@@ -76,3 +76,14 @@ Version 0.3.0 was rebuilt from a clean checkout and tested on Splunk Enterprise 
 - **Page template:** the page depends on a custom page template, which Splunk has deprecated from Enterprise 10.4 (see Verification).
 - **Evidence:** the seven checks cover logging controls that Splunk can evidence about itself. Most of the other 1,184 controls need searches written against your own data, or a manual-attestation workflow.
 - **Editing:** RASCI assignments are read-only. Changes are made in `matrix.json` and the app is rebuilt.
+
+## Screenshots
+
+[`screenshots/`](screenshots/) holds screenshots of version 0.3.0 on Splunk Enterprise 9.4:
+
+- **React explorer page (01–05):** allocation, controls, evidence, graph and Cypher.
+- **Dashboard Studio dashboards (06–12).**
+- **Bundled standalone explorer (13–15):** with the example organisation profile applied.
+
+Sample events were loaded into the test instance so that the evidence checks have results.
+
