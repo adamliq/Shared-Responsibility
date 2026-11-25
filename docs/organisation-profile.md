@@ -8,6 +8,8 @@ An organisation profile adds your own information to the published baseline. The
 
 Open **Organisation profile** at the top right of the explorer to import, review, export or remove a profile. **Try the example profile** loads [`examples/profile-example.json`](../examples/profile-example.json), a fictional organisation that uses every feature.
 
+> **In the Splunk app**, profiles and workbooks in these formats are imported on the Explorer page's **Data** tab. There they're stored in the app's KV Store and shared by everyone using the app, rather than kept in one browser. See [`splunk/README.md`](../splunk/README.md).
+
 > **Privacy.** A profile is stored only in your browser (`localStorage`); nothing is uploaded. To keep a copy or share it, export it. Do not commit organisation profiles to this repository: GitHub Pages publishes the whole repository, so anything committed becomes public.
 
 ## What a profile can contain

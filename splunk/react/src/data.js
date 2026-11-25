@@ -7,6 +7,8 @@ export const APP = 'shared_responsibility';
 export const LOOKUPS = {
     controls: 'srm_controls_lookup',
     rasci: 'srm_rasci_lookup',
+    parties: 'srm_parties_lookup',
+    systems: 'srm_systems_lookup',
     layers: 'srm_layers_lookup',
     layerDomains: 'srm_layer_domains_lookup',
     layerShares: 'srm_layer_shares_lookup',

@@ -27,7 +27,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 APP_ID = "shared_responsibility"
 APP_DIR = ROOT / "splunk" / APP_ID
-VERSION = "0.3.0"
+VERSION = "0.4.0"
 UI_DIR = ROOT / "splunk" / "react"
 PARTIES = [
     ("csc", "Customer governance"),
@@ -36,6 +36,14 @@ PARTIES = [
     ("third_party", "Third party"),
 ]
 NO_ROLE = {"—", "N/A", ""}
+# Columns an organisation's own information adds to each control (see docs/organisation-profile.md).
+PROFILE_COLUMNS = ["applicable", "source", "tailored", "justification", "owner", "evidence_links", "notes"]
+SYSTEM_COLUMNS = ["system_id", "system", "service_model", "provider", "criticality", "owner", "description"]
+# The dataset: shipped as demo CSV lookups (srm_demo_<name>.csv) and held live in KV Store
+# collections (<name>), which the app's own information is written to.
+DATASET = ["srm_controls", "srm_rasci", "srm_parties", "srm_systems", "srm_layers", "srm_layer_domains", "srm_layer_shares",
+           "srm_service_models", "srm_pillars", "srm_functions", "srm_sections", "srm_section_roles", "srm_lifecycle_stages",
+           "srm_lifecycle_pillars", "srm_lifecycle_layers", "srm_scenarios", "srm_scenario_involvement", "srm_scenario_layers"]
 
 
 def read_reference_data():
@@ -94,18 +102,21 @@ def build_lookups(matrix, ref):
             c["owner_assignment"], rasci.get("csp", "—"), rasci.get("csc", "—"), rasci.get("customer_soc", "—"),
             rasci.get("third_party", "—"), mv(accountable), c.get("ism_mapping_strength", ""), mv(c.get("ism_applicability")),
             mv(c.get("shared_control_component")), mv(domain_layers.get(c["domain"], [])),
+            "Yes", "baseline", "", "", "", "", "",
             *[mv(refs.get(k)) if isinstance(refs.get(k), list) else (refs.get(k) or "") for k in ref_keys],
         ])
     counts["srm_controls.csv"] = write_csv("srm_controls.csv", [
         "control_id", "domain", "service_model", "objective", "expected_outcome", "test", "owner_assignment",
         "rasci_csp", "rasci_csc", "rasci_customer_soc", "rasci_third_party", "accountable_party", "ism_mapping_strength",
-        "ism_applicability", "shared_control_component", "layer_ids", *ref_keys,
+        "ism_applicability", "shared_control_component", "layer_ids", *PROFILE_COLUMNS, *ref_keys,
     ], rows)
 
     rows = [[c["control_id"], key, label, c["rasci"][key]] for c in controls for key, label in PARTIES
             if c.get("rasci", {}).get(key, "—") not in NO_ROLE]
     counts["srm_rasci.csv"] = write_csv("srm_rasci.csv", ["control_id", "party_key", "party", "rasci"], rows)
 
+    counts["srm_parties.csv"] = write_csv("srm_parties.csv", ["party_key", "party", "contact"], [[k, label, ""] for k, label in PARTIES])
+    counts["srm_systems.csv"] = write_csv("srm_systems.csv", SYSTEM_COLUMNS, [])
     counts["srm_layers.csv"] = write_csv("srm_layers.csv", ["layer_id", "layer", "scope"],
                                          [[l["id"], l["label"], l["hint"]] for l in layers])
     counts["srm_layer_domains.csv"] = write_csv("srm_layer_domains.csv", ["layer_id", "layer", "domain"],
@@ -117,8 +128,8 @@ def build_lookups(matrix, ref):
             rows.append([layer["id"], layer["label"], model, max(0, share - soc), soc, 100 - share])
     counts["srm_layer_shares.csv"] = write_csv("srm_layer_shares.csv",
                                                ["layer_id", "layer", "service_model", "customer_pct", "soc_pct", "provider_pct"], rows)
-    counts["srm_service_models.csv"] = write_csv("srm_service_models.csv", ["service_model", "definition"],
-                                                 [[m, ref["MODEL_INFO"].get(m, "")] for m in ref["MODELS"]])
+    counts["srm_service_models.csv"] = write_csv("srm_service_models.csv", ["service_model", "definition", "provider"],
+                                                 [[m, ref["MODEL_INFO"].get(m, ""), ""] for m in ref["MODELS"]])
 
     functions = ref["ONPREM_RESPONSIBILITIES"]
     pillars = {p["code"]: p for p in ref["ONPREM_PILLARS"]}
@@ -340,8 +351,8 @@ def build_dashboards(ref):
             "ds_controls": ds("| inputlookup srm_controls_lookup | search owner_assignment=\"$owner$\" ism_mapping_strength=\"$ism$\" "
                               "| search control_id=\"*$q$*\" OR objective=\"*$q$*\" OR domain=\"*$q$*\" OR test=\"*$q$*\" "
                               "| eval csa_ccm_v4_1_control_ids=replace(csa_ccm_v4_1_control_ids,\"\\|\",\", \") "
-                              "| table control_id domain objective test owner_assignment accountable_party rasci_csc rasci_customer_soc rasci_csp rasci_third_party ism_mapping_strength csa_ccm_v4_1_control_ids "
-                              "| rename control_id as ID domain as Domain objective as Objective test as Test owner_assignment as Owner accountable_party as Accountable "
+                              "| table control_id domain objective applicable source test owner_assignment accountable_party rasci_csc rasci_customer_soc rasci_csp rasci_third_party ism_mapping_strength csa_ccm_v4_1_control_ids "
+                              "| rename control_id as ID domain as Domain objective as Objective applicable as Applicable source as Source test as Test owner_assignment as Owner accountable_party as Accountable "
                               "rasci_csc as \"Customer gov.\" rasci_customer_soc as SOC rasci_csp as Provider rasci_third_party as \"Third party\" ism_mapping_strength as ISM csa_ccm_v4_1_control_ids as \"CSA CCM\""),
         },
         {
@@ -450,10 +461,11 @@ def build_conf(views):
     write("default/app.conf", f"""
 [install]
 is_configured = false
-build = 3
+build = 4
 
 [ui]
 is_visible = true
+setup_view = srm_explorer
 label = Shared Responsibility
 
 [launcher]
@@ -481,14 +493,25 @@ version = {VERSION}
   </collection>
   <view name="srm_controls" />
   <view name="srm_evidence" />
-  <a href="/static/app/shared_responsibility/explorer/index.html" target="_blank">Standalone explorer ↗</a>
+  <a href="/static/app/shared_responsibility/explorer/index.html" target="_blank">Standalone explorer (demo data) ↗</a>
   <view name="search" />
 </nav>
 """)
     lookups = sorted(p.name for p in (APP_DIR / "lookups").glob("*.csv"))
-    stanzas = []
+    stanzas, collections = [], []
     for name in lookups:
         stanzas.append(f"[{name[:-4]}_lookup]\nfilename = {name}\ncase_sensitive_match = false\n")
+    for name in DATASET:
+        with (APP_DIR / "lookups" / f"srm_demo_{name[4:]}.csv").open(encoding="utf-8") as fh:
+            columns = next(csv.reader(fh))
+        stanzas.append(f"[{name}_lookup]\nexternal_type = kvstore\ncollection = {name}\ncase_sensitive_match = false\nfields_list = _key, {', '.join(columns)}\n")
+        collections.append(f"[{name}]\n" + "".join(f"field.{c} = string\n" for c in columns))
+    stanzas.append("""[srm_dataset_lookup]
+external_type = kvstore
+collection = srm_dataset
+case_sensitive_match = false
+fields_list = _key, kind, name, source, loaded_at, loaded_by, json
+""")
     stanzas.append("""[srm_evidence_lookup]
 external_type = kvstore
 collection = srm_evidence
@@ -496,7 +519,16 @@ case_sensitive_match = false
 fields_list = _key, control_id, check, status, evidence, metric, checked_at
 """)
     write("default/transforms.conf", "\n".join(stanzas))
-    write("default/collections.conf", """
+    write("default/collections.conf", "\n".join(collections) + """
+# Dataset status and the sources of an organisation's own data (catalogue, reference, profile).
+[srm_dataset]
+field.kind = string
+field.name = string
+field.source = string
+field.loaded_at = time
+field.loaded_by = string
+field.json = string
+
 [srm_evidence]
 field.control_id = string
 field.check = string
@@ -529,6 +561,18 @@ cron_schedule = {c['cron']}
 enableSched = 1
 is_visible = true
 """)
+    # One flat chain of subsearches (Splunk allows at most 8 nested levels).
+    first, *rest = DATASET
+    load = f"| inputlookup srm_demo_{first[4:]}_lookup | outputlookup override_if_empty=true {first}_lookup | stats count as {first}" + "".join(
+        f" | appendcols [| inputlookup srm_demo_{n[4:]}_lookup | outputlookup override_if_empty=true {n}_lookup | stats count as {n}]" for n in rest)
+    saved.append(f"""[SRM - Load demo dataset]
+description = Replaces the app's dataset (the KV Store collections) with the shipped demo dataset. The Explorer page does the same with its Load demo dataset button. Run it on demand only.
+search = {load} | appendcols [| makeresults | where false() | outputlookup override_if_empty=true srm_dataset_lookup]
+dispatch.earliest_time = -1m
+dispatch.latest_time = now
+enableSched = 0
+is_visible = true
+""")
     write("default/savedsearches.conf", "\n".join(saved))
     write("metadata/default.meta", """
 []
@@ -545,9 +589,11 @@ owner = nobody
 Shared Responsibility for Splunk ({APP_ID}) - version {VERSION} - proof of concept
 
 WHAT IT CONTAINS
-- Lookups generated from the explorer's data: srm_controls (1,191 controls), srm_rasci,
-  srm_layer_shares, srm_sections, srm_section_roles, srm_lifecycle_*, srm_scenario_* and more.
-  Every lookup has a definition named <file>_lookup, for example | inputlookup srm_controls_lookup
+- The dataset, held in KV Store collections (srm_controls, srm_rasci, srm_parties, srm_systems,
+  srm_layer_shares, srm_sections, srm_lifecycle_*, srm_scenario_* and more) and read through
+  lookup definitions named <collection>_lookup, for example | inputlookup srm_controls_lookup.
+  Load the shipped demo dataset (srm_demo_*.csv) or your own information from the Explorer
+  page's Data tab; the "SRM - Load demo dataset" search reloads the demo from the command line.
 - Explorer: a Splunk UI Toolkit (React) page, the app's default view, that reads the lookups live,
   runs evidence checks on demand and queries the combined graph with read-only Cypher.
 - Dashboard Studio dashboards: {", ".join(views)}
@@ -559,8 +605,10 @@ WHAT IT CONTAINS
 SET UP
 1. Install the app (Apps > Manage Apps > Install app from file), then restart Splunk so
    Splunk Web picks up the Explorer page template.
-2. Edit the srm_monitored_indexes macro to list the indexes that hold your security data.
-3. Run any check immediately with | savedsearch "SRM Evidence - LOG-004"; they are otherwise
+2. Open the app as an administrator: the setup screen offers the demo dataset or your own
+   information (an organisation profile or your own control catalogue).
+3. Edit the srm_monitored_indexes macro to list the indexes that hold your security data.
+4. Run any check immediately with | savedsearch "SRM Evidence - LOG-004"; they are otherwise
    scheduled hourly (LOG-010 daily).
 
 This package is generated by splunk/build.py in the Shared Responsibility repository; edit
@@ -658,6 +706,9 @@ def main():
     (APP_DIR / "lookups").mkdir(parents=True)
     (APP_DIR / "static").mkdir(parents=True)
     counts = build_lookups(matrix, ref)
+    for name in DATASET:
+        (APP_DIR / "lookups" / f"{name}.csv").rename(APP_DIR / "lookups" / f"srm_demo_{name[4:]}.csv")
+    counts = {(f"srm_demo_{k[4:]}" if k[:-4] in DATASET else k): v for k, v in counts.items()}
     views = build_dashboards(ref)
     build_conf(views)
     copy_explorer()

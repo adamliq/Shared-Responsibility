@@ -122,7 +122,7 @@
     "ds_controls": {
       "type": "ds.search",
       "options": {
-        "query": "| inputlookup srm_controls_lookup | search owner_assignment=\"$owner$\" ism_mapping_strength=\"$ism$\" | search control_id=\"*$q$*\" OR objective=\"*$q$*\" OR domain=\"*$q$*\" OR test=\"*$q$*\" | eval csa_ccm_v4_1_control_ids=replace(csa_ccm_v4_1_control_ids,\"\\|\",\", \") | table control_id domain objective test owner_assignment accountable_party rasci_csc rasci_customer_soc rasci_csp rasci_third_party ism_mapping_strength csa_ccm_v4_1_control_ids | rename control_id as ID domain as Domain objective as Objective test as Test owner_assignment as Owner accountable_party as Accountable rasci_csc as \"Customer gov.\" rasci_customer_soc as SOC rasci_csp as Provider rasci_third_party as \"Third party\" ism_mapping_strength as ISM csa_ccm_v4_1_control_ids as \"CSA CCM\""
+        "query": "| inputlookup srm_controls_lookup | search owner_assignment=\"$owner$\" ism_mapping_strength=\"$ism$\" | search control_id=\"*$q$*\" OR objective=\"*$q$*\" OR domain=\"*$q$*\" OR test=\"*$q$*\" | eval csa_ccm_v4_1_control_ids=replace(csa_ccm_v4_1_control_ids,\"\\|\",\", \") | table control_id domain objective applicable source test owner_assignment accountable_party rasci_csc rasci_customer_soc rasci_csp rasci_third_party ism_mapping_strength csa_ccm_v4_1_control_ids | rename control_id as ID domain as Domain objective as Objective applicable as Applicable source as Source test as Test owner_assignment as Owner accountable_party as Accountable rasci_csc as \"Customer gov.\" rasci_customer_soc as SOC rasci_csp as Provider rasci_third_party as \"Third party\" ism_mapping_strength as ISM csa_ccm_v4_1_control_ids as \"CSA CCM\""
       }
     }
   },

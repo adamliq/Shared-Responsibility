@@ -8,19 +8,47 @@ A Splunk app generated from this repository's control matrix. It makes the 1,191
 python3 splunk/build.py --package     # needs Python 3.9+, Node.js 22+ and npm
 ```
 
-This builds the React page (running `npm ci` the first time), regenerates `splunk/shared_responsibility/` and writes `splunk/dist/shared_responsibility-0.3.0.tgz`. Use `--skip-ui` to reuse the last React build. To install the package in Splunk, go to **Apps › Manage Apps › Install app from file**, then **restart Splunk**: Splunk Web only discovers a new app's page templates at startup. The lookups come from the repository's `matrix.json` and `reference.json`, so the app and the standalone explorer always agree. `build.py` and `splunk/react/src` are the sources of truth, so edit them rather than the generated files.
+This builds the React page (running `npm ci` the first time), regenerates `splunk/shared_responsibility/` and writes `splunk/dist/shared_responsibility-0.4.0.tgz`. Use `--skip-ui` to reuse the last React build. To install the package in Splunk, go to **Apps › Manage Apps › Install app from file**, then **restart Splunk**: Splunk Web only discovers a new app's page templates at startup. The demo dataset comes from the repository's `matrix.json` and `reference.json`, so the app and the standalone explorer always agree. `build.py` and `splunk/react/src` are the sources of truth, so edit them rather than the generated files.
 
 After installing:
 
 1. Edit the `srm_monitored_indexes` macro (**Settings › Advanced search › Search macros**) so it names the indexes that hold your security data. The default is `index=*`.
 2. Run any evidence check straight away, for example `| savedsearch "SRM Evidence - LOG-004"`. Otherwise they run on their schedule: hourly, and daily for LOG-010.
 
+## Your own information and the demo dataset
+
+The app's data lives in **KV Store collections**. Every dashboard, search and the Explorer page read them through lookup definitions (`srm_controls_lookup`, `srm_rasci_lookup` and so on).
+
+**The demo dataset** is the published 1,191-control baseline. It ships as read-only CSV lookups (`srm_demo_*.csv`) and can be reloaded at any time.
+
+**First launch:** an administrator opening the app sees Splunk's *app configuration* notice. From there, the setup screen offers three starting points: the demo dataset, an organisation profile applied to the demo catalogue, or your own control catalogue.
+
+**Managing the data:** the Explorer page's **Data** tab shows what's loaded (demo or your own, when and by whom) and lets you:
+
+- **Reload the demo dataset.** This replaces everything with the baseline, after a confirmation. From the command line, `| savedsearch "SRM - Load demo dataset"` does the same.
+- **Import an organisation profile:** a JSON profile or a tailoring workbook (CSV), in the same formats as the standalone explorer (see [`docs/organisation-profile.md`](../docs/organisation-profile.md)). It adds named parties and providers, systems, control applicability with justifications, RASCI changes, owners, contract references, evidence links, custom controls, allocation shares and failure scenarios. A preview shows the counts, errors and warnings before anything is written.
+- **Import your own control catalogue** (`matrix.json` format), optionally with your own reference data (`reference.json` format). Any organisation profile is re-applied to it.
+- **Export** the tailoring workbook, a Statement of Applicability, the profile, a tailoring report, the catalogue and the reference data.
+- **Remove the organisation profile.**
+
+**Editing controls:** each expanded row on the **Controls** tab has **Edit this control**. You can change applicability and justification, owner assignment, RASCI, owner, contract reference, evidence links and notes. Edits are stored as organisation-profile overrides (differences from the baseline), so they appear in the tailoring report and survive a new baseline.
+
+**How the data is built and stored:**
+
+- **Builder:** the browser builds the collections with the same rules as `build.py`; `test/dataset-parity.mjs` checks that they produce identical demo data.
+- **Profile rules:** applied with the standalone explorer's own code, extracted from `index.html` at build time.
+- **Sources:** the imported catalogue, reference data and profile are kept in the `srm_dataset` collection, so they can be exported and re-applied.
+- **Speed:** a full write takes about 5 seconds.
+
+**Permissions:** changes apply to everyone using the app. Writing needs write access to the app's KV Store collections, which by default means the `admin` or `sc_admin` role. Other users see a clear refusal and the data is left unchanged. Control evidence results are kept separately and aren't affected by reloads or imports.
+
 ## What is in the app
 
 | Part | Contents |
 | --- | --- |
-| **Lookups** (17) | `srm_controls` (one row per control, with RASCI, owner, test and standards references), `srm_rasci` (control × party), `srm_layer_shares` (layer × service model split), `srm_sections` and `srm_section_roles`, `srm_functions`, `srm_pillars`, `srm_lifecycle_*`, `srm_scenario*`, `srm_layer_domains`, `srm_service_models`, `srm_evidence_checks`. Each has a lookup definition named `<file>_lookup`. Multivalue fields are pipe-delimited. |
-| **KV Store** | `srm_evidence`, an append-only history of evidence results (`control_id`, `check`, `status`, `evidence`, `metric`, `checked_at`), read with `| inputlookup srm_evidence_lookup`. |
+| **Dataset** (18 KV Store collections) | `srm_controls` (one row per control, with RASCI, owner, test, standards references and your applicability, justification, owner, evidence and notes), `srm_rasci` (control × party, with your party names), `srm_parties`, `srm_systems`, `srm_layer_shares` (layer × service model split), `srm_service_models` (with your providers), `srm_sections` and `srm_section_roles`, `srm_functions`, `srm_pillars`, `srm_lifecycle_*`, `srm_scenario*` and `srm_layer_domains`. Each is read through a lookup definition named `<collection>_lookup`. Multivalue fields are pipe-delimited. |
+| **Demo dataset** (18 CSV lookups) | `srm_demo_*.csv`, with definitions named `srm_demo_*_lookup`. Generated by `build.py`. |
+| **Other KV Store collections** | `srm_dataset`, the dataset's status and its imported sources. `srm_evidence`, an append-only history of evidence results (`control_id`, `check`, `status`, `evidence`, `metric`, `checked_at`), read with `| inputlookup srm_evidence_lookup`. |
 | **Explorer page** (React, the app's default view) | Built with Splunk UI Toolkit (`@splunk/react-ui`, `@splunk/react-page`, `@splunk/search-job`). Lookups and the latest evidence load through live searches. **Allocation:** a layer × service-model matrix with a details panel. **Controls:** a sortable, filterable table with expandable rows. **Evidence:** each check with a **Run now** button (or **Run all checks**) that runs its saved search and refreshes the results. **Graph & Cypher:** the combined property graph rebuilt from the lookups, with expandable domains and the read-only Cypher console showing graph and table results. |
 | **Dashboards** (Dashboard Studio) | Overview, Responsibility Allocation (party → layer Sankey by service model), Control Catalogue, On-premises Cross-cut, Platform Lifecycle, Failure Scenarios, Control Evidence. |
 | **Evidence searches** (7) | `SRM Evidence - <control>` scheduled searches. They evidence logging controls from data every Splunk instance holds, and write results through the `srm_record_evidence` macro. |
@@ -53,7 +81,17 @@ Each result is `pass`, `fail` or `no_evidence`. To add a check, add an entry to 
 
 ## Verification
 
-Version 0.3.0 was rebuilt from a clean checkout and tested on Splunk Enterprise 9.4 (the `splunk/splunk:9.4` container), driving the React page and the standalone explorer in a browser. In the standalone explorer, the example organisation profile applies and persists. The React page:
+Version 0.4.0 was tested on a fresh Splunk Enterprise 9.4 container (`splunk/splunk:9.4`), driving the React page in a browser and checking KV Store from the Splunk CLI. These checks were added in 0.4.0:
+
+- **First launch:** Splunk shows its *app configuration* notice, which leads to the setup screen. Loading the demo dataset writes 1,191 controls and marks the app configured.
+- **Example profile:** importing it gives 1,192 controls (3 out of scope, 1 custom), 3 systems, named parties and an allocation override in KV Store.
+- **Editing a control:** the edit is stored, and the Statement of Applicability and profile exports reflect it. Cypher finds the profile's systems.
+- **Own catalogue:** importing a 40-control catalogue gives 41 controls, including the profile's custom control, and the sources are recorded.
+- **Reloading the demo:** restores 1,191 controls with no profile. `SRM - Load demo dataset` does the same from the CLI.
+- **Non-admin user:** sees a clear refusal, and the data is left unchanged.
+- **Parity:** `test/dataset-parity.mjs` shows the browser builder reproduces all 18 demo collections exactly. `test/profile-parity.mjs` shows that, with the example profile applied, the graph built from the written dataset matches the standalone explorer's (1,330 nodes, 5,899 relationships).
+
+The earlier checks still pass. The React page:
 
 - **Loading:** all lookups load in about 2 seconds.
 - **Allocation:** selecting a layer filters the control table (Security operations → 146 controls), and rows expand.
@@ -71,7 +109,8 @@ Version 0.3.0 was rebuilt from a clean checkout and tested on Splunk Enterprise 
 
 ## Limits of the proof of concept
 
-- **Organisation profiles in the React page:** the React page and the lookups show the published baseline. Organisation profiles apply only in the standalone explorer. Sharing a profile through Splunk (KV Store overrides with role-based editing) is the next step.
+- **Standalone explorer:** the bundled standalone explorer still shows the demo dataset. Its own Organisation profile feature works per browser. The Explorer page and dashboards show the app's dataset.
+- **No approval workflow:** edits and imports take effect straight away for everyone; there's no review or approval step.
 - **React page coverage:** the React page covers allocation, controls, evidence and the graph. The on-premises, lifecycle and failure-scenario diagrams are available as Dashboard Studio dashboards and in the standalone explorer, but not yet as React components.
 - **Page template:** the page depends on a custom page template, which Splunk has deprecated from Enterprise 10.4 (see Verification).
 - **Evidence:** the seven checks cover logging controls that Splunk can evidence about itself. Most of the other 1,184 controls need searches written against your own data, or a manual-attestation workflow.
@@ -79,7 +118,7 @@ Version 0.3.0 was rebuilt from a clean checkout and tested on Splunk Enterprise 
 
 ## Screenshots
 
-[`screenshots/`](screenshots/) holds screenshots of version 0.3.0 on Splunk Enterprise 9.4:
+[`screenshots/`](screenshots/) holds screenshots on Splunk Enterprise 9.4. Screenshots 01–15 are from version 0.3.0; 16–19 show 0.4.0's setup screen, import preview, own information and control editor:
 
 - **React explorer page (01–05):** allocation, controls, evidence, graph and Cypher.
 - **Dashboard Studio dashboards (06–12).**

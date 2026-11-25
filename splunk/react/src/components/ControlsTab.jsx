@@ -25,7 +25,7 @@ export function StatusChip({ status }) {
     return <Chip appearance={STATUS[status] || 'outline'}>{status.replace('_', ' ')}</Chip>;
 }
 
-export default function ControlsTab({ data, filters, setFilters }) {
+export default function ControlsTab({ data, filters, setFilters, onEdit }) {
     const [sort, setSort] = useState({ key: 'control_id', dir: 'asc' });
     const [page, setPage] = useState(1);
     const [expanded, setExpanded] = useState(null);
@@ -43,6 +43,9 @@ export default function ControlsTab({ data, filters, setFilters }) {
             if (domainsOfLayer && !domainsOfLayer.has(c.domain)) return false;
             if (filters.owner !== 'All' && c.owner_assignment !== filters.owner) return false;
             if (filters.ism !== 'All' && c.ism_mapping_strength !== filters.ism) return false;
+            if (filters.scope === 'in' && c.applicable === 'No') return false;
+            if (filters.scope === 'out' && c.applicable !== 'No') return false;
+            if ((filters.scope === 'tailored' || filters.scope === 'custom') && c.source !== filters.scope) return false;
             if (filters.party !== 'All') {
                 const code = c[`rasci_${filters.party}`] || '—';
                 if (filters.role === 'Any' ? ['—', 'N/A', ''].includes(code) : !code.split('/').includes(filters.role)) return false;
@@ -103,6 +106,16 @@ export default function ControlsTab({ data, filters, setFilters }) {
                         ))}
                     </Select>
                 </Field>
+                <Field $width={170}>
+                    Applicability
+                    <Select value={filters.scope || 'All'} onChange={(e, { value }) => set({ scope: value })}>
+                        <Select.Option label="All controls" value="All" />
+                        <Select.Option label="In scope" value="in" />
+                        <Select.Option label="Out of scope" value="out" />
+                        <Select.Option label="Tailored" value="tailored" />
+                        <Select.Option label="Custom" value="custom" />
+                    </Select>
+                </Field>
                 {layerName && <Button appearance="secondary" label={`Layer: ${layerName} ✕`} onClick={() => set({ layer: null })} />}
             </Toolbar>
             <p>
@@ -134,6 +147,19 @@ export default function ControlsTab({ data, filters, setFilters }) {
                                     <Table.Row key={`${c.control_id}-x`}>
                                         <Table.Cell style={{ borderTop: 'none' }} colSpan={COLUMNS.length + 1}>
                                             <Grid2>
+                                                {(c.applicable === 'No' || c.source !== 'baseline' || c.owner || c.notes) && (
+                                                    <>
+                                                        <dt>Organisation profile</dt>
+                                                        <dd>
+                                                            {c.applicable === 'No' && <Chip appearance="error">out of scope</Chip>} {c.source !== 'baseline' && <Chip appearance="warning">{c.source}</Chip>}{' '}
+                                                            {mv(c.tailored).filter((t) => t !== 'custom').join(', ')}
+                                                            {c.justification && <div>Justification: {c.justification}</div>}
+                                                            {c.owner && <div>Owner: {c.owner}</div>}
+                                                            {c.notes && <div>Notes: {c.notes}</div>}
+                                                            {c.evidence_links && <div>Evidence: {mv(c.evidence_links).join(', ')}</div>}
+                                                        </dd>
+                                                    </>
+                                                )}
                                                 <dt>Expected outcome</dt>
                                                 <dd>{c.expected_outcome}</dd>
                                                 <dt>Test</dt>
@@ -148,6 +174,8 @@ export default function ControlsTab({ data, filters, setFilters }) {
                                                         </span>
                                                     ))}
                                                 </dd>
+                                                <dt>Contract reference</dt>
+                                                <dd>{c.provider_contractual_reference || '—'}</dd>
                                                 <dt>CSA CCM</dt>
                                                 <dd>{mv(c.csa_ccm_v4_1_control_ids).join(', ') || '—'}</dd>
                                                 <dt>ISO/IEC 27017</dt>
@@ -164,6 +192,11 @@ export default function ControlsTab({ data, filters, setFilters }) {
                                                     </>
                                                 )}
                                             </Grid2>
+                                            {onEdit && (
+                                                <div style={{ marginTop: 10 }}>
+                                                    <Button appearance="secondary" label="Edit this control" onClick={() => onEdit(c)} />
+                                                </div>
+                                            )}
                                         </Table.Cell>
                                     </Table.Row>
                                 }
@@ -172,7 +205,21 @@ export default function ControlsTab({ data, filters, setFilters }) {
                                     <strong>{c.control_id}</strong>
                                 </Table.Cell>
                                 <Table.Cell>{c.domain}</Table.Cell>
-                                <Table.Cell>{c.objective}</Table.Cell>
+                                <Table.Cell>
+                                    {c.objective}
+                                    {c.applicable === 'No' && (
+                                        <>
+                                            {' '}
+                                            <Chip appearance="error">out of scope</Chip>
+                                        </>
+                                    )}
+                                    {c.source && c.source !== 'baseline' && (
+                                        <>
+                                            {' '}
+                                            <Chip appearance="warning">{c.source}</Chip>
+                                        </>
+                                    )}
+                                </Table.Cell>
                                 <Table.Cell>{c.owner_assignment}</Table.Cell>
                                 <Table.Cell>{mv(c.accountable_party).join(', ')}</Table.Cell>
                                 <Table.Cell>{c.ism_mapping_strength}</Table.Cell>
